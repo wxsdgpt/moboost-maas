@@ -65,3 +65,26 @@ body {
   box-shadow: 0 4px 16px rgba(0,0,0,0.06);
   border-color: var(--brand);
 }
+
+/* ===== Login page animations ===== */
+@keyframes float-in {
+  0% { opacity: 0; transform: translateY(18px) scale(0.97); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+.animate-float-in {
+  animation: float-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.animate-float-in-delay {
+  animation: float-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-5px); }
+  40% { transform: translateX(5px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(3px); }
+}
+.animate-shake {
+  animation: shake 0.4s ease-in-out;
+}
