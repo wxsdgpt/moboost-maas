@@ -12,6 +12,7 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [anyFocused, setAnyFocused] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -28,30 +29,33 @@ export default function LoginPage() {
       })
 
       if (res.ok) {
-        router.push('/')
-        router.refresh()
+        // Keep loading state visible for the vortex collapse animation
+        setTimeout(() => {
+          router.push('/')
+          router.refresh()
+        }, 700)
       } else {
         setError('账号或密码错误，请重试')
+        setLoading(false)
       }
     } catch {
       setError('网络错误，请检查连接后重试')
-    } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#F8FAFB]">
+    <div className="relative min-h-screen overflow-hidden" style={{ background: '#0a0a1a' }}>
 
-      {/* Generative particle flow background */}
-      <ParticleFlow />
+      {/* Generative particle flow background (Three.js + GLSL) */}
+      <ParticleFlow focused={anyFocused} loading={loading} />
 
-      {/* Soft radial vignette to focus center */}
+      {/* Soft radial vignette to focus center (dark) */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'radial-gradient(ellipse at center, rgba(248,250,251,0) 0%, rgba(248,250,251,0.25) 55%, rgba(248,250,251,0.75) 100%)',
+            'radial-gradient(ellipse at center, rgba(10,10,26,0) 0%, rgba(10,10,26,0.35) 55%, rgba(10,10,26,0.85) 100%)',
           zIndex: 1,
         }}
       />
@@ -62,54 +66,97 @@ export default function LoginPage() {
 
           {/* Logo / Brand */}
           <div className="text-center mb-8 animate-float-in">
-            <div className="relative inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-400 to-emerald-600 shadow-xl shadow-emerald-300/40 mb-4">
+            <div className="relative inline-flex items-center justify-center w-14 h-14 rounded-2xl mb-4"
+              style={{
+                background: 'linear-gradient(135deg, #22d3ee 0%, #a855f7 55%, #d946ef 100%)',
+                boxShadow: '0 10px 40px -8px rgba(168, 85, 247, 0.55), 0 0 24px rgba(34, 211, 238, 0.35)',
+              }}
+            >
               <Sparkles className="w-7 h-7 text-white drop-shadow-sm" />
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/30 to-transparent pointer-events-none" />
             </div>
-            <h1 className="text-[28px] font-bold text-gray-900 tracking-tight">
-              Moboost <span className="text-emerald-600">AI</span>
+            <h1 className="text-[28px] font-bold tracking-tight" style={{ color: '#F5F7FB' }}>
+              Moboost{' '}
+              <span
+                style={{
+                  background: 'linear-gradient(90deg, #22d3ee, #d946ef)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                }}
+              >
+                AI
+              </span>
             </h1>
-            <p className="text-sm text-gray-500 mt-1.5">Marketing-as-a-Service Platform</p>
+            <p className="text-sm mt-1.5" style={{ color: 'rgba(245, 247, 251, 0.5)' }}>
+              Marketing-as-a-Service Platform
+            </p>
           </div>
 
-          {/* Glass card */}
+          {/* Glass card — dark variant */}
           <div
-            className="relative rounded-3xl p-8 border border-white/60 shadow-2xl shadow-emerald-900/5 animate-float-in-delay"
+            className="relative rounded-3xl p-8 animate-float-in-delay"
             style={{
-              background: 'rgba(255, 255, 255, 0.72)',
-              backdropFilter: 'blur(20px) saturate(180%)',
-              WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+              background: 'rgba(20, 22, 42, 0.55)',
+              backdropFilter: 'blur(24px) saturate(180%)',
+              WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+              border: '1px solid rgba(255, 255, 255, 0.08)',
+              boxShadow:
+                '0 20px 60px -15px rgba(0,0,0,0.5), 0 0 0 1px rgba(34, 211, 238, 0.05), inset 0 1px 0 rgba(255,255,255,0.06)',
             }}
           >
-            {/* Subtle top gradient highlight */}
+            {/* Top gradient highlight */}
             <div
               className="absolute inset-x-0 top-0 h-px rounded-t-3xl"
-              style={{ background: 'linear-gradient(90deg, transparent, rgba(16,185,129,0.35), transparent)' }}
+              style={{ background: 'linear-gradient(90deg, transparent, rgba(34,211,238,0.5), rgba(217,70,239,0.5), transparent)' }}
             />
 
-            <h2 className="text-lg font-semibold text-gray-900 mb-1">登录你的账户</h2>
-            <p className="text-xs text-gray-400 mb-6">请输入账号密码进入 MAAS 工作台</p>
+            <h2 className="text-lg font-semibold mb-1" style={{ color: '#F5F7FB' }}>登录你的账户</h2>
+            <p className="text-xs mb-6" style={{ color: 'rgba(245, 247, 251, 0.4)' }}>
+              请输入账号密码进入 MAAS 工作台
+            </p>
 
             <form onSubmit={handleSubmit} className="space-y-4">
 
               {/* Username */}
               <div>
-                <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wider">
+                <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wider"
+                  style={{ color: 'rgba(245, 247, 251, 0.6)' }}
+                >
                   账号
                 </label>
                 <input
                   type="text"
                   value={username}
                   onChange={e => { setUsername(e.target.value); setError('') }}
+                  onFocus={() => setAnyFocused(true)}
+                  onBlur={() => setAnyFocused(false)}
                   placeholder="输入账号"
                   autoComplete="username"
-                  className="w-full px-4 py-3 rounded-xl bg-white/70 border border-[#E2E6EB] text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100/60 focus:bg-white transition-all"
+                  className="w-full px-4 py-3 rounded-xl text-sm outline-none transition-all"
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.04)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    color: '#F5F7FB',
+                  }}
+                  onFocusCapture={e => {
+                    e.currentTarget.style.borderColor = 'rgba(34, 211, 238, 0.5)'
+                    e.currentTarget.style.boxShadow = '0 0 0 4px rgba(34, 211, 238, 0.12)'
+                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.06)'
+                  }}
+                  onBlurCapture={e => {
+                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)'
+                    e.currentTarget.style.boxShadow = 'none'
+                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.04)'
+                  }}
                 />
               </div>
 
               {/* Password */}
               <div>
-                <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wider">
+                <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wider"
+                  style={{ color: 'rgba(245, 247, 251, 0.6)' }}
+                >
                   密码
                 </label>
                 <div className="relative">
@@ -117,14 +164,32 @@ export default function LoginPage() {
                     type={showPassword ? 'text' : 'password'}
                     value={password}
                     onChange={e => { setPassword(e.target.value); setError('') }}
+                    onFocus={() => setAnyFocused(true)}
+                    onBlur={() => setAnyFocused(false)}
                     placeholder="输入密码"
                     autoComplete="current-password"
-                    className="w-full px-4 py-3 pr-11 rounded-xl bg-white/70 border border-[#E2E6EB] text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100/60 focus:bg-white transition-all"
+                    className="w-full px-4 py-3 pr-11 rounded-xl text-sm outline-none transition-all"
+                    style={{
+                      background: 'rgba(255, 255, 255, 0.04)',
+                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                      color: '#F5F7FB',
+                    }}
+                    onFocusCapture={e => {
+                      e.currentTarget.style.borderColor = 'rgba(217, 70, 239, 0.5)'
+                      e.currentTarget.style.boxShadow = '0 0 0 4px rgba(217, 70, 239, 0.12)'
+                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.06)'
+                    }}
+                    onBlurCapture={e => {
+                      e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)'
+                      e.currentTarget.style.boxShadow = 'none'
+                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.04)'
+                    }}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(p => !p)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 transition-colors"
+                    style={{ color: 'rgba(245, 247, 251, 0.5)' }}
                     tabIndex={-1}
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -134,7 +199,14 @@ export default function LoginPage() {
 
               {/* Error message */}
               {error && (
-                <div className="px-4 py-2.5 rounded-xl bg-red-50/90 border border-red-100 text-sm text-red-600 animate-shake">
+                <div
+                  className="px-4 py-2.5 rounded-xl text-sm animate-shake"
+                  style={{
+                    background: 'rgba(239, 68, 68, 0.1)',
+                    border: '1px solid rgba(239, 68, 68, 0.25)',
+                    color: '#fca5a5',
+                  }}
+                >
                   {error}
                 </div>
               )}
@@ -143,7 +215,21 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading || !username.trim() || !password.trim()}
-                className="group relative w-full py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 disabled:from-gray-200 disabled:to-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed text-white text-sm font-semibold transition-all shadow-lg shadow-emerald-300/40 disabled:shadow-none flex items-center justify-center gap-2 mt-2 overflow-hidden"
+                className="group relative w-full py-3 rounded-xl text-white text-sm font-semibold transition-all flex items-center justify-center gap-2 mt-2 overflow-hidden disabled:cursor-not-allowed"
+                style={{
+                  background:
+                    loading || !username.trim() || !password.trim()
+                      ? 'rgba(255,255,255,0.06)'
+                      : 'linear-gradient(90deg, #22d3ee 0%, #a855f7 50%, #d946ef 100%)',
+                  boxShadow:
+                    loading || !username.trim() || !password.trim()
+                      ? 'none'
+                      : '0 10px 30px -8px rgba(168, 85, 247, 0.5), 0 0 20px rgba(34, 211, 238, 0.25)',
+                  color:
+                    !username.trim() || !password.trim()
+                      ? 'rgba(245, 247, 251, 0.35)'
+                      : '#ffffff',
+                }}
               >
                 <span className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
                 {loading ? (
@@ -155,7 +241,7 @@ export default function LoginPage() {
             </form>
           </div>
 
-          <p className="text-center text-xs text-gray-400 mt-6">
+          <p className="text-center text-xs mt-6" style={{ color: 'rgba(245, 247, 251, 0.35)' }}>
             © 2026 Moboost AI · iGaming Marketing Platform
           </p>
         </div>
