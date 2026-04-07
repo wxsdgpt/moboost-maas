@@ -1,0 +1,3 @@
+- 开始前：告诉 AI "读 CLAUDE.md 和 docs/sessions/latest.md"，几秒内上手
+- 结束时：让 AI 更新 docs/sessions/latest.md + 新建当天的 session 摘要，然后 git push
+- 换电脑：git clone → cp .env.example .env.local → npm install → npm run dev 即可
