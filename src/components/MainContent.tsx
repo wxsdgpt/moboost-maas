@@ -12,10 +12,11 @@ export default function MainContent({ children }: { children: React.ReactNode })
   const collapsed = useStoreValue(store.isSidebarCollapsed)
   const pathname = usePathname()
 
-  // Workspace pages (/project/[id]) use their own full-width 3-column layout
+  // Workspace pages (/project/[id]) and login page use their own full-width layout
   const isWorkspace = /^\/project\/[^/]+$/.test(pathname)
+  const isLogin = pathname === '/login'
 
-  if (isWorkspace) {
+  if (isWorkspace || isLogin) {
     return <main className="min-h-screen">{children}</main>
   }
 

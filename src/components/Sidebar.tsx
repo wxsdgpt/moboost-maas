@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { Home, FolderKanban, Dna, Wrench, Sparkles, Settings, LogOut, ChevronDown, User, PanelLeftClose, PanelLeftOpen } from 'lucide-react'
 import { useState, useSyncExternalStore } from 'react'
 import { store } from '@/lib/store'
@@ -20,13 +20,21 @@ function useStoreValue<T>(selector: () => T): T {
 
 export default function Sidebar() {
   const pathname = usePathname()
+  const router = useRouter()
   const [showUserMenu, setShowUserMenu] = useState(false)
   const collapsed = useStoreValue(store.isSidebarCollapsed)
   const [hovered, setHovered] = useState(false)
 
-  // Hide sidebar on workspace pages — they have their own layout
+  const handleLogout = async () => {
+    await fetch('/api/auth/logout', { method: 'POST' })
+    router.push('/login')
+    router.refresh()
+  }
+
+  // Hide sidebar on workspace pages and login page — they have their own layout
   const isWorkspace = /^\/project\/[^/]+$/.test(pathname)
-  if (isWorkspace) return null
+  const isLogin = pathname === '/login'
+  if (isWorkspace || isLogin) return null
 
   const isExpanded = !collapsed || hovered
 
@@ -103,8 +111,8 @@ export default function Sidebar() {
             {isExpanded && (
               <>
                 <div className="flex-1 min-w-0">
-                  <div className="text-[13px] font-semibold text-gray-900 truncate">Demo User</div>
-                  <div className="text-[11px] text-gray-400 truncate">demo@moboost.ai</div>
+                  <div className="text-[13px] font-semibold text-gray-900 truncate">moboost</div>
+                  <div className="text-[11px] text-gray-400 truncate">admin@moboost.ai</div>
                 </div>
                 <ChevronDown className={`w-3.5 h-3.5 text-gray-400 transition-transform ${showUserMenu ? 'rotate-180' : ''}`} />
               </>
@@ -122,7 +130,10 @@ export default function Sidebar() {
                 Settings
               </button>
               <div className="my-1 border-t border-[var(--border-light)]" />
-              <button className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] text-red-500 hover:bg-red-50 transition-colors">
+              <button
+                onClick={handleLogout}
+                className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] text-red-500 hover:bg-red-50 transition-colors"
+              >
                 <LogOut className="w-4 h-4" />
                 Sign out
               </button>
