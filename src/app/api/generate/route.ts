@@ -3,6 +3,12 @@ import { NextRequest, NextResponse } from 'next/server'
 const OPENROUTER_BASE = process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1'
 const OPENROUTER_KEY = process.env.OPENROUTER_API_KEY || ''
 
+function fetchWithTimeout(url: string, options: RequestInit, timeoutMs = 300_000): Promise<Response> {
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), timeoutMs)
+  return fetch(url, { ...options, signal: controller.signal }).finally(() => clearTimeout(timer))
+}
+
 export async function POST(req: NextRequest) {
   try {
     const { prompt, type } = await req.json()
@@ -15,7 +21,7 @@ export async function POST(req: NextRequest) {
       ? (process.env.VIDEO_MODEL || 'google/veo-3.1')
       : (process.env.IMAGE_MODEL || 'google/gemini-3-pro-image-preview')
 
-    const response = await fetch(`${OPENROUTER_BASE}/chat/completions`, {
+    const response = await fetchWithTimeout(`${OPENROUTER_BASE}/chat/completions`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${OPENROUTER_KEY}`,
@@ -33,7 +39,6 @@ export async function POST(req: NextRequest) {
 
     if (!response.ok) {
       const err = await response.text()
-      console.error('OpenRouter error:', err)
       return NextResponse.json({ error: err }, { status: response.status })
     }
 
@@ -100,8 +105,9 @@ export async function POST(req: NextRequest) {
       allImages, // Return all images if multiple were generated
       usage: data.usage,
     })
-  } catch (error: any) {
-    console.error('Generate error:', error)
-    return NextResponse.json({ error: error.message }, { status: 500 })
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error)
+    console.error('Generate error:', message)
+    return NextResponse.json({ error: message }, { status: 500 })
   }
 }

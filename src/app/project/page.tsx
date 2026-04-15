@@ -1,15 +1,40 @@
 'use client'
 
-import { useState, useSyncExternalStore } from 'react'
+/**
+ * /project — list of all projects for the current user.
+ *
+ * Source of truth is the database via GET /api/projects (returns rows
+ * enriched with `counts: { reports, landingPages, assets }` and the
+ * embedded `products` row). The page used to read from a localStorage
+ * `lib/store`, which silently diverged whenever artifacts were generated
+ * server-side — that's why generated reports/landing pages "disappeared"
+ * after creation. This file is now a thin renderer over the API.
+ */
+
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import {
-  Plus, Search, FolderKanban, FileText, Image as ImageIcon, Scroll, Video,
-  MoreHorizontal, Clock, ChevronRight, Sparkles, CheckCircle2, Loader2, AlertCircle
+  FolderKanban, FileText, Image as ImageIcon, Layout,
+  Clock, ChevronRight, AlertCircle, Loader2,
 } from 'lucide-react'
-import { store, ProjectRecord } from '@/lib/store'
 
-function useStoreValue<T>(sel: () => T): T {
-  return useSyncExternalStore(store.subscribe, sel, sel)
+type ProjectRow = {
+  id: string
+  name: string
+  description: string | null
+  status: string
+  source: string | null
+  created_at: string
+  updated_at: string | null
+  product_id: string | null
+  products: {
+    id: string
+    name: string | null
+    url: string | null
+    category: string | null
+    enrichment_status: string | null
+  } | null
+  counts: { reports: number; landingPages: number; assets: number }
 }
 
 function timeAgo(iso: string): string {
@@ -22,141 +47,189 @@ function timeAgo(iso: string): string {
   return `${Math.floor(hrs / 24)}d ago`
 }
 
-function statusBadge(status: string) {
-  switch (status) {
-    case 'completed':
-      return <span className="flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100 font-medium"><CheckCircle2 className="w-3 h-3" />Done</span>
-    case 'generating':
-      return <span className="flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full bg-amber-50 text-amber-600 border border-amber-100 font-medium"><Loader2 className="w-3 h-3 animate-spin" />Generating</span>
-    case 'evaluating':
-      return <span className="flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 border border-blue-100 font-medium"><Loader2 className="w-3 h-3 animate-spin" />Evaluating</span>
-    case 'failed':
-      return <span className="flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full bg-red-50 text-red-500 border border-red-100 font-medium"><AlertCircle className="w-3 h-3" />Failed</span>
-    default:
-      return <span className="text-[11px] px-2 py-0.5 rounded-full bg-gray-50 text-gray-400 border border-gray-100 font-medium">{status}</span>
-  }
-}
-
 export default function ProjectPage() {
   const router = useRouter()
-  const projects = useStoreValue(store.getProjects)
-  const [expandedId, setExpandedId] = useState<string | null>(null)
+  const [projects, setProjects] = useState<ProjectRow[] | null>(null)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    let cancelled = false
+    fetch('/api/projects', { cache: 'no-store' })
+      .then((r) => r.json())
+      .then((data) => {
+        if (cancelled) return
+        if (!data.ok) {
+          setError(data.error || 'failed_to_load')
+          setProjects([])
+          return
+        }
+        setProjects(data.projects ?? [])
+      })
+      .catch((err) => {
+        if (cancelled) return
+        setError(err.message)
+        setProjects([])
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  const loading = projects === null
+  const total = projects?.length ?? 0
 
   return (
-    <div className="p-8">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900">Projects</h1>
-          <p className="text-sm text-gray-400 mt-1">
-            {projects.length} project{projects.length !== 1 ? 's' : ''}
+    <div
+      style={{ fontFamily: '-apple-system, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif' }}
+      className="min-h-screen bg-white"
+    >
+      <div className="mx-auto max-w-5xl px-6 py-12">
+        {/* Header */}
+        <div className="mb-12">
+          <h1
+            style={{ lineHeight: '1.07' }}
+            className="text-5xl font-semibold tracking-tight text-black mb-2"
+          >
+            Projects
+          </h1>
+          <p style={{ color: 'rgba(0,0,0,0.48)' }} className="text-base">
+            {loading ? 'Loading…' : `${total} project${total !== 1 ? 's' : ''}`}
           </p>
         </div>
-      </div>
 
-      {/* Empty state */}
-      {projects.length === 0 && (
-        <div className="text-center py-16">
-          <div className="w-16 h-16 rounded-2xl bg-emerald-50 flex items-center justify-center mx-auto mb-4 border border-emerald-100">
-            <FolderKanban className="w-7 h-7 text-emerald-400" />
-          </div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-1">No projects yet</h3>
-          <p className="text-sm text-gray-400 mb-4">Go to Home and start generating to create your first project</p>
-        </div>
-      )}
-
-      {/* Project List */}
-      <div className="space-y-4">
-        {projects.map(proj => (
-          <div key={proj.id} className="bg-white border border-[var(--border)] rounded-xl overflow-hidden">
-            {/* Project header */}
-            <div className="w-full flex items-center gap-4 p-5 hover:bg-gray-50/50 transition-colors">
-              <button
-                onClick={() => router.push(`/project/${proj.id}`)}
-                className="flex items-center gap-4 flex-1 min-w-0 text-left"
-              >
-                <div className="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center border border-emerald-100 flex-shrink-0">
-                  <FolderKanban className="w-5 h-5 text-emerald-600" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-[15px] font-semibold text-gray-900 truncate">{proj.name}</h3>
-                  <div className="flex items-center gap-2 mt-0.5">
-                    <Clock className="w-3 h-3 text-gray-400" />
-                    <span className="text-xs text-gray-400">{timeAgo(proj.createdAt)}</span>
-                    <span className="text-xs text-gray-300">·</span>
-                    <span className="text-xs text-gray-400">{proj.jobs.length} generation{proj.jobs.length !== 1 ? 's' : ''}</span>
-                    <span className="text-xs text-gray-300">·</span>
-                    <span className="text-xs text-gray-400">{proj.assets.length} asset{proj.assets.length !== 1 ? 's' : ''}</span>
-                  </div>
-                </div>
-              </button>
-              <button
-                onClick={() => router.push(`/project/${proj.id}`)}
-                className="px-3 py-1.5 rounded-lg text-xs font-medium text-emerald-600 bg-emerald-50 hover:bg-emerald-100 border border-emerald-100 transition-colors flex-shrink-0"
-              >
-                Open
-              </button>
-              <button
-                onClick={() => setExpandedId(expandedId === proj.id ? null : proj.id)}
-                className="p-1.5 rounded-lg text-gray-300 hover:text-gray-600 hover:bg-gray-100 transition-colors flex-shrink-0"
-              >
-                <ChevronRight className={`w-4 h-4 transition-transform ${expandedId === proj.id ? 'rotate-90' : ''}`} />
-              </button>
+        {/* Error banner */}
+        {error && (
+          <div
+            style={{ backgroundColor: '#fff5f5', borderColor: '#fca5a5' }}
+            className="rounded-lg p-4 mb-8 border max-w-2xl text-sm flex items-start gap-3"
+          >
+            <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0 text-red-500" />
+            <div>
+              <div className="font-medium text-red-700 mb-1">Failed to load projects</div>
+              <div className="text-red-600 text-xs">{error}</div>
             </div>
+          </div>
+        )}
 
-            {/* Expanded: show jobs */}
-            {expandedId === proj.id && (
-              <div className="border-t border-[var(--border-light)] px-5 py-4 space-y-3 bg-[var(--bg-secondary)]">
-                {proj.jobs.map(job => (
-                  <div key={job.id} className="bg-white border border-[var(--border)] rounded-lg p-4">
-                    <div className="flex items-start justify-between mb-2">
-                      <div className="flex items-center gap-2">
-                        {job.type === 'image' ? <ImageIcon className="w-4 h-4 text-purple-500" /> : <Video className="w-4 h-4 text-blue-500" />}
-                        <span className="text-xs font-semibold text-gray-700 uppercase">{job.type}</span>
-                        <span className="text-[11px] text-gray-400">{timeAgo(job.createdAt)}</span>
-                      </div>
-                      {statusBadge(job.status)}
+        {/* Loading skeleton */}
+        {loading && (
+          <div className="flex items-center gap-2 text-gray-400 text-sm py-12">
+            <Loader2 className="w-4 h-4 animate-spin" />
+            Loading projects…
+          </div>
+        )}
+
+        {/* Empty state */}
+        {!loading && total === 0 && !error && (
+          <div className="text-center py-24">
+            <div className="w-20 h-20 rounded-2xl bg-gray-100 flex items-center justify-center mx-auto mb-6">
+              <FolderKanban className="w-10 h-10" style={{ color: 'rgba(0,0,0,0.2)' }} />
+            </div>
+            <h2 style={{ lineHeight: '1.1' }} className="text-2xl font-semibold text-black mb-3">
+              No projects yet
+            </h2>
+            <p style={{ color: 'rgba(0,0,0,0.48)' }} className="text-base">
+              Generate a report or landing page from Home to create your first project.
+            </p>
+          </div>
+        )}
+
+        {/* Project list */}
+        <div className="space-y-3">
+          {(projects ?? []).map((proj) => {
+            const totalArtifacts =
+              proj.counts.reports + proj.counts.landingPages + proj.counts.assets
+            return (
+              <button
+                key={proj.id}
+                onClick={() => router.push(`/project/${proj.id}`)}
+                style={{ backgroundColor: '#f5f5f7' }}
+                className="w-full text-left rounded-lg overflow-hidden hover:bg-gray-100 transition-colors"
+              >
+                <div className="flex items-center gap-4 p-4">
+                  <div
+                    style={{ backgroundColor: '#e8f4ff' }}
+                    className="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0"
+                  >
+                    <FolderKanban className="w-6 h-6" style={{ color: '#0071e3' }} />
+                  </div>
+
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <h3
+                        style={{ lineHeight: '1.1' }}
+                        className="text-base font-semibold text-black truncate"
+                      >
+                        {proj.name}
+                      </h3>
+                      {proj.source === 'auto' && (
+                        <span className="text-[10px] uppercase tracking-wide text-gray-400">
+                          auto
+                        </span>
+                      )}
                     </div>
 
-                    <p className="text-[13px] text-gray-600 mb-3 line-clamp-2">{job.prompt}</p>
+                    <div className="flex items-center gap-2 mt-1 flex-wrap">
+                      <Clock className="w-3 h-3" style={{ color: 'rgba(0,0,0,0.48)' }} />
+                      <span style={{ color: 'rgba(0,0,0,0.48)' }} className="text-xs">
+                        {timeAgo(proj.created_at)}
+                      </span>
+                      {proj.products?.name && (
+                        <>
+                          <span style={{ color: 'rgba(0,0,0,0.2)' }}>·</span>
+                          <span style={{ color: 'rgba(0,0,0,0.48)' }} className="text-xs truncate">
+                            {proj.products.name}
+                          </span>
+                        </>
+                      )}
+                    </div>
 
-                    {/* Show image if available */}
-                    {job.imageData && (
-                      <div className="mb-3">
-                        <img src={job.imageData} alt="Generated" className="w-full max-h-[200px] object-contain rounded-lg bg-gray-50 border border-[var(--border-light)]" />
-                      </div>
-                    )}
-
-                    {/* Show video if available */}
-                    {(job.videoUrl || job.videoData) && (
-                      <div className="mb-3">
-                        <video src={job.videoData || job.videoUrl} controls className="w-full max-h-[200px] rounded-lg bg-black" />
-                      </div>
-                    )}
-
-                    {/* Show evaluation scores */}
-                    {job.evaluation && (
-                      <div className="flex items-center gap-3 mt-2">
-                        <span className="text-[11px] text-gray-400">D1-D4:</span>
-                        {['d1_spec', 'd2_content', 'd3_expression', 'd4_competitive'].map((key, i) => {
-                          const score = (job.evaluation as any)?.[key]?.score || 0
-                          return (
-                            <span key={key} className={`text-xs font-bold ${score >= 8 ? 'text-emerald-600' : score >= 6 ? 'text-amber-500' : 'text-red-500'}`}>
-                              {score}
-                            </span>
-                          )
-                        })}
-                        <span className="text-xs font-bold text-gray-900 ml-auto">
-                          Overall: {(job.evaluation as any)?.overall?.toFixed(1) || 'N/A'}
+                    {/* Counts row */}
+                    <div className="flex items-center gap-3 mt-2">
+                      <span
+                        className="inline-flex items-center gap-1 text-[11px]"
+                        style={{ color: 'rgba(0,0,0,0.6)' }}
+                      >
+                        <FileText className="w-3 h-3" />
+                        {proj.counts.reports} report{proj.counts.reports !== 1 ? 's' : ''}
+                      </span>
+                      <span
+                        className="inline-flex items-center gap-1 text-[11px]"
+                        style={{ color: 'rgba(0,0,0,0.6)' }}
+                      >
+                        <Layout className="w-3 h-3" />
+                        {proj.counts.landingPages} landing
+                      </span>
+                      <span
+                        className="inline-flex items-center gap-1 text-[11px]"
+                        style={{ color: 'rgba(0,0,0,0.6)' }}
+                      >
+                        <ImageIcon className="w-3 h-3" />
+                        {proj.counts.assets} asset{proj.counts.assets !== 1 ? 's' : ''}
+                      </span>
+                      {totalArtifacts === 0 && (
+                        <span className="text-[11px] text-gray-400 italic">
+                          empty — generate something to fill it
                         </span>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
-                ))}
-              </div>
-            )}
-          </div>
-        ))}
+
+                  <span
+                    style={{ backgroundColor: '#0071e3', color: 'white' }}
+                    className="px-4 py-2 rounded-full text-sm font-medium flex-shrink-0"
+                  >
+                    Open
+                  </span>
+                  <ChevronRight
+                    className="w-5 h-5 flex-shrink-0"
+                    style={{ color: 'rgba(0,0,0,0.32)' }}
+                  />
+                </div>
+              </button>
+            )
+          })}
+        </div>
       </div>
     </div>
   )

@@ -1,0 +1,144 @@
+[
+  {
+    "category": "best_practice",
+    "vertical": "igaming",
+    "region": null,
+    "tags": [
+      "短视频广告",
+      "可玩广告",
+      "CTR",
+      "ROI",
+      "2026",
+      "格式表现"
+    ],
+    "title": "2026年短视频与可玩广告领跑iGaming CTR与ROI表现",
+    "summary": "2026年数据显示，≤15秒短视频CTR达3.8%-6.1%，ROI为180%-320%；可玩/插屏广告CTR为4.5%-7.2%，ROI达200%-380%，显著优于弹窗广告（CTR 0.2%-0.8%）和展示横幅（CTR 0.1%-0.4%）。",
+    "source_type": "agent",
+    "source_url": "https://reacheffect.com/blog/igaming-ad-creative-strategies/",
+    "source_query": "igaming creative ad formats performance data 2025-2026",
+    "confidence": 0.85,
+    "relevance": 0.92,
+    "collected_by": "openclaw"
+  },
+  {
+    "category": "best_practice",
+    "vertical": "igaming",
+    "region": null,
+    "tags": [
+      "可玩广告",
+      "IPM",
+      "ROAS",
+      "2026",
+      "Liftoff",
+      "基准数据"
+    ],
+    "title": "Liftoff 2026报告：可玩广告IPM达4.8，视频仅2.9",
+    "summary": "Liftoff《2026移动广告创意报告》显示，可玩广告平均IPM为4.8，较视频（2.9）高66%、静态广告（1.4）高243%。休闲游戏D7 ROAS达11.4%，视频为8.2%。",
+    "source_type": "agent",
+    "source_url": "https://www.rocketshiphq.com/liftoff-mobile-ad-creative-report-2025-summary/",
+    "source_query": "igaming creative ad formats performance data 2025-2026",
+    "confidence": 0.88,
+    "relevance": 0.95,
+    "collected_by": "openclaw"
+  },
+  {
+    "category": "best_practice",
+    "vertical": "igaming",
+    "region": null,
+    "tags": [
+      "创意疲劳",
+      "视频广告",
+      "Meta",
+      "刷新周期",
+      "2026"
+    ],
+    "title": "Meta视频广告创意疲劳加速至9.2天，建议每周刷新",
+    "summary": "Meta视频广告创意疲劳周期从2024年14天加速至2026年9.2天（降幅34%），静态图片为6.5天。可玩广告疲劳最慢（15.4天），建议每12天刷新一次。",
+    "source_type": "agent",
+    "source_url": "https://www.rocketshiphq.com/liftoff-mobile-ad-creative-report-2025-summary/",
+    "source_query": "igaming creative ad formats performance data 2025-2026",
+    "confidence": 0.88,
+    "relevance": 0.88,
+    "collected_by": "openclaw"
+  },
+  {
+    "category": "best_practice",
+    "vertical": "igaming",
+    "region": null,
+    "tags": [
+      "AI测试",
+      "多创意变体",
+      "CPA降低",
+      "2026",
+      "效果优化"
+    ],
+    "title": "AI辅助多变体测试策略：CPA平均降低31%",
+    "summary": "2026年行业分析显示，采用5个以上创意变体结合AI辅助测试的广告活动，相比单一静态创意，CPA平均降低31%。创意已从设计附庸转变为效果杠杆。",
+    "source_type": "agent",
+    "source_url": "https://reacheffect.com/blog/igaming-ad-creative-strategies/",
+    "source_query": "igaming creative ad formats performance data 2025-2026",
+    "confidence": 0.85,
+    "relevance": 0.9,
+    "collected_by": "openclaw"
+  },
+  {
+    "category": "best_practice",
+    "vertical": "igaming",
+    "region": null,
+    "tags": [
+      "视频广告",
+      "广告支出",
+      "市场份额",
+      "2026",
+      "Sensor_Tower"
+    ],
+    "title": "视频广告占iGaming支出71%份额，可玩广告IPM更优",
+    "summary": "Sensor Tower 2026 Q1数据显示，前200大广告主中视频仍占广告支出71%最高份额，尽管可玩广告IPM更高（4.8 vs 2.9）。视频在高容量渠道仍主导。",
+    "source_type": "agent",
+    "source_url": "https://www.rocketshiphq.com/liftoff-mobile-ad-creative-report-2025-summary/",
+    "source_query": "igaming creative ad formats performance data 2025-2026",
+    "confidence": 0.85,
+    "relevance": 0.85,
+    "collected_by": "openclaw"
+  },
+  {
+    "category": "best_practice",
+    "vertical": "igaming",
+    "region": null,
+    "tags": [
+      "原生信息流广告",
+      "CTR",
+      "ROI",
+      "2026",
+      "再营销"
+    ],
+    "title": "原生信息流广告CTR 1.9%-3.4%，适合再营销",
+    "summary": "2026年原生信息流广告CTR达1.9%-3.4%，ROI为140%-260%，对再营销和内容匹配人群效果显著。CTR介于可玩广告与社交推送之间。",
+    "source_type": "agent",
+    "source_url": "https://reacheffect.com/blog/igaming-ad-creative-strategies/",
+    "source_query": "igaming creative ad formats performance data 2025-2026",
+    "confidence": 0.85,
+    "relevance": 0.82,
+    "collected_by": "openclaw"
+  },
+  {
+    "category": "best_practice",
+    "vertical": "igaming",
+    "region": null,
+    "tags": [
+      "创意生产",
+      "规模化",
+      "2025",
+      "ContentGrip",
+      "AI工具"
+    ],
+    "title": "头部广告主季度产出2400-2600个创意变体，中小广告主增速20%-40%",
+    "summary": "ContentGrip《2026游戏UA报告》显示，季度预算400万美元以上的头部广告主2025年每季度产出2400-2600个创意变体，同比增长25%-30%；中小广告主创意产出增长20%-40%。",
+    "source_type": "agent",
+    "source_url": "https://www.contentgrip.com/gaming-marketing-trends-report/",
+    "source_query": "igaming creative ad formats performance data 2025-2026",
+    "confidence": 0.82,
+    "relevance": 0.8,
+    "collected_by": "openclaw"
+  }
+]

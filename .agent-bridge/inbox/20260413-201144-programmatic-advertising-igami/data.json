@@ -1,0 +1,126 @@
+[
+  {
+    "category": "regulation",
+    "vertical": "igaming",
+    "region": "US",
+    "tags": [
+      "regulation",
+      "Google Ads",
+      "2026",
+      "compliance",
+      "prediction markets"
+    ],
+    "title": "Google赌博广告政策2026年扩展：预测市场纳入监管",
+    "summary": "2026年1月Google扩展赌博广告政策，将联邦监管的预测市场纳入范围。3月23日起要求\"良好政策健康\"并实施历史合规检查，执照信息与IRS文件不匹配将导致认证被拒。美国iGaming运营商需提供完整的所有权链条证明才能投放广告。",
+    "source_type": "agent",
+    "source_url": "https://yeezypay.io/blog/running-gambling-ads-on-google-in-2026",
+    "source_query": "programmatic advertising igaming compliance regulations 2025-2026",
+    "confidence": 0.9,
+    "relevance": 0.95,
+    "collected_by": "openclaw"
+  },
+  {
+    "category": "regulation",
+    "vertical": "igaming",
+    "region": "US-NY",
+    "tags": [
+      "regulation",
+      "AI",
+      "New York",
+      "2025",
+      "synthetic performers",
+      "advertising"
+    ],
+    "title": "纽约州2025年AI广告披露法：虚拟表演者须标注",
+    "summary": "纽约州2025年立法要求广告商在使用AI生成的\"合成表演者\"时必须显著披露，适用于在线和社交媒体iGaming广告。该法于2025年6月9日生效，违规将面临递增民事罚款。FTC\"AI合规行动\"至2026年初已执法12次以上。",
+    "source_type": "agent",
+    "source_url": "https://www.afslaw.com/perspectives/the-fine-print/advertising-law-compliance-2026-five-developments-every-advertiser",
+    "source_query": "programmatic advertising igaming compliance regulations 2025-2026",
+    "confidence": 0.9,
+    "relevance": 0.88,
+    "collected_by": "openclaw"
+  },
+  {
+    "category": "regulation",
+    "vertical": "igaming",
+    "region": "US",
+    "tags": [
+      "regulation",
+      "AGA",
+      "responsible gaming",
+      "2026",
+      "CCRB"
+    ],
+    "title": "美国博彩协会负责任博彩行为准则2026版",
+    "summary": "美国博彩协会(AGA)2026年准则要求成员及代理商遵守游戏广告/营销合规。准则合规审查委员会(CCRB)负责监督数字广告、地理位置验证、内容审核及内部审查，确保负责任博彩措施落实。",
+    "source_type": "agent",
+    "source_url": "https://www.americangaming.org/wp-content/uploads/2025/12/Responsible-Gaming-Code-of-Conduct-2026.pdf",
+    "source_query": "programmatic advertising igaming compliance regulations 2025-2026",
+    "confidence": 0.9,
+    "relevance": 0.92,
+    "collected_by": "openclaw"
+  },
+  {
+    "category": "regulation",
+    "vertical": "igaming",
+    "region": "Europe",
+    "tags": [
+      "regulation",
+      "Europe",
+      "Italy",
+      "Spain",
+      "Baltic",
+      "2025-2026",
+      "fragmentation"
+    ],
+    "title": "欧洲iGaming广告碎片化：意大利罚款与西班牙禁令2025-2026",
+    "summary": "2025-2026年欧洲监管收紧：意大利对全球平台罚款违规赌博广告，西班牙推进近乎全面禁令，波罗的海国家准备更严格法规针对体育/数字品牌。监管机构要求整个推广链合规，包括运营商内容到媒体交付。",
+    "source_type": "agent",
+    "source_url": "https://4h.agency/everything-else/tpost/mbm9j0hdo1-european-igaming-advertising-fragmentati",
+    "source_query": "programmatic advertising igaming compliance regulations 2025-2026",
+    "confidence": 0.85,
+    "relevance": 0.9,
+    "collected_by": "openclaw"
+  },
+  {
+    "category": "regulation",
+    "vertical": "igaming",
+    "region": "US-NJ",
+    "tags": [
+      "regulation",
+      "New Jersey",
+      "2026",
+      "responsible gaming",
+      "S2356"
+    ],
+    "title": "新泽西州S2356法案要求轮换负责任博彩短语",
+    "summary": "2026年初新泽西州S2356法案要求所有数字赌博广告轮换使用3-10条特定\"负责任博彩\"短语。Google Ads要求IRS文件与执照完全匹配，创意素材需每30天刷新。",
+    "source_type": "agent",
+    "source_url": "https://yeezypay.io/blog/running-gambling-ads-on-google-in-2026",
+    "source_query": "programmatic advertising igaming compliance regulations 2025-2026",
+    "confidence": 0.9,
+    "relevance": 0.87,
+    "collected_by": "openclaw"
+  },
+  {
+    "category": "regulation",
+    "vertical": "igaming",
+    "region": "global",
+    "tags": [
+      "regulation",
+      "Google",
+      "Meta",
+      "TikTok",
+      "platforms",
+      "2026"
+    ],
+    "title": "2026年平台收紧iGaming广告政策：Google、Meta、TikTok认证要求",
+    "summary": "2026年各平台加强iGaming广告管控：Google在英国/西班牙/意大利要求执照认证及年龄门禁；Meta需许可且禁止未成年人及\"快速致富\"声称；TikTok试点许可地区实行严格年龄/合规控制；所有平台均要求负责任博彩链接。",
+    "source_type": "agent",
+    "source_url": "https://www.clickguard.com/blog/ppc-for-igaming-and-casino-brands/",
+    "source_query": "programmatic advertising igaming compliance regulations 2025-2026",
+    "confidence": 0.85,
+    "relevance": 0.88,
+    "collected_by": "openclaw"
+  }
+]

@@ -1,0 +1,81 @@
+[
+  {
+    "category": "competitor",
+    "vertical": "Casino",
+    "tags": ["optimove", "ai", "gartner", "ranking", "multichannel"],
+    "title": "Optimove 被 Gartner 评为多渠道营销中心 AI 能力第一名",
+    "summary": "在 Gartner 2025 多渠道营销中心评估报告中，Optimove 的 AI 能力排名第一，并在关键评估类别中获得前三名，验证了其 Positionless Marketing 平台的 AI 实力。这对 Moboost 意味着需要在进化系统中对标行业最高的 AI 营销标准。",
+    "source_type": "crawler",
+    "source_url": "https://www.optimove.com/resources/blog/optimove-ranked-1-for-ai-capabilities-by-gartner-for-multichannel-marketing-hubs",
+    "source_query": "Optimove product updates 2026",
+    "confidence": 0.9,
+    "relevance": 0.95,
+    "collected_by": "openclaw"
+  },
+  {
+    "category": "competitor",
+    "vertical": null,
+    "tags": ["optimove", "ai-decisioning", "product-launch", "positionless-marketing"],
+    "title": "Optimove 发布 AI Decisioning Studio — 统一 AI 决策管理中心",
+    "summary": "Optimove 推出 AI Decisioning Studio，作为 Positionless Marketing 的新中枢。该工具将 campaign、journey、offer、timing 的 AI 决策统一到单一管理界面。这代表了 CRM 营销平台向 AI-first 架构的演进方向，Moboost 需要关注其架构设计理念。",
+    "source_type": "crawler",
+    "source_url": "https://www.optimove.com/resources/blog/ai-decisioning-studio-optimove-s-new-hub-for-positionless-marketing",
+    "source_query": "Optimove AI decisioning 2026",
+    "confidence": 0.9,
+    "relevance": 0.9,
+    "collected_by": "openclaw"
+  },
+  {
+    "category": "competitor",
+    "vertical": "Casino",
+    "tags": ["optimove", "personalization", "email-marketing", "game-recommendations", "roi"],
+    "title": "Optimove AI 游戏推荐驱动 £40K 投注额增长",
+    "summary": "Optimove Personalize 功能通过每日自动轮换热门游戏推荐用于邮件营销，成功带来 £40K 投注金额增长。关键机制包括减少邮件疲劳、提升点击率到游戏页面的转化。这证明了 AI 个性化在 iGaming 邮件渠道的直接 ROI。",
+    "source_type": "crawler",
+    "source_url": "https://www.optimove.com/resources/blog/how-ai-powered-game-recommendations-drove-40-k-in-bet-amount",
+    "source_query": "iGaming email personalization ROI",
+    "confidence": 0.85,
+    "relevance": 0.85,
+    "collected_by": "openclaw"
+  },
+  {
+    "category": "market_data",
+    "vertical": "Sports Betting",
+    "region": "US",
+    "tags": ["igaming-pulse", "player-behavior", "deposits", "bets", "us-market"],
+    "title": "Optimove iGaming Pulse 2026年2月：美国存款上升但投注下降",
+    "summary": "Optimove 的 iGaming Pulse 月度报告显示，2026年2月美国玩家存款持续上升，但投注次数呈下降趋势。与全球市场对比，美国市场行为差异显著，暗示高价值玩家集中度提升。这一数据可作为 Moboost 进化系统 Domain Gap Analysis 的市场环境输入。",
+    "source_type": "crawler",
+    "source_url": "https://www.optimove.com/resources/blog/optimove-insights-i-gaming-pulse-february-2026-us-rising-deposits-declining-bets",
+    "source_query": "iGaming market data 2026",
+    "confidence": 0.8,
+    "relevance": 0.75,
+    "collected_by": "openclaw"
+  },
+  {
+    "category": "technology",
+    "vertical": null,
+    "tags": ["gamification", "active-personalization", "preference-collection", "trust-building"],
+    "title": "Gamification 驱动主动个性化：偏好收集的游戏化方法",
+    "summary": "Optimove 博客详述了如何将游戏化与主动个性化结合的方法论。核心理念是通过游戏化机制让用户主动分享偏好，构建信任基础，实现可扩展的权限式个性化。这对 Moboost 的创意素材生成系统有架构参考价值。",
+    "source_type": "crawler",
+    "source_url": "https://www.optimove.com/resources/blog/how-to-use-gamification-for-active-personalization",
+    "source_query": "gamification personalization igaming",
+    "confidence": 0.8,
+    "relevance": 0.7,
+    "collected_by": "openclaw"
+  },
+  {
+    "category": "best_practice",
+    "vertical": "Sports Betting",
+    "tags": ["igaming", "strategy", "retention", "automation", "crm", "2026-priorities"],
+    "title": "2026年 iGaming 运营商5大战略优先级",
+    "summary": "Optimove 总结了 2026 年 iGaming 运营商应关注的5个战略优先级，核心方向是从常规 CRM 运营转向测试驱动、自主权增强、自动化优先的模式，以提升玩家忠诚度和增长。这与 Moboost 的自进化定位高度契合，可直接喂给 Cross-Eval 和 Self-Test 机制。",
+    "source_type": "crawler",
+    "source_url": "https://www.optimove.com/resources/blog/5-strategic-priorities-for-i-gaming-operators-in-2026",
+    "source_query": "iGaming operator strategy 2026",
+    "confidence": 0.85,
+    "relevance": 0.9,
+    "collected_by": "openclaw"
+  }
+]

@@ -3,6 +3,10 @@
 // ===== Global State Store =====
 // Manages: generation jobs, projects, notifications, sidebar, conversations
 
+export interface EvaluationResult {
+  [key: string]: unknown
+}
+
 export interface GenerationJob {
   id: string
   projectId: string
@@ -14,7 +18,7 @@ export interface GenerationJob {
   videoJobId?: string
   videoUrl?: string
   videoData?: string
-  evaluation?: any
+  evaluation?: EvaluationResult
   resultText?: string
   error?: string
   createdAt: string
@@ -41,7 +45,7 @@ export interface ChatMessage {
   allImages?: string[]
   videoData?: string
   videoUrl?: string
-  evaluation?: any
+  evaluation?: EvaluationResult
   isGenerating?: boolean
   isEvaluating?: boolean
   error?: string
@@ -56,7 +60,7 @@ export interface GeneratedAsset {
   videoData?: string
   videoUrl?: string
   prompt: string
-  evaluation?: any
+  evaluation?: EvaluationResult
   createdAt: string
 }
 
@@ -90,6 +94,74 @@ let _listeners: Set<() => void> = new Set()
 
 function emit() { _listeners.forEach(fn => fn()) }
 
+// ===== Persistence bridge (PCEC cycle 3, C12) =================================
+//
+// Every project mutation schedules a debounced async POST to /api/store/persist
+// which writes <DATA_DIR>/projects/<projectId>.json on the server.
+//
+// Why debounced: a single user action (e.g. "send a message") often triggers
+// multiple sequential mutations (add user msg → add generating placeholder →
+// update placeholder with result). Without debouncing we'd write the same file
+// 3-5 times per click. With a 250ms debounce we coalesce all bursts of
+// activity on the same project into a single write.
+//
+// All persistence is fire-and-forget — failures log to console but never
+// throw, never block the UI, never reject promises that the caller is
+// awaiting. The store's in-memory state remains the source of truth during
+// the current session; persistence only matters across reloads.
+//
+// On a fresh app boot the project list page calls `store.hydrate()` once to
+// pull the persisted snapshot back from disk. See `/api/store/restore`.
+//
+// ADL note: this whole block is purely additive. Removing the four lines
+// inside _schedulePersist() restores the old in-memory-only behavior with
+// zero side effects on the public store API.
+// ────────────────────────────────────────────────────────────────────────────
+const _persistTimers = new Map<string, ReturnType<typeof setTimeout>>()
+const PERSIST_DEBOUNCE_MS = 250
+let _hydrated = false
+
+function _schedulePersist(projectId: string) {
+  // Skip on the server side — persistence is the browser's job. The /api
+  // route handlers should never re-trigger themselves.
+  if (typeof window === 'undefined') return
+  const existing = _persistTimers.get(projectId)
+  if (existing) clearTimeout(existing)
+  const t = setTimeout(() => {
+    _persistTimers.delete(projectId)
+    const project = _projects.find((p) => p.id === projectId)
+    if (!project) return
+    fetch('/api/store/persist', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ project }),
+    })
+      .then(async (r) => {
+        if (!r.ok) {
+          // Persist failed silently
+        }
+      })
+      .catch((err) => {
+        // Persist failed silently
+      })
+  }, PERSIST_DEBOUNCE_MS)
+  _persistTimers.set(projectId, t)
+}
+
+function _scheduleDelete(projectId: string) {
+  if (typeof window === 'undefined') return
+  const existing = _persistTimers.get(projectId)
+  if (existing) {
+    clearTimeout(existing)
+    _persistTimers.delete(projectId)
+  }
+  fetch(`/api/store/persist?projectId=${encodeURIComponent(projectId)}`, {
+    method: 'DELETE',
+  }).catch((err) => {
+    // Delete failed silently
+  })
+}
+
 export const store = {
   subscribe(fn: () => void) {
     _listeners.add(fn)
@@ -117,7 +189,16 @@ export const store = {
     _projects = [project, ..._projects]
     _activeProjectId = project.id
     emit()
+    _schedulePersist(project.id)
     return project
+  },
+
+  /** Remove a project from memory AND from disk. */
+  removeProject(projectId: string) {
+    _projects = _projects.filter((p) => p.id !== projectId)
+    if (_activeProjectId === projectId) _activeProjectId = null
+    emit()
+    _scheduleDelete(projectId)
   },
 
   addMessageToProject(projectId: string, msg: ChatMessage) {
@@ -125,6 +206,7 @@ export const store = {
       p.id === projectId ? { ...p, messages: [...p.messages, msg] } : p
     )
     emit()
+    _schedulePersist(projectId)
   },
 
   updateMessageInProject(projectId: string, msgId: string, updates: Partial<ChatMessage>) {
@@ -134,6 +216,7 @@ export const store = {
         : p
     )
     emit()
+    _schedulePersist(projectId)
   },
 
   addJobToProject(projectId: string, job: GenerationJob) {
@@ -141,6 +224,7 @@ export const store = {
       p.id === projectId ? { ...p, jobs: [...p.jobs, job] } : p
     )
     emit()
+    _schedulePersist(projectId)
   },
 
   updateJobInProject(projectId: string, jobId: string, updates: Partial<GenerationJob>) {
@@ -150,6 +234,7 @@ export const store = {
         : p
     )
     emit()
+    _schedulePersist(projectId)
   },
 
   getJob(projectId: string, jobId: string): GenerationJob | undefined {
@@ -164,6 +249,7 @@ export const store = {
         : p
     )
     emit()
+    _schedulePersist(projectId)
   },
 
   removeAssetFromProject(projectId: string, assetId: string) {
@@ -179,6 +265,7 @@ export const store = {
       }
     })
     emit()
+    _schedulePersist(projectId)
   },
 
   selectAsset(projectId: string, assetId: string) {
@@ -186,6 +273,7 @@ export const store = {
       p.id === projectId ? { ...p, selectedAssetId: assetId } : p
     )
     emit()
+    _schedulePersist(projectId)
   },
 
   getSelectedAsset(projectId: string): GeneratedAsset | undefined {
@@ -219,6 +307,94 @@ export const store = {
   // ===== Sidebar =====
   isSidebarCollapsed: () => _sidebarCollapsed,
   setSidebarCollapsed(v: boolean) { _sidebarCollapsed = v; emit() },
+
+  // ===== Persistence (PCEC cycle 3, C12) =================================
+  /**
+   * Pull every persisted project back from <DATA_DIR>/projects/*.json into
+   * memory. Idempotent — calling twice is harmless. Should be called once
+   * on app boot, typically from the project listing page's useEffect.
+   *
+   * Returns the storage info object so callers can show "stored at: ..."
+   * in the UI.
+   */
+  async hydrate(): Promise<{
+    hydrated: boolean
+    storage: {
+      projectsDir: string
+      dataDir: string
+      exists: boolean
+      fileCount: number
+      totalBytes: number
+      schemaVersion: number
+    } | null
+  }> {
+    if (_hydrated) {
+      // Even if hydrated, refresh storage info for the UI
+      try {
+        const r = await fetch('/api/store/info')
+        const d = await r.json()
+        return { hydrated: true, storage: d?.storage ?? null }
+      } catch {
+        return { hydrated: true, storage: null }
+      }
+    }
+    try {
+      const res = await fetch('/api/store/restore')
+      if (!res.ok) {
+        _hydrated = true
+        return { hydrated: false, storage: null }
+      }
+      const data = await res.json()
+      const restored = (data?.projects ?? []) as ProjectRecord[]
+      // Merge: anything already in memory wins (the user might have created
+      // a project before hydrate finishes). Disk fills in the rest.
+      const haveIds = new Set(_projects.map((p) => p.id))
+      const fresh = restored.filter((p) => !haveIds.has(p.id))
+      _projects = [..._projects, ...fresh]
+      // Sort newest-first to match createProject() prepend behavior
+      _projects.sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''))
+      _hydrated = true
+      emit()
+      return { hydrated: true, storage: data?.storage ?? null }
+    } catch (err: unknown) {
+      _hydrated = true
+      return { hydrated: false, storage: null }
+    }
+  },
+
+  /** True iff hydrate() has finished (either successfully or after a hard fail). */
+  isHydrated(): boolean {
+    return _hydrated
+  },
+
+  /**
+   * Reset the entire in-memory store back to a clean anonymous state.
+   *
+   * Phase 1.5: called by <UserScopeGuard> whenever the Clerk user changes
+   * (sign-in, sign-out, or A → B account switch).  This prevents user A's
+   * projects, messages, and notifications from leaking into user B's session.
+   *
+   * Pending debounced persist timers are cancelled — they reference _projects
+   * which is about to be cleared, so flushing them now would write empty
+   * payloads under the wrong identity.  Any unsaved work is sacrificed on
+   * purpose; by the time we reach reset() the user has already changed and
+   * keeping "their" state around would be a privacy leak.
+   */
+  reset() {
+    // Cancel all pending persist writes.  We use forEach rather than
+    // `for...of _persistTimers.values()` because this repo targets an
+    // older ES version where Map iterators aren't iterable without the
+    // downlevelIteration flag.
+    _persistTimers.forEach((t) => clearTimeout(t))
+    _persistTimers.clear()
+
+    _projects = []
+    _notifications = []
+    _activeProjectId = null
+    _hydrated = false
+    // _sidebarCollapsed is a UI preference — keep it across user switches
+    emit()
+  },
 }
 
 // ===== Fake thinking steps =====
@@ -310,7 +486,9 @@ export async function pollVideoJob(
         store.updateJobInProject(projectId, jobId, { status: 'failed', error: 'Timeout' })
         store.addNotification({ type: 'error', title: '视频生成超时', message: '超过 150 秒', projectId })
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err)
+      // Silently continue polling on error
       if (attempts < maxAttempts) setTimeout(poll, 5000)
     }
   }

@@ -1,0 +1,1908 @@
+{
+  "summary": {
+    "total": 237,
+    "passed": 234,
+    "failed": 3,
+    "pass_rate": 98.73417721518987,
+    "run_time": "2026-04-15T13:18:15.633153",
+    "project_path": "/sessions/brave-wonderful-davinci/mnt/moboost AI/moboost-maas"
+  },
+  "results": [
+    {
+      "tc_id": "TC-API-001",
+      "category": "API",
+      "name": "Route exists: /api/brief/parse",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Found: /api/brief/parse"
+    },
+    {
+      "tc_id": "TC-API-002",
+      "category": "API",
+      "name": "Route exists: /api/brief/clarify",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Found: /api/brief/clarify"
+    },
+    {
+      "tc_id": "TC-API-003",
+      "category": "API",
+      "name": "Route exists: /api/brief/enrich",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Found: /api/brief/enrich"
+    },
+    {
+      "tc_id": "TC-API-004",
+      "category": "API",
+      "name": "Route exists: /api/brief/execute",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Found: /api/brief/execute"
+    },
+    {
+      "tc_id": "TC-API-005",
+      "category": "API",
+      "name": "Route exists: /api/brief/agent",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Found: /api/brief/agent"
+    },
+    {
+      "tc_id": "TC-API-006",
+      "category": "API",
+      "name": "Route exists: /api/brief/expert-search",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Found: /api/brief/expert-search"
+    },
+    {
+      "tc_id": "TC-API-007",
+      "category": "API",
+      "name": "Route exists: /api/brief/fetch-url",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Found: /api/brief/fetch-url"
+    },
+    {
+      "tc_id": "TC-API-008",
+      "category": "API",
+      "name": "Route exists: /api/generate",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Found: /api/generate"
+    },
+    {
+      "tc_id": "TC-API-009",
+      "category": "API",
+      "name": "Route exists: /api/generate-video",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Found: /api/generate-video"
+    },
+    {
+      "tc_id": "TC-API-010",
+      "category": "API",
+      "name": "Route exists: /api/evaluate",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Found: /api/evaluate"
+    },
+    {
+      "tc_id": "TC-API-011",
+      "category": "API",
+      "name": "Route exists: /api/knowledge",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Found: /api/knowledge"
+    },
+    {
+      "tc_id": "TC-API-012",
+      "category": "API",
+      "name": "Route exists: /api/landing/generate",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Found: /api/landing/generate"
+    },
+    {
+      "tc_id": "TC-API-013",
+      "category": "API",
+      "name": "Route exists: /api/me",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Found: /api/me"
+    },
+    {
+      "tc_id": "TC-API-014",
+      "category": "API",
+      "name": "Route exists: /api/auth/login",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Found: /api/auth/login"
+    },
+    {
+      "tc_id": "TC-API-015",
+      "category": "API",
+      "name": "Route exists: /api/auth/logout",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Found: /api/auth/logout"
+    },
+    {
+      "tc_id": "TC-API-016",
+      "category": "API",
+      "name": "Route exists: /api/products/enrich",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Found: /api/products/enrich"
+    },
+    {
+      "tc_id": "TC-API-017",
+      "category": "API",
+      "name": "Route exists: /api/credits/balance",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Found: /api/credits/balance"
+    },
+    {
+      "tc_id": "TC-API-018",
+      "category": "API",
+      "name": "Route exists: /api/upload",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Found: /api/upload"
+    },
+    {
+      "tc_id": "TC-API-019",
+      "category": "API",
+      "name": "Route exists: /api/admin/auth",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Found: /api/admin/auth"
+    },
+    {
+      "tc_id": "TC-API-020",
+      "category": "API",
+      "name": "Route exists: /api/admin/counts",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Found: /api/admin/counts"
+    },
+    {
+      "tc_id": "TC-API-021",
+      "category": "API",
+      "name": "Route exists: /api/admin/data",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Found: /api/admin/data"
+    },
+    {
+      "tc_id": "TC-API-022",
+      "category": "API",
+      "name": "Route exists: /api/admin/evolution",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Found: /api/admin/evolution"
+    },
+    {
+      "tc_id": "TC-API-023",
+      "category": "API",
+      "name": "Route exists: /api/admin/intelligence",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Found: /api/admin/intelligence"
+    },
+    {
+      "tc_id": "TC-API-024",
+      "category": "API",
+      "name": "Route exists: /api/admin/mutations",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Found: /api/admin/mutations"
+    },
+    {
+      "tc_id": "TC-API-025",
+      "category": "API",
+      "name": "Route exists: /api/admin/reset",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Found: /api/admin/reset"
+    },
+    {
+      "tc_id": "TC-API-026",
+      "category": "API",
+      "name": "Route exists: /api/onboarding/complete",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Found: /api/onboarding/complete"
+    },
+    {
+      "tc_id": "TC-API-027",
+      "category": "API",
+      "name": "Route exists: /api/reports/generate",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Found: /api/reports/generate"
+    },
+    {
+      "tc_id": "TC-API-028",
+      "category": "API",
+      "name": "Route exists: /api/store/info",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Found: /api/store/info"
+    },
+    {
+      "tc_id": "TC-API-029",
+      "category": "API",
+      "name": "Route exists: /api/store/persist",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Found: /api/store/persist"
+    },
+    {
+      "tc_id": "TC-API-030",
+      "category": "API",
+      "name": "Route exists: /api/store/restore",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Found: /api/store/restore"
+    },
+    {
+      "tc_id": "TC-API-031",
+      "category": "API",
+      "name": "Route exists: /api/spec/probe",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Found: /api/spec/probe"
+    },
+    {
+      "tc_id": "TC-API-032",
+      "category": "API",
+      "name": "Route exists: /api/spec/validate",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Found: /api/spec/validate"
+    },
+    {
+      "tc_id": "TC-API-033",
+      "category": "API",
+      "name": "Route exists: /api/meta",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Found: /api/meta"
+    },
+    {
+      "tc_id": "TC-API-034",
+      "category": "API",
+      "name": "Route exists: /api/evolution",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Found: /api/evolution"
+    },
+    {
+      "tc_id": "TC-API-035",
+      "category": "API",
+      "name": "Route exists: /api/evolution/agents",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Found: /api/evolution/agents"
+    },
+    {
+      "tc_id": "TC-API-036",
+      "category": "API",
+      "name": "Route exists: /api/cron/market-intel/sync",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Found: /api/cron/market-intel/sync"
+    },
+    {
+      "tc_id": "TC-API-037",
+      "category": "API",
+      "name": "POST /api/landing/generate reads request body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing"
+    },
+    {
+      "tc_id": "TC-API-038",
+      "category": "API",
+      "name": "POST /api/products/enrich reads request body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing"
+    },
+    {
+      "tc_id": "TC-API-039",
+      "category": "API",
+      "name": "POST /api/auth/logout reads request body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Route does not need body (OK: auth/logout)"
+    },
+    {
+      "tc_id": "TC-API-040",
+      "category": "API",
+      "name": "POST /api/auth/login reads request body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing"
+    },
+    {
+      "tc_id": "TC-API-041",
+      "category": "API",
+      "name": "POST /api/debug-generate reads request body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing"
+    },
+    {
+      "tc_id": "TC-API-042",
+      "category": "API",
+      "name": "POST /api/projects reads request body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing"
+    },
+    {
+      "tc_id": "TC-API-043",
+      "category": "API",
+      "name": "POST /api/projects/[id]/conversations reads request body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing"
+    },
+    {
+      "tc_id": "TC-API-044",
+      "category": "API",
+      "name": "POST /api/spec/validate reads request body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing"
+    },
+    {
+      "tc_id": "TC-API-045",
+      "category": "API",
+      "name": "POST /api/spec/probe reads request body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing"
+    },
+    {
+      "tc_id": "TC-API-046",
+      "category": "API",
+      "name": "POST /api/admin/intelligence reads request body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing"
+    },
+    {
+      "tc_id": "TC-API-047",
+      "category": "API",
+      "name": "POST /api/admin/auth reads request body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing"
+    },
+    {
+      "tc_id": "TC-API-048",
+      "category": "API",
+      "name": "POST /api/admin/mutations reads request body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing"
+    },
+    {
+      "tc_id": "TC-API-049",
+      "category": "API",
+      "name": "POST /api/admin/reset reads request body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing"
+    },
+    {
+      "tc_id": "TC-API-050",
+      "category": "API",
+      "name": "POST /api/meta reads request body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing"
+    },
+    {
+      "tc_id": "TC-API-051",
+      "category": "API",
+      "name": "POST /api/debug-video reads request body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing"
+    },
+    {
+      "tc_id": "TC-API-052",
+      "category": "API",
+      "name": "POST /api/evaluate reads request body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing"
+    },
+    {
+      "tc_id": "TC-API-053",
+      "category": "API",
+      "name": "POST /api/intent reads request body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing"
+    },
+    {
+      "tc_id": "TC-API-054",
+      "category": "API",
+      "name": "POST /api/generate-video reads request body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing"
+    },
+    {
+      "tc_id": "TC-API-055",
+      "category": "API",
+      "name": "POST /api/evolution reads request body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing"
+    },
+    {
+      "tc_id": "TC-API-056",
+      "category": "API",
+      "name": "POST /api/generate reads request body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing"
+    },
+    {
+      "tc_id": "TC-API-057",
+      "category": "API",
+      "name": "POST /api/brief/expert-search reads request body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing"
+    },
+    {
+      "tc_id": "TC-API-058",
+      "category": "API",
+      "name": "POST /api/brief/fetch-url reads request body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing"
+    },
+    {
+      "tc_id": "TC-API-059",
+      "category": "API",
+      "name": "POST /api/brief/clarify reads request body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing"
+    },
+    {
+      "tc_id": "TC-API-060",
+      "category": "API",
+      "name": "POST /api/brief/parse reads request body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing"
+    },
+    {
+      "tc_id": "TC-API-061",
+      "category": "API",
+      "name": "POST /api/brief/agent reads request body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing"
+    },
+    {
+      "tc_id": "TC-API-062",
+      "category": "API",
+      "name": "POST /api/brief/enrich reads request body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing"
+    },
+    {
+      "tc_id": "TC-API-063",
+      "category": "API",
+      "name": "POST /api/brief/execute reads request body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing"
+    },
+    {
+      "tc_id": "TC-API-064",
+      "category": "API",
+      "name": "POST /api/onboarding/complete reads request body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing"
+    },
+    {
+      "tc_id": "TC-API-065",
+      "category": "API",
+      "name": "POST /api/upload reads request body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing"
+    },
+    {
+      "tc_id": "TC-API-066",
+      "category": "API",
+      "name": "POST /api/cron/market-intel/sync reads request body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Route does not need body (OK: cron/market-intel/sync)"
+    },
+    {
+      "tc_id": "TC-API-067",
+      "category": "API",
+      "name": "POST /api/reports/generate reads request body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing"
+    },
+    {
+      "tc_id": "TC-API-068",
+      "category": "API",
+      "name": "POST /api/store/persist reads request body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing"
+    },
+    {
+      "tc_id": "TC-API-069",
+      "category": "API",
+      "name": "/api/debug-generate has OpenRouter error handling",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Has try/catch + error response"
+    },
+    {
+      "tc_id": "TC-API-070",
+      "category": "API",
+      "name": "/api/debug-video has OpenRouter error handling",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Has try/catch + error response"
+    },
+    {
+      "tc_id": "TC-API-071",
+      "category": "API",
+      "name": "/api/generate-video has OpenRouter error handling",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Has try/catch + error response"
+    },
+    {
+      "tc_id": "TC-API-072",
+      "category": "API",
+      "name": "/api/generate has OpenRouter error handling",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Has try/catch + error response"
+    },
+    {
+      "tc_id": "TC-API-073",
+      "category": "API",
+      "name": "/api/brief/clarify has OpenRouter error handling",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Has try/catch + error response"
+    },
+    {
+      "tc_id": "TC-API-074",
+      "category": "API",
+      "name": "/api/brief/parse has OpenRouter error handling",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Has try/catch + error response"
+    },
+    {
+      "tc_id": "TC-API-075",
+      "category": "API",
+      "name": "/api/brief/agent has OpenRouter error handling",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Has try/catch + error response"
+    },
+    {
+      "tc_id": "TC-API-076",
+      "category": "API",
+      "name": "/api/brief/enrich has OpenRouter error handling",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Has try/catch + error response"
+    },
+    {
+      "tc_id": "TC-API-077",
+      "category": "API",
+      "name": "/api/brief/execute has OpenRouter error handling",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Has try/catch + error response"
+    },
+    {
+      "tc_id": "TC-API-078",
+      "category": "API",
+      "name": "/api/onboarding/complete has OpenRouter error handling",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Has try/catch + error response"
+    },
+    {
+      "tc_id": "TC-API-079",
+      "category": "API",
+      "name": "/api/landing/generate returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-080",
+      "category": "API",
+      "name": "/api/products/enrich returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-081",
+      "category": "API",
+      "name": "/api/auth/logout returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-082",
+      "category": "API",
+      "name": "/api/auth/login returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-083",
+      "category": "API",
+      "name": "/api/debug-generate returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-084",
+      "category": "API",
+      "name": "/api/projects returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-085",
+      "category": "API",
+      "name": "/api/projects/[id] returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-086",
+      "category": "API",
+      "name": "/api/projects/[id]/conversations returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-087",
+      "category": "API",
+      "name": "/api/spec/validate returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-088",
+      "category": "API",
+      "name": "/api/spec/probe returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-089",
+      "category": "API",
+      "name": "/api/admin/intelligence returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-090",
+      "category": "API",
+      "name": "/api/admin/config returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-091",
+      "category": "API",
+      "name": "/api/admin/auth returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-092",
+      "category": "API",
+      "name": "/api/admin/mutations returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-093",
+      "category": "API",
+      "name": "/api/admin/reset returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-094",
+      "category": "API",
+      "name": "/api/admin/evolution returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-095",
+      "category": "API",
+      "name": "/api/admin/prompts returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-096",
+      "category": "API",
+      "name": "/api/admin/prompts/[id] returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-097",
+      "category": "API",
+      "name": "/api/admin/data returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-098",
+      "category": "API",
+      "name": "/api/admin/counts returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-099",
+      "category": "API",
+      "name": "/api/meta returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-100",
+      "category": "API",
+      "name": "/api/debug-video returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-101",
+      "category": "API",
+      "name": "/api/evaluate returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-102",
+      "category": "API",
+      "name": "/api/intent returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-103",
+      "category": "API",
+      "name": "/api/knowledge returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-104",
+      "category": "API",
+      "name": "/api/generate-video returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-105",
+      "category": "API",
+      "name": "/api/me returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-106",
+      "category": "API",
+      "name": "/api/evolution returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-107",
+      "category": "API",
+      "name": "/api/evolution/agents returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-108",
+      "category": "API",
+      "name": "/api/generate returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-109",
+      "category": "API",
+      "name": "/api/brief/expert-search returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-110",
+      "category": "API",
+      "name": "/api/brief/fetch-url returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-111",
+      "category": "API",
+      "name": "/api/brief/clarify returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-112",
+      "category": "API",
+      "name": "/api/brief/parse returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-113",
+      "category": "API",
+      "name": "/api/brief/agent returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-114",
+      "category": "API",
+      "name": "/api/brief/enrich returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-115",
+      "category": "API",
+      "name": "/api/brief/execute returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-116",
+      "category": "API",
+      "name": "/api/credits/balance returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-117",
+      "category": "API",
+      "name": "/api/onboarding/complete returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-118",
+      "category": "API",
+      "name": "/api/upload returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-119",
+      "category": "API",
+      "name": "/api/cron/market-intel/sync returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-120",
+      "category": "API",
+      "name": "/api/reports/generate returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-121",
+      "category": "API",
+      "name": "/api/reports/[id] returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-122",
+      "category": "API",
+      "name": "/api/store/info returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-123",
+      "category": "API",
+      "name": "/api/store/restore returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-124",
+      "category": "API",
+      "name": "/api/store/persist returns NextResponse.json()",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Uses NextResponse.json"
+    },
+    {
+      "tc_id": "TC-API-125",
+      "category": "API",
+      "name": "brief/parse validates text length (max 4000)",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Has length check"
+    },
+    {
+      "tc_id": "TC-API-126",
+      "category": "API",
+      "name": "brief/parse handles empty text",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Has empty check"
+    },
+    {
+      "tc_id": "TC-API-127",
+      "category": "API",
+      "name": "generate-video handles action='submit'",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Found 'submit' handling"
+    },
+    {
+      "tc_id": "TC-API-128",
+      "category": "API",
+      "name": "generate-video handles action='poll'",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Found 'poll' handling"
+    },
+    {
+      "tc_id": "TC-API-129",
+      "category": "API",
+      "name": "generate-video handles action='download'",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Found 'download' handling"
+    },
+    {
+      "tc_id": "TC-API-130",
+      "category": "API",
+      "name": "evaluate checks dimension d1",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Found d1"
+    },
+    {
+      "tc_id": "TC-API-131",
+      "category": "API",
+      "name": "evaluate checks dimension d2",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Found d2"
+    },
+    {
+      "tc_id": "TC-API-132",
+      "category": "API",
+      "name": "evaluate checks dimension d3",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Found d3"
+    },
+    {
+      "tc_id": "TC-API-133",
+      "category": "API",
+      "name": "evaluate checks dimension d4",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Found d4"
+    },
+    {
+      "tc_id": "TC-API-134",
+      "category": "API",
+      "name": "upload enforces file size limit",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Has size limit"
+    },
+    {
+      "tc_id": "TC-API-135",
+      "category": "API",
+      "name": "upload validates file type",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has type validation"
+    },
+    {
+      "tc_id": "TC-SEC-001",
+      "category": "SEC",
+      "name": "/api/brief/execute has auth check",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Has auth"
+    },
+    {
+      "tc_id": "TC-SEC-002",
+      "category": "SEC",
+      "name": "/api/landing/generate has auth check",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Has auth"
+    },
+    {
+      "tc_id": "TC-SEC-003",
+      "category": "SEC",
+      "name": "/api/me has auth check",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Has auth"
+    },
+    {
+      "tc_id": "TC-SEC-004",
+      "category": "SEC",
+      "name": "/api/credits/balance has auth check",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Has auth"
+    },
+    {
+      "tc_id": "TC-SEC-005",
+      "category": "SEC",
+      "name": "/api/products/enrich has auth check",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Has auth"
+    },
+    {
+      "tc_id": "TC-SEC-006",
+      "category": "SEC",
+      "name": "/api/onboarding/complete has auth check",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Has auth"
+    },
+    {
+      "tc_id": "TC-SEC-007",
+      "category": "SEC",
+      "name": "/api/brief/execute returns 401 for unauth",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Returns 401"
+    },
+    {
+      "tc_id": "TC-SEC-008",
+      "category": "SEC",
+      "name": "/api/landing/generate returns 401 for unauth",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Returns 401"
+    },
+    {
+      "tc_id": "TC-SEC-009",
+      "category": "SEC",
+      "name": "/api/me returns 401 for unauth",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Returns 401"
+    },
+    {
+      "tc_id": "TC-SEC-010",
+      "category": "SEC",
+      "name": "/api/credits/balance returns 401 for unauth",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Returns 401"
+    },
+    {
+      "tc_id": "TC-SEC-011",
+      "category": "SEC",
+      "name": "/api/products/enrich returns 401 for unauth",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Returns 401"
+    },
+    {
+      "tc_id": "TC-SEC-012",
+      "category": "SEC",
+      "name": "/api/onboarding/complete returns 401 for unauth",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Returns 401"
+    },
+    {
+      "tc_id": "TC-SEC-013",
+      "category": "SEC",
+      "name": "/api/admin/intelligence checks admin session",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Has admin check"
+    },
+    {
+      "tc_id": "TC-SEC-014",
+      "category": "SEC",
+      "name": "/api/admin/config checks admin session",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Has admin check"
+    },
+    {
+      "tc_id": "TC-SEC-015",
+      "category": "SEC",
+      "name": "/api/admin/mutations checks admin session",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Has admin check"
+    },
+    {
+      "tc_id": "TC-SEC-016",
+      "category": "SEC",
+      "name": "/api/admin/reset checks admin session",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Has admin check"
+    },
+    {
+      "tc_id": "TC-SEC-017",
+      "category": "SEC",
+      "name": "/api/admin/evolution checks admin session",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Has admin check"
+    },
+    {
+      "tc_id": "TC-SEC-018",
+      "category": "SEC",
+      "name": "/api/admin/prompts checks admin session",
+      "priority": "P0",
+      "status": "FAIL",
+      "detail": "MISSING admin auth check"
+    },
+    {
+      "tc_id": "TC-SEC-019",
+      "category": "SEC",
+      "name": "/api/admin/prompts/[id] checks admin session",
+      "priority": "P0",
+      "status": "FAIL",
+      "detail": "MISSING admin auth check"
+    },
+    {
+      "tc_id": "TC-SEC-020",
+      "category": "SEC",
+      "name": "/api/admin/data checks admin session",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Has admin check"
+    },
+    {
+      "tc_id": "TC-SEC-021",
+      "category": "SEC",
+      "name": "/api/admin/counts checks admin session",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Has admin check"
+    },
+    {
+      "tc_id": "TC-SEC-022",
+      "category": "SEC",
+      "name": "No raw SQL string concatenation",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "No raw SQL interpolation found"
+    },
+    {
+      "tc_id": "TC-SEC-023",
+      "category": "SEC",
+      "name": "dangerouslySetInnerHTML usage audit",
+      "priority": "P1",
+      "status": "FAIL",
+      "detail": "Found in: layout.tsx"
+    },
+    {
+      "tc_id": "TC-SEC-024",
+      "category": "SEC",
+      "name": "No hardcoded secrets in source files",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Clean \u2014 no secrets in source"
+    },
+    {
+      "tc_id": "TC-SEC-025",
+      "category": "SEC",
+      "name": "No wildcard CORS (Access-Control-Allow-Origin: *)",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "No wildcard CORS"
+    },
+    {
+      "tc_id": "TC-SEC-026",
+      "category": "SEC",
+      "name": "Rate limiting mechanism exists",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Has rate limiting"
+    },
+    {
+      "tc_id": "TC-SEC-027",
+      "category": "SEC",
+      "name": "auth/login doesn't have hardcoded credentials in source",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Credentials not hardcoded"
+    },
+    {
+      "tc_id": "TC-SEC-028",
+      "category": "SEC",
+      "name": "admin/auth uses httpOnly cookies",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "httpOnly cookies"
+    },
+    {
+      "tc_id": "TC-SEC-029",
+      "category": "SEC",
+      "name": "Middleware.ts exists and has auth logic",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Middleware with auth"
+    },
+    {
+      "tc_id": "TC-SEC-030",
+      "category": "SEC",
+      "name": "Input sanitization / validation middleware",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has input sanitization"
+    },
+    {
+      "tc_id": "TC-SEC-031",
+      "category": "SEC",
+      "name": "Secret env vars not exposed in client components",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Clean"
+    },
+    {
+      "tc_id": "TC-EDGE-001",
+      "category": "EDGE",
+      "name": "/api/landing/generate handles missing/invalid JSON body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing error handling"
+    },
+    {
+      "tc_id": "TC-EDGE-002",
+      "category": "EDGE",
+      "name": "/api/products/enrich handles missing/invalid JSON body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing error handling"
+    },
+    {
+      "tc_id": "TC-EDGE-003",
+      "category": "EDGE",
+      "name": "/api/auth/logout handles missing/invalid JSON body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Route does not parse request body (OK)"
+    },
+    {
+      "tc_id": "TC-EDGE-004",
+      "category": "EDGE",
+      "name": "/api/auth/login handles missing/invalid JSON body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing error handling"
+    },
+    {
+      "tc_id": "TC-EDGE-005",
+      "category": "EDGE",
+      "name": "/api/debug-generate handles missing/invalid JSON body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing error handling"
+    },
+    {
+      "tc_id": "TC-EDGE-006",
+      "category": "EDGE",
+      "name": "/api/projects handles missing/invalid JSON body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing error handling"
+    },
+    {
+      "tc_id": "TC-EDGE-007",
+      "category": "EDGE",
+      "name": "/api/projects/[id]/conversations handles missing/invalid JSON body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing error handling"
+    },
+    {
+      "tc_id": "TC-EDGE-008",
+      "category": "EDGE",
+      "name": "/api/spec/validate handles missing/invalid JSON body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing error handling"
+    },
+    {
+      "tc_id": "TC-EDGE-009",
+      "category": "EDGE",
+      "name": "/api/spec/probe handles missing/invalid JSON body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Route does not parse request body (OK)"
+    },
+    {
+      "tc_id": "TC-EDGE-010",
+      "category": "EDGE",
+      "name": "/api/admin/intelligence handles missing/invalid JSON body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing error handling"
+    },
+    {
+      "tc_id": "TC-EDGE-011",
+      "category": "EDGE",
+      "name": "/api/admin/auth handles missing/invalid JSON body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing error handling"
+    },
+    {
+      "tc_id": "TC-EDGE-012",
+      "category": "EDGE",
+      "name": "/api/admin/mutations handles missing/invalid JSON body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing error handling"
+    },
+    {
+      "tc_id": "TC-EDGE-013",
+      "category": "EDGE",
+      "name": "/api/admin/reset handles missing/invalid JSON body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing error handling"
+    },
+    {
+      "tc_id": "TC-EDGE-014",
+      "category": "EDGE",
+      "name": "/api/meta handles missing/invalid JSON body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing error handling"
+    },
+    {
+      "tc_id": "TC-EDGE-015",
+      "category": "EDGE",
+      "name": "/api/debug-video handles missing/invalid JSON body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing error handling"
+    },
+    {
+      "tc_id": "TC-EDGE-016",
+      "category": "EDGE",
+      "name": "/api/evaluate handles missing/invalid JSON body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing error handling"
+    },
+    {
+      "tc_id": "TC-EDGE-017",
+      "category": "EDGE",
+      "name": "/api/intent handles missing/invalid JSON body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing error handling"
+    },
+    {
+      "tc_id": "TC-EDGE-018",
+      "category": "EDGE",
+      "name": "/api/generate-video handles missing/invalid JSON body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing error handling"
+    },
+    {
+      "tc_id": "TC-EDGE-019",
+      "category": "EDGE",
+      "name": "/api/evolution handles missing/invalid JSON body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing error handling"
+    },
+    {
+      "tc_id": "TC-EDGE-020",
+      "category": "EDGE",
+      "name": "/api/generate handles missing/invalid JSON body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing error handling"
+    },
+    {
+      "tc_id": "TC-EDGE-021",
+      "category": "EDGE",
+      "name": "/api/brief/expert-search handles missing/invalid JSON body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing error handling"
+    },
+    {
+      "tc_id": "TC-EDGE-022",
+      "category": "EDGE",
+      "name": "/api/brief/fetch-url handles missing/invalid JSON body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing error handling"
+    },
+    {
+      "tc_id": "TC-EDGE-023",
+      "category": "EDGE",
+      "name": "/api/brief/clarify handles missing/invalid JSON body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing error handling"
+    },
+    {
+      "tc_id": "TC-EDGE-024",
+      "category": "EDGE",
+      "name": "/api/brief/parse handles missing/invalid JSON body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing error handling"
+    },
+    {
+      "tc_id": "TC-EDGE-025",
+      "category": "EDGE",
+      "name": "/api/brief/agent handles missing/invalid JSON body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing error handling"
+    },
+    {
+      "tc_id": "TC-EDGE-026",
+      "category": "EDGE",
+      "name": "/api/brief/enrich handles missing/invalid JSON body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing error handling"
+    },
+    {
+      "tc_id": "TC-EDGE-027",
+      "category": "EDGE",
+      "name": "/api/brief/execute handles missing/invalid JSON body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing error handling"
+    },
+    {
+      "tc_id": "TC-EDGE-028",
+      "category": "EDGE",
+      "name": "/api/onboarding/complete handles missing/invalid JSON body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing error handling"
+    },
+    {
+      "tc_id": "TC-EDGE-029",
+      "category": "EDGE",
+      "name": "/api/upload handles missing/invalid JSON body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Route does not parse request body (OK)"
+    },
+    {
+      "tc_id": "TC-EDGE-030",
+      "category": "EDGE",
+      "name": "/api/cron/market-intel/sync handles missing/invalid JSON body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Route does not parse request body (OK)"
+    },
+    {
+      "tc_id": "TC-EDGE-031",
+      "category": "EDGE",
+      "name": "/api/reports/generate handles missing/invalid JSON body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing error handling"
+    },
+    {
+      "tc_id": "TC-EDGE-032",
+      "category": "EDGE",
+      "name": "/api/store/persist handles missing/invalid JSON body",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has body parsing error handling"
+    },
+    {
+      "tc_id": "TC-EDGE-033",
+      "category": "EDGE",
+      "name": "/api/debug-generate has timeout for external calls",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has timeout/abort"
+    },
+    {
+      "tc_id": "TC-EDGE-034",
+      "category": "EDGE",
+      "name": "/api/debug-video has timeout for external calls",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has timeout/abort"
+    },
+    {
+      "tc_id": "TC-EDGE-035",
+      "category": "EDGE",
+      "name": "/api/generate-video has timeout for external calls",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has timeout/abort"
+    },
+    {
+      "tc_id": "TC-EDGE-036",
+      "category": "EDGE",
+      "name": "/api/generate has timeout for external calls",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has timeout/abort"
+    },
+    {
+      "tc_id": "TC-CODE-001",
+      "category": "CODE",
+      "name": "Console.log/warn count in production code (excl. console.error)",
+      "priority": "P2",
+      "status": "PASS",
+      "detail": "10 console statements across 5 files \u2014 files: videoProbe.ts, route.ts, ReportView.tsx, middleware.ts, callLLM.ts"
+    },
+    {
+      "tc_id": "TC-CODE-002",
+      "category": "CODE",
+      "name": "TypeScript 'any' usage audit",
+      "priority": "P2",
+      "status": "PASS",
+      "detail": "1 'any' usages across 1 files \u2014 top: page.tsx"
+    },
+    {
+      "tc_id": "TC-CODE-003",
+      "category": "CODE",
+      "name": "No TODO/FIXME/HACK comments (tech debt audit)",
+      "priority": "P3",
+      "status": "PASS",
+      "detail": "Found 4 TODO/FIXME markers"
+    },
+    {
+      "tc_id": "TC-EDGE-037",
+      "category": "EDGE",
+      "name": "Supabase calls have error checking",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Good coverage \u2014 0 files with insufficient error checking: "
+    },
+    {
+      "tc_id": "TC-CODE-004",
+      "category": "CODE",
+      "name": "next.config has security headers",
+      "priority": "P2",
+      "status": "PASS",
+      "detail": "Has security headers config"
+    },
+    {
+      "tc_id": "TC-CODE-005",
+      "category": "CODE",
+      "name": "Error boundary files exist for key pages",
+      "priority": "P2",
+      "status": "PASS",
+      "detail": "4 error.tsx files for 31 pages"
+    },
+    {
+      "tc_id": "TC-CODE-006",
+      "category": "CODE",
+      "name": "Loading state files exist",
+      "priority": "P2",
+      "status": "PASS",
+      "detail": "4 loading.tsx files"
+    },
+    {
+      "tc_id": "TC-EDGE-038",
+      "category": "EDGE",
+      "name": "/api/landing/generate has maxDuration set",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "maxDuration configured in landing/generate"
+    },
+    {
+      "tc_id": "TC-EDGE-039",
+      "category": "EDGE",
+      "name": "/api/products/enrich has maxDuration set",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "maxDuration configured in products/enrich"
+    },
+    {
+      "tc_id": "TC-EDGE-040",
+      "category": "EDGE",
+      "name": "/api/admin/intelligence has maxDuration set",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "maxDuration configured in admin/intelligence"
+    },
+    {
+      "tc_id": "TC-EDGE-041",
+      "category": "EDGE",
+      "name": "/api/brief/execute has maxDuration set",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "maxDuration configured in brief/execute"
+    },
+    {
+      "tc_id": "TC-EDGE-042",
+      "category": "EDGE",
+      "name": "/api/cron/market-intel/sync has maxDuration set",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "maxDuration configured in cron/market-intel/sync"
+    },
+    {
+      "tc_id": "TC-EDGE-043",
+      "category": "EDGE",
+      "name": "/api/reports/generate has maxDuration set",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "maxDuration configured in reports/generate"
+    },
+    {
+      "tc_id": "TC-EDGE-044",
+      "category": "EDGE",
+      "name": "brief/parse can handle CJK/Unicode text",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "No ASCII-only validation (good for i18n)"
+    },
+    {
+      "tc_id": "TC-CODE-007",
+      "category": "CODE",
+      "name": "Required file exists: Root layout",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Root layout exists (2043 bytes)"
+    },
+    {
+      "tc_id": "TC-CODE-008",
+      "category": "CODE",
+      "name": "Required file exists: Home page",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Home page exists (11084 bytes)"
+    },
+    {
+      "tc_id": "TC-CODE-009",
+      "category": "CODE",
+      "name": "Required file exists: Global state store",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Global state store exists (17632 bytes)"
+    },
+    {
+      "tc_id": "TC-CODE-010",
+      "category": "CODE",
+      "name": "Required file exists: Auth middleware",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Auth middleware exists (4889 bytes)"
+    },
+    {
+      "tc_id": "TC-CODE-011",
+      "category": "CODE",
+      "name": "Required file exists: Type definitions",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Type definitions exists (2961 bytes)"
+    },
+    {
+      "tc_id": "TC-E2E-001",
+      "category": "E2E",
+      "name": "Brief pipeline stage exists: brief/parse",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Present"
+    },
+    {
+      "tc_id": "TC-E2E-002",
+      "category": "E2E",
+      "name": "Brief pipeline stage exists: brief/clarify",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Present"
+    },
+    {
+      "tc_id": "TC-E2E-003",
+      "category": "E2E",
+      "name": "Brief pipeline stage exists: brief/enrich",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Present"
+    },
+    {
+      "tc_id": "TC-E2E-004",
+      "category": "E2E",
+      "name": "Brief pipeline stage exists: brief/execute",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Present"
+    },
+    {
+      "tc_id": "TC-E2E-005",
+      "category": "E2E",
+      "name": "Parse->Clarify data contract (intake object)",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Both use 'intake' object"
+    },
+    {
+      "tc_id": "TC-E2E-006",
+      "category": "E2E",
+      "name": "Clarify->Enrich data contract (brief object)",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Both use 'brief' object"
+    },
+    {
+      "tc_id": "TC-E2E-007",
+      "category": "E2E",
+      "name": "brief/execute handles audienceGroups",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Handles audience groups"
+    },
+    {
+      "tc_id": "TC-E2E-008",
+      "category": "E2E",
+      "name": "Image generation returns base64 data",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Returns image data"
+    },
+    {
+      "tc_id": "TC-E2E-009",
+      "category": "E2E",
+      "name": "Video generation has submit->poll->download flow",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "All 3 stages present"
+    },
+    {
+      "tc_id": "TC-E2E-010",
+      "category": "E2E",
+      "name": "Landing generation produces HTML",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Generates HTML"
+    },
+    {
+      "tc_id": "TC-E2E-011",
+      "category": "E2E",
+      "name": "Evaluation accepts asset+brief for scoring",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Takes asset+brief"
+    },
+    {
+      "tc_id": "TC-E2E-012",
+      "category": "E2E",
+      "name": "Execute page has retry mechanism",
+      "priority": "P0",
+      "status": "PASS",
+      "detail": "Has retry logic"
+    },
+    {
+      "tc_id": "TC-E2E-013",
+      "category": "E2E",
+      "name": "Execute page has fallback SVG",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has fallback"
+    },
+    {
+      "tc_id": "TC-E2E-014",
+      "category": "E2E",
+      "name": "Execute page has prompt editor",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has prompt editor"
+    },
+    {
+      "tc_id": "TC-E2E-015",
+      "category": "E2E",
+      "name": "Execute page fetches brand style",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Has brand style"
+    },
+    {
+      "tc_id": "TC-E2E-016",
+      "category": "E2E",
+      "name": "Knowledge API supports tag-based filtering",
+      "priority": "P1",
+      "status": "PASS",
+      "detail": "Supports tags"
+    }
+  ]
+}

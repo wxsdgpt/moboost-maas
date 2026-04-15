@@ -1,0 +1,101 @@
+{
+  "timestamp": "2026-04-13T20:19:22+08:00",
+  "results": [
+    {
+      "topic": "sports betting advertising regulations update 2025-2026",
+      "category": "regulation",
+      "entries": 7,
+      "db_status": 201,
+      "elapsed": 48.4,
+      "status": "ok"
+    },
+    {
+      "topic": "igaming competitor analysis top operators strategies 2025-2026",
+      "category": "competitor",
+      "entries": 6,
+      "db_status": 201,
+      "elapsed": 66.6,
+      "status": "ok"
+    },
+    {
+      "topic": "casino online marketing best practices 2025-2026",
+      "category": "best_practice",
+      "entries": 6,
+      "db_status": 201,
+      "elapsed": 88.4,
+      "status": "ok"
+    },
+    {
+      "topic": "crash games viral marketing techniques 2025-2026",
+      "category": "trend",
+      "entries": 5,
+      "db_status": 201,
+      "elapsed": 43.5,
+      "status": "ok"
+    },
+    {
+      "topic": "igaming creative ad formats performance data 2025-2026",
+      "category": "best_practice",
+      "entries": 7,
+      "db_status": 201,
+      "elapsed": 70.0,
+      "status": "ok"
+    },
+    {
+      "topic": "programmatic advertising igaming compliance regulations 2025-2026",
+      "category": "regulation",
+      "entries": 6,
+      "db_status": 201,
+      "elapsed": 76.5,
+      "status": "ok"
+    },
+    {
+      "topic": "iGaming digital marketing trends 2026",
+      "category": "trend",
+      "entries": 6,
+      "db_status": 201,
+      "elapsed": 63.8,
+      "status": "ok"
+    },
+    {
+      "topic": "slots game marketing visual trends 2025-2026",
+      "category": "trend",
+      "entries": 6,
+      "db_status": 201,
+      "elapsed": 55.4,
+      "status": "ok"
+    },
+    {
+      "topic": "AI generated creative ads gaming industry 2025-2026",
+      "category": "technology",
+      "entries": 0,
+      "elapsed": 3.4,
+      "status": "parse_error"
+    },
+    {
+      "topic": "live dealer casino promotion strategies 2025-2026",
+      "category": "best_practice",
+      "entries": 7,
+      "db_status": 201,
+      "elapsed": 81.4,
+      "status": "ok"
+    },
+    {
+      "topic": "esports sponsorship marketing ROI data 2025-2026",
+      "category": "market_data",
+      "entries": 6,
+      "db_status": 201,
+      "elapsed": 60.9,
+      "status": "ok"
+    },
+    {
+      "topic": "mobile gaming user acquisition strategies 2025-2026",
+      "category": "trend",
+      "entries": 6,
+      "db_status": 201,
+      "elapsed": 99.2,
+      "status": "ok"
+    }
+  ],
+  "total_entries": 68
+}

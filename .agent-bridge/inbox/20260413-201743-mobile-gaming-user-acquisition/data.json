@@ -1,0 +1,121 @@
+[
+  {
+    "category": "trend",
+    "vertical": "iGaming",
+    "region": "global",
+    "tags": [
+      "mobile-first",
+      "mobile optimization",
+      "engagement metrics",
+      "2025-2026"
+    ],
+    "title": "移动端占iGaming会话超70%，移动优先策略成行业标配",
+    "summary": "移动端渗透率在iGaming领域已超70%且持续上升，针对移动端优化的平台 Engagement 指标提升20-50%。预计2025年底移动博彩收入达1450亿美元，76%全球博彩用户通过移动平台参与。移动优化已从可选项变为必选项，高增长市场包括印度、尼日利亚、巴西。",
+    "source_type": "agent",
+    "source_url": "https://www.connectivegames.com/news/articles/igaming-trends-to-watch-in-2026-what-s-next-for-the-industry",
+    "source_query": "mobile gaming user acquisition strategies 2025-2026",
+    "confidence": 0.9,
+    "relevance": 0.95,
+    "collected_by": "openclaw"
+  },
+  {
+    "category": "trend",
+    "vertical": "iGaming",
+    "region": "global",
+    "tags": [
+      "AI targeting",
+      "predictive analytics",
+      "user acquisition",
+      "2026"
+    ],
+    "title": "AI驱动精准定位高意图用户，首存转化率显著提升",
+    "summary": "AI工具和机器学习算法分析玩家行为预测首存可能性，动态AI细分 Retention 提升10-35%，预测性流失模型降低流失率5-12%。Facebook Audience Insights等平台实现高精度用户定向，配合个性化优惠提升转化。最佳运营者将AI与透明化解释层结合，避免过度个性化导致信任流失。",
+    "source_type": "agent",
+    "source_url": "https://affnook.com/user-acquisition/",
+    "source_query": "mobile gaming user acquisition strategies 2025-2026",
+    "confidence": 0.9,
+    "relevance": 0.92,
+    "collected_by": "openclaw"
+  },
+  {
+    "category": "trend",
+    "vertical": "iGaming",
+    "region": [
+      "LATAM",
+      "Africa",
+      "MENA"
+    ],
+    "tags": [
+      "market expansion",
+      "CAGR",
+      "2026 forecast",
+      "geo-targeting"
+    ],
+    "title": "拉美非洲成为增长引擎，2027年前监管领域CAGR达20-30%",
+    "summary": "2026年iGaming增长呈现东西分化格局：LATAM和非洲监管领域收入增长CAGR预计20-30%；欧洲成熟市场个位数增长，聚焦Retention而非获客；北美新收入超50%来自留存改善。进入LATAM市场未提供本地化支付（PIX/Boleto/SuperApps）的运营商，首存转化率比竞争对手低20-30%。",
+    "source_type": "agent",
+    "source_url": "https://www.connectivegames.com/news/articles/igaming-trends-to-watch-in-2026-what-s-next-for-the-industry",
+    "source_query": "mobile gaming user acquisition strategies 2025-2026",
+    "confidence": 0.9,
+    "relevance": 0.88,
+    "collected_by": "openclaw"
+  },
+  {
+    "category": "trend",
+    "vertical": "iGaming",
+    "region": "global",
+    "tags": [
+      "localization",
+      "CTR optimization",
+      "creative strategy",
+      "2025"
+    ],
+    "title": "本地化创意素材CTR提升30-50%，需融合语言文化支付方式",
+    "summary": "针对地域定向的iGaming活动通过本地化实现30-50%更高点击率。本地化策略涵盖：本地语言和文化偏好的创意和落地页、本地流行游戏、本地支付方式以及原生语言支持。高绩效地区包括印度、印度尼西亚、孟加拉国、泰国、巴西、越南、马来西亚。",
+    "source_type": "agent",
+    "source_url": "https://richads.com/blog/igaming-traffic-acquisition/",
+    "source_query": "mobile gaming user acquisition strategies 2025-2026",
+    "confidence": 0.9,
+    "relevance": 0.9,
+    "collected_by": "openclaw"
+  },
+  {
+    "category": "trend",
+    "vertical": "iGaming",
+    "region": "global",
+    "tags": [
+      "retention",
+      "game design",
+      "engagement mechanics",
+      "2026"
+    ],
+    "title": "平衡游戏组合Retention提升30-70%，结构化设计优于单一格式",
+    "summary": "即时化Gamified格式可提升DAU 15-40%，但若无结构化进程设计，LTV增益有限。平衡游戏组合（快速会话+旅程弧线+留存钩子）相比单格式策略Retention提升30-70%。入门级比赛、免费赛和任务系统吸引规避风险的玩家，在成熟和新兴市场均有效。",
+    "source_type": "agent",
+    "source_url": "https://www.connectivegames.com/news/articles/igaming-trends-to-watch-in-2026-what-s-next-for-the-industry",
+    "source_query": "mobile gaming user acquisition strategies 2025-2026",
+    "confidence": 0.9,
+    "relevance": 0.87,
+    "collected_by": "openclaw"
+  },
+  {
+    "category": "trend",
+    "vertical": "iGaming",
+    "region": "global",
+    "tags": [
+      "omnichannel",
+      "compliance",
+      "LTV",
+      "regulation",
+      "2026"
+    ],
+    "title": "全渠道体验降低流失，合规运营LTV高出15-25%",
+    "summary": "跨设备功能、统一玩家账户及一致品牌形象的跨渠道体验降低流失率并改善获客成本。合规运营LTV比忽视合规者高15-25%，因AML、广告和RG要求符合带来信任提升。安大略、希腊、西班牙等市场强制实时行为监控，无主动控制运营商Responsible Gaming标记增加10-15%。",
+    "source_type": "agent",
+    "source_url": "https://www.connectivegames.com/news/articles/igaming-trends-to-watch-in-2026-what-s-next-for-the-industry",
+    "source_query": "mobile gaming user acquisition strategies 2025-2026",
+    "confidence": 0.9,
+    "relevance": 0.85,
+    "collected_by": "openclaw"
+  }
+]

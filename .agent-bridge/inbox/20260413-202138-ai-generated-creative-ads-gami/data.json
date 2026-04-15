@@ -1,0 +1,122 @@
+[
+  {
+    "category": "technology",
+    "vertical": "gaming",
+    "region": "global",
+    "tags": [
+      "用户获取",
+      "AI创意生成",
+      "广告支出",
+      "2025数据",
+      "市场竞争"
+    ],
+    "title": "2025年全球游戏用户获取支出达250亿美元，AI驱动创意内容激增",
+    "summary": "2025年全球游戏广告主在用户获取上投入约250亿美元，其中美国市场占一半。AI驱动制作使大型广告主内容产出同比增长25-30%，小型广告主增幅高达40%。AI降低制作成本与时间，但市场内容泛滥使差异化愈发困难。",
+    "source_type": "news",
+    "source_url": "https://www.emarketer.com/content/gaming-user-acquisition-spend-hits-25-billion-ai-fuels-creative-boom",
+    "source_query": "AI generated creative ads gaming industry tools 2025-2026",
+    "confidence": 0.8,
+    "relevance": 0.95,
+    "collected_by": "openclaw"
+  },
+  {
+    "category": "technology",
+    "vertical": "gaming",
+    "region": "global",
+    "tags": [
+      "AI生成创意",
+      "移动游戏",
+      "2026预测",
+      "创意生产",
+      "成本节省"
+    ],
+    "title": "预测2026年底50%移动游戏创意将由AI生成，质量将与人工创作无异",
+    "summary": "行业预测到2026年底，半数移动游戏创意将由AI生成，质量与人类制作无法区分。AI工具显著降低生产时间和成本，同时支持快速迭代和个性化定制。",
+    "source_type": "news",
+    "source_url": "https://adriancrook.com/2026-mobile-gaming-predictions-ads-playables-ai/",
+    "source_query": "AI generated creative ads gaming industry tools 2025-2026",
+    "confidence": 0.8,
+    "relevance": 0.92,
+    "collected_by": "openclaw"
+  },
+  {
+    "category": "technology",
+    "vertical": "gaming",
+    "region": "global",
+    "tags": [
+      "可玩广告",
+      "创意模板",
+      "用户获取",
+      "游戏营销",
+      "参与度"
+    ],
+    "title": "可玩广告将成为2026年主导创意格式，3×3谜题等模板降低生产成本",
+    "summary": "2026年可玩广告预计成为主导创意格式，来自高表现类型（如3×3谜题机制）的可复用模板大幅降低制作时间和成本，同时提高用户参与度和转化率。",
+    "source_type": "news",
+    "source_url": "https://adriancrook.com/2026-mobile-gaming-predictions-ads-playables-ai/",
+    "source_query": "AI generated creative ads gaming industry tools 2025-2026",
+    "confidence": 0.8,
+    "relevance": 0.88,
+    "collected_by": "openclaw"
+  },
+  {
+    "category": "technology",
+    "vertical": "gaming",
+    "region": "global",
+    "tags": [
+      "生成式AI采用",
+      "视频广告",
+      "2026预测",
+      "广告支出",
+      "行业趋势"
+    ],
+    "title": "86%广告主已使用或计划使用生成式AI制作视频广告，2026年近40%视频广告将涉及AI",
+    "summary": "IAB报告显示86%广告主已使用或计划使用生成式AI制作视频广告。预计到2026年近40%视频广告将涉及生成式AI。2026年全球数字广告支出预计超过7400亿美元，移动视频支出将超越搜索。",
+    "source_type": "news",
+    "source_url": "https://www.uplifted.ai/blog/post/best-ai-tools-for-creatives-2026",
+    "source_query": "AI generated creative ads gaming industry tools 2025-2026",
+    "confidence": 0.8,
+    "relevance": 0.9,
+    "collected_by": "openclaw"
+  },
+  {
+    "category": "technology",
+    "vertical": "gaming",
+    "region": "global",
+    "tags": [
+      "AI工具",
+      "创意生成",
+      "Segwise",
+      "AdCreative.ai",
+      "效果分析"
+    ],
+    "title": "AI广告创意工具分为生成型与智能型：Segwise领跑智能分析，AdCreative.ai专注内容生成",
+    "summary": "AI广告创意工具分为两类：生成工具（生产原始素材）和智能工具（分析性能）。Segwise主导智能层，支持多模态AI标签标注视频、音频、图像、文字和可玩广告。AdCreative.ai提供转化优化生成服务，起价39美元/月。",
+    "source_type": "news",
+    "source_url": "https://segwise.ai/blog/best-ai-advertising-creative-tools-2026",
+    "source_query": "AI generated creative ads gaming industry tools 2025-2026",
+    "confidence": 0.8,
+    "relevance": 0.85,
+    "collected_by": "openclaw"
+  },
+  {
+    "category": "technology",
+    "vertical": "gaming",
+    "region": "global",
+    "tags": [
+      "AI虚拟演员",
+      "UGC内容",
+      "Arcads",
+      "Creatify",
+      "视频生成"
+    ],
+    "title": "AI生成UGC风格虚拟演员助力视频制作规模化，Creatify可从产品链接生成5-10个视频广告",
+    "summary": "Arcads生成高质量AI UGC风格视频广告，作为真实创作者内容的补充。Creatify等工具可从产品链接生成5-10个逼真AI虚拟形象视频广告，助力效果营销人员规模化制作。",
+    "source_type": "news",
+    "source_url": "https://www.uplifted.ai/blog/post/best-ai-tools-for-creatives-2026",
+    "source_query": "AI generated creative ads gaming industry tools 2025-2026",
+    "confidence": 0.8,
+    "relevance": 0.82,
+    "collected_by": "openclaw"
+  }
+]

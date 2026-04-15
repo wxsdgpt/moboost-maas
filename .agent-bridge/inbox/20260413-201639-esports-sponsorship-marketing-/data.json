@@ -1,0 +1,116 @@
+[
+  {
+    "category": "market_data",
+    "vertical": "Esports",
+    "region": "全球",
+    "tags": [
+      "市场规模",
+      " sponsorship_revenue",
+      "2025",
+      "增长预测"
+    ],
+    "title": "2025年电竞赞助收入预计达10.6亿美元同比增长8%",
+    "summary": "据Statista Market Insights数据，电竞赞助与广告收入2025年预计达10.6亿美元，2024年为9.828亿美元，2026年将达11.1亿美元。增长由品牌激活和粉丝参与度驱动，占电竞总收入超40%。",
+    "source_type": "news",
+    "source_url": "https://esportsinsider.com/esports-marketing-statistics",
+    "source_query": "esports sponsorship marketing ROI data 2025-2026",
+    "confidence": 0.8,
+    "relevance": 0.9,
+    "collected_by": "openclaw"
+  },
+  {
+    "category": "market_data",
+    "vertical": "Esports",
+    "region": "全球",
+    "tags": [
+      "CAGR",
+      "team_sponsorship",
+      "AI_ROI",
+      "2034预测"
+    ],
+    "title": "全球电竞赞助市场2024年估值18亿美元预计2034年达167.6亿美元",
+    "summary": "全球电竞赞助市场从2024年18亿美元增长，2025-2034年复合年增长率25%，预计2034年达167.6亿美元。2024年团队赞助占35.4%份额，AI通过Logo识别追踪实时ROI。",
+    "source_type": "news",
+    "source_url": "https://market.us/report/e-sports-sponsorship-market/",
+    "source_query": "esports sponsorship marketing ROI data 2025-2026",
+    "confidence": 0.8,
+    "relevance": 0.9,
+    "collected_by": "openclaw"
+  },
+  {
+    "category": "market_data",
+    "vertical": "Esports",
+    "region": "美国",
+    "tags": [
+      "CMO调查",
+      "ROI挑战",
+      "投资增长",
+      "2025"
+    ],
+    "title": " Forrester调查：76%营销高管难以计算赞助ROI但67%计划增加投资",
+    "summary": "Forrester 2024年Q4调查显示，76%美国B2C营销高管难以计算体育赞助ROI，但67%计划2025年首次进入或增加投资。ROI计算困难因组织内部分析孤立，赞助资产跨营销和销售多职能使用。",
+    "source_type": "news",
+    "source_url": "https://www.sportsbusinessjournal.com/Articles/2025/11/03/investment-in-sports-sponsorships-is-rising-yet-cmos-struggle-to-calculate-the-roi-heres-why/",
+    "source_query": "esports sponsorship marketing ROI data 2025-2026",
+    "confidence": 0.8,
+    "relevance": 0.85,
+    "collected_by": "openclaw"
+  },
+  {
+    "category": "market_data",
+    "vertical": "Esports",
+    "region": "亚太地区",
+    "tags": [
+      "移动电竞",
+      "应用内赞助",
+      "实时ROI",
+      "2026"
+    ],
+    "title": "2026年电竞转向移动端应用内赞助提供实时ROI数据",
+    "summary": "2026年营销预算从静态赞助重新分配至移动电竞（如MLBB）应用内集成，提供微转化实时ROI数据。M7世界冠军赛同时在线观众达568万，移动电竞已超越传统PC项目。57%全球电竞观众集中亚太地区。",
+    "source_type": "news",
+    "source_url": "https://escharts.com/news/2026-esports-pivot-speculative-hype-industrial-maturity",
+    "source_query": "esports sponsorship marketing ROI data 2025-2026",
+    "confidence": 0.8,
+    "relevance": 0.9,
+    "collected_by": "openclaw"
+  },
+  {
+    "category": "market_data",
+    "vertical": "Esports",
+    "region": "全球",
+    "tags": [
+      "电竞市场总量",
+      "区域增长",
+      "MOBA",
+      "2025"
+    ],
+    "title": "2024年电竞赞助收入占比超60%MOBA类游戏领跑",
+    "summary": "2024年赞助占电竞收入超60%，MOBA类游戏因全球覆盖主导市场。2025-2026年预测强调ROI透明度需求，赞助商要求统一数据看板。全球电竞市场2024年估值28.9亿美元，观众达6.408亿。",
+    "source_type": "news",
+    "source_url": "https://awisee.com/blog/esports-industry-statistics/",
+    "source_query": "esports sponsorship marketing ROI data 2025-2026",
+    "confidence": 0.8,
+    "relevance": 0.85,
+    "collected_by": "openclaw"
+  },
+  {
+    "category": "market_data",
+    "vertical": "Esports",
+    "region": "美国",
+    "tags": [
+      "全球赞助支出",
+      "营销预算占比",
+      "电竞总价值",
+      "2025"
+    ],
+    "title": "2025年全球赞助支出预计达964亿美元其中体育类占70%",
+    "summary": "Keevee预测2025年全球赞助支出达964亿美元，品牌分配20%营销预算。体育（含电竞）占主导70%，电竞总价值超16亿美元，美国市场达10.7亿美元。",
+    "source_type": "news",
+    "source_url": "https://market.us/report/e-sports-sponsorship-market/",
+    "source_query": "esports sponsorship marketing ROI data 2025-2026",
+    "confidence": 0.8,
+    "relevance": 0.8,
+    "collected_by": "openclaw"
+  }
+]
