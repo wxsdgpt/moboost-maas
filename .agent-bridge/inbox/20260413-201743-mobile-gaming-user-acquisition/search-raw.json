@@ -1,0 +1,50 @@
+[
+  {
+    "title": "Mobile-First Optimization Drives 20-50% Better Engagement",
+    "summary": "Platforms optimized for mobile-first usage see 20-50% better engagement metrics than desktop-first adaptations. Mobile penetration in iGaming exceeds 70% of all sessions and continues rising, making mobile optimization essential rather than optional.",
+    "source_url": "https://www.connectivegames.com/news/articles/igaming-trends-to-watch-in-2026-what-s-next-for-the-industry",
+    "tags": ["mobile optimization", "engagement metrics", "2026 trends"]
+  },
+  {
+    "title": "Balanced Game Mix Improves Retention by 30-70%",
+    "summary": "Combining quick sessions, journey arcs, and retention hooks can improve retention by 30-70% compared to single-format strategies. Quick sessions alone lift DAU by 15-40% but show modest LTV gains without deeper engagement mechanics.",
+    "source_url": "https://www.connectivegames.com/news/articles/igaming-trends-to-watch-in-2026-what-s-next-for-the-industry",
+    "tags": ["retention", "game design", "engagement mechanics", "2026"]
+  },
+  {
+    "title": "Localized Creatives Achieve 30-50% Higher CTRs",
+    "summary": "iGaming campaigns targeting promotions by geography achieve 30-50% higher click-through rates and better retention. Localization includes geo-specific payment options, locally trending games, and native-language support.",
+    "source_url": "https://richads.com/blog/igaming-traffic-acquisition/",
+    "tags": ["localization", "CTR optimization", "geo-targeting", "2025"]
+  },
+  {
+    "title": "Mobile Gambling Revenue Projected at $145 Billion by End of 2025",
+    "summary": "Mobile gambling revenue is estimated to reach $145 billion globally by the end of 2025, with 76% of global gambling users utilizing platforms via mobile. Mobile optimization is critical in high-growth markets like India, Nigeria, and Brazil.",
+    "source_url": "https://richads.com/blog/igaming-traffic-acquisition/",
+    "tags": ["mobile revenue", "market size", "2025 forecast"]
+  },
+  {
+    "title": "AI-Driven Precision Targeting for High-Intent Users",
+    "summary": "AI tools and machine learning algorithms analyze player behavior to predict first-time deposit likelihood. Platforms like Facebook Audience Insights enable precision targeting of high-intent users with personalized offers to boost user acquisition.",
+    "source_url": "https://affnook.com/user-acquisition/",
+    "tags": ["AI integration", "predictive analytics", "targeting", "2026"]
+  },
+  {
+    "title": "Omnichannel Experience Reduces Churn and Improves UA Costs",
+    "summary": "Consistent branding, cross-device functionality, and unified player accounts across mobile apps, desktops, and social media improve mobile user acquisition costs and reduce churn rates. Seamless transitions between channels are crucial for retention.",
+    "source_url": "https://affnook.com/user-acquisition/",
+    "tags": ["omnichannel", "user experience", "churn reduction", "2026"]
+  },
+  {
+    "title": "Telegram Bots Drive High Engagement with Low Ad Fatigue",
+    "summary": "Users are highly active with Telegram bots, showing strong inclination to engage with in-app ads. Ads perceived as part of user experience with rewards or gamification show low ad fatigue and appear novel to most users.",
+    "source_url": "https://richads.com/blog/igaming-traffic-acquisition/",
+    "tags": ["Telegram", "engagement", "ad fatigue", "2025"]
+  },
+  {
+    "title": "Soft-Entry Tournaments and Freerolls Appeal to Risk-Averse New Users",
+    "summary": "Soft-entry tournaments, freerolls, and missions are essential B2C iGaming strategies for onboarding gaming-oriented but risk-averse new users across mature and emerging markets in 2026.",
+    "source_url": "https://evenbetgaming.com/blog/the-future-of-igaming-takes-shape-what-to-expect-in-2026/",
+    "tags": ["player onboarding", "low-risk mechanics", "2026"]
+  }
+]

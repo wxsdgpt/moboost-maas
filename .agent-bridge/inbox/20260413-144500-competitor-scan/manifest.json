@@ -1,0 +1,37 @@
+{
+  "version": "1.0",
+  "id": "20260413-144500-competitor-scan",
+  "created_at": "2026-04-13T14:45:00+08:00",
+  "created_by": "openclaw",
+  "topic": "竞品 Optimove 最新动态扫描（博客 + 产品更新）",
+  "category": "competitor",
+  "priority": 8,
+  "files": [
+    {
+      "path": "report.md",
+      "type": "report",
+      "format": "markdown",
+      "description": "Optimove 6条最新博客情报分析"
+    },
+    {
+      "path": "data.json",
+      "type": "data",
+      "format": "json",
+      "description": "6条结构化知识条目，可直接入库 industry_knowledge",
+      "schema": "KnowledgeEntry[]"
+    }
+  ],
+  "db_actions": [
+    {
+      "table": "industry_knowledge",
+      "action": "insert",
+      "data_file": "data.json"
+    }
+  ],
+  "suggested_actions": [
+    "将 data.json 中 6 条记录写入 industry_knowledge 表",
+    "基于竞品 AI Decisioning Studio 的发布触发 Cross-Eval 进化机制",
+    "将 iGaming Pulse 市场数据喂给 Domain Gap Analysis"
+  ],
+  "tags": ["competitor", "optimove", "igaming", "ai", "q2-2026"]
+}

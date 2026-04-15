@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-
-const OPENROUTER_BASE = process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1'
-const OPENROUTER_KEY = process.env.OPENROUTER_API_KEY || ''
+import { callLLM } from '@/lib/callLLM'
 
 export async function POST(req: NextRequest) {
   try {
@@ -34,34 +32,21 @@ Respond ONLY with JSON:
   "suggestion": "..."
 }`
 
-    const response = await fetch(`${OPENROUTER_BASE}/chat/completions`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${OPENROUTER_KEY}`,
-        'Content-Type': 'application/json',
-        'HTTP-Referer': 'https://moboost.ai',
-        'X-Title': 'Moboost AI MAAS',
-      },
-      body: JSON.stringify({
-        model: process.env.EVAL_MODEL || 'anthropic/claude-sonnet-4-6',
-        messages: [{ role: 'user', content: evalPrompt }],
-      }),
+    const result = await callLLM({
+      model: process.env.EVAL_MODEL || 'anthropic/claude-sonnet-4-6',
+      messages: [{ role: 'user', content: evalPrompt }],
+      caller: 'evaluate',
+      action: 'asset_evaluation',
+      timeoutMs: 300000,
     })
 
-    if (!response.ok) {
-      const err = await response.text()
-      return NextResponse.json({ error: err }, { status: response.status })
-    }
-
-    const data = await response.json()
-    const content = data.choices?.[0]?.message?.content || '{}'
-
     // Try to parse JSON from response
-    const jsonMatch = content.match(/\{[\s\S]*\}/)
+    const jsonMatch = result.content.match(/\{[\s\S]*\}/)
     const evaluation = jsonMatch ? JSON.parse(jsonMatch[0]) : { error: 'Failed to parse evaluation' }
 
     return NextResponse.json({ evaluation })
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error)
+    return NextResponse.json({ error: message }, { status: 500 })
   }
 }

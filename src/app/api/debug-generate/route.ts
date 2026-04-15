@@ -3,12 +3,24 @@ import { NextRequest, NextResponse } from 'next/server'
 const OPENROUTER_BASE = process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1'
 const OPENROUTER_KEY = process.env.OPENROUTER_API_KEY || ''
 
+function fetchWithTimeout(url: string, options: RequestInit, timeoutMs = 300_000): Promise<Response> {
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), timeoutMs)
+  return fetch(url, { ...options, signal: controller.signal }).finally(() => clearTimeout(timer))
+}
+
 // Debug endpoint — returns raw OpenRouter response for inspection
 export async function POST(req: NextRequest) {
   try {
-    const { prompt } = await req.json()
+    let body
+    try {
+      body = await req.json()
+    } catch {
+      return NextResponse.json({ error: 'invalid_json' }, { status: 400 })
+    }
+    const { prompt } = body
 
-    const response = await fetch(`${OPENROUTER_BASE}/chat/completions`, {
+    const response = await fetchWithTimeout(`${OPENROUTER_BASE}/chat/completions`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${OPENROUTER_KEY}`,
@@ -53,7 +65,8 @@ export async function POST(req: NextRequest) {
           : JSON.stringify(parsed.choices[0].message.content).length
         : 0,
     })
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error)
+    return NextResponse.json({ error: message }, { status: 500 })
   }
 }

@@ -1,0 +1,4 @@
+// DEPRECATED: kept only because the file cannot be deleted.
+// Real admin is at src/app/admin/page.tsx
+import { redirect } from 'next/navigation'
+export default function LegacyAdminStub() { redirect('/admin/login') }

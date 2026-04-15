@@ -9,6 +9,7 @@ import {
 } from 'lucide-react'
 import ModelRouter from '@/components/ModelRouter'
 import ThinkingPanel from '@/components/ThinkingPanel'
+import RemoteProjectView from './RemoteProjectView'
 import {
   store, generateThinkingSteps, pollVideoJob,
   GenerationJob, GeneratedAsset, ThinkingStep, ChatMessage as StoreChatMessage
@@ -25,8 +26,8 @@ function detectIntent(text: string): 'image' | 'video' {
   return videoKw.some(k => lower.includes(k)) ? 'video' : 'image'
 }
 
-function scoreColor(s: number) { return s >= 8 ? 'text-emerald-600' : s >= 6 ? 'text-amber-500' : 'text-red-500' }
-function scoreBg(s: number) { return s >= 8 ? 'bg-emerald-50 border-emerald-100' : s >= 6 ? 'bg-amber-50 border-amber-100' : 'bg-red-50 border-red-100' }
+function scoreColor(s: number) { return s >= 8 ? 'text-blue-600' : s >= 6 ? 'text-amber-500' : 'text-red-500' }
+function scoreBg(s: number) { return s >= 8 ? 'bg-blue-50 border-blue-100' : s >= 6 ? 'bg-amber-50 border-amber-100' : 'bg-red-50 border-red-100' }
 
 export default function ProjectWorkspace() {
   const params = useParams()
@@ -69,15 +70,12 @@ export default function ProjectWorkspace() {
     scrollToBottom()
   }, [project, autoStarted, scrollToBottom])
 
+  // Not in localStorage — fall back to the read-only DB-backed view so
+  // server-generated projects (auto-created when a report or landing page
+  // is generated) are still reachable. RemoteProjectView handles its own
+  // loading/error/not-found states.
   if (!project) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="text-center">
-          <p className="text-gray-400 mb-4">Project not found</p>
-          <button onClick={() => router.push('/project')} className="text-sm text-emerald-600 hover:underline">Back to Projects</button>
-        </div>
-      </div>
-    )
+    return <RemoteProjectView projectId={projectId} />
   }
 
   const messages = project.messages
@@ -133,11 +131,12 @@ export default function ProjectWorkspace() {
 
       // D1-D4 Evaluation
       await callEvaluate(prompt, data.result || '', jobId)
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err)
       store.updateMessageInProject(projectId, genMsgId, {
-        content: `网络错误: ${err.message}`, isGenerating: false, error: err.message,
+        content: `网络错误: ${message}`, isGenerating: false, error: message,
       })
-      store.updateJobInProject(projectId, jobId, { status: 'failed', error: err.message })
+      store.updateJobInProject(projectId, jobId, { status: 'failed', error: message })
     }
 
     setIsProcessing(false)
@@ -179,9 +178,10 @@ export default function ProjectWorkspace() {
 
       // Background polling
       pollVideoJob(projectId, jobId, data.jobId, prompt)
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err)
       store.updateMessageInProject(projectId, genMsgId, {
-        content: `网络错误: ${err.message}`, isGenerating: false, error: err.message,
+        content: `网络错误: ${message}`, isGenerating: false, error: message,
       })
       setIsProcessing(false)
     }
@@ -214,9 +214,10 @@ export default function ProjectWorkspace() {
         store.updateJobInProject(projectId, jobId, { status: 'completed', evaluation: data.evaluation, completedAt: new Date().toISOString() })
       }
       scrollToBottom()
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err)
       store.updateMessageInProject(projectId, evalMsgId, {
-        content: `评估错误: ${err.message}`, isEvaluating: false, error: err.message,
+        content: `评估错误: ${message}`, isEvaluating: false, error: message,
       })
     }
   }
@@ -282,27 +283,27 @@ export default function ProjectWorkspace() {
       { key: 'D4', label: '竞争优势', data: evaluation.d4_competitive },
     ]
     return (
-      <div className="bg-white rounded-lg border border-[var(--border)] p-4">
+      <div style={{ backgroundColor: '#f5f5f7', border: '1px solid #e5e5e7' }} className="rounded-lg p-4">
         <div className="flex items-center gap-2 mb-3">
-          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-          <span className="text-[10px] font-semibold text-emerald-700 uppercase tracking-wider">Evaluation</span>
-          <span className="ml-auto text-base font-bold text-gray-900">
-            {evaluation.overall?.toFixed(1) || 'N/A'}<span className="text-[10px] text-gray-400">/10</span>
+          <CheckCircle2 className="w-3.5 h-3.5" style={{ color: '#0071e3' }} />
+          <span style={{ color: '#0071e3' }} className="text-[10px] font-semibold uppercase tracking-wider">Evaluation</span>
+          <span style={{ color: 'rgba(0,0,0,0.8)' }} className="ml-auto text-base font-semibold">
+            {evaluation.overall?.toFixed(1) || 'N/A'}<span style={{ color: 'rgba(0,0,0,0.48)' }} className="text-[10px]">/10</span>
           </span>
         </div>
         <div className="grid grid-cols-2 gap-1.5 mb-3">
           {dims.map(({ key, label, data }) => (
-            <div key={key} className={`px-2.5 py-2 rounded-md border ${scoreBg(data?.score || 0)}`}>
+            <div key={key} style={{ backgroundColor: data?.score || 0 >= 8 ? '#e8f4ff' : data?.score || 0 >= 6 ? '#fef3c7' : '#fee2e2', border: '1px solid ' + (data?.score || 0 >= 8 ? '#b3deff' : data?.score || 0 >= 6 ? '#fde68a' : '#fecaca') }} className="px-2.5 py-2 rounded-md">
               <div className="flex items-center justify-between">
-                <span className="text-[9px] font-semibold text-gray-500 uppercase">{key}</span>
+                <span style={{ color: 'rgba(0,0,0,0.48)' }} className="text-[9px] font-semibold uppercase">{key}</span>
                 <span className={`text-xs font-bold ${scoreColor(data?.score || 0)}`}>{data?.score || 0}</span>
               </div>
-              <p className="text-[10px] text-gray-500 mt-0.5 line-clamp-1">{data?.details || ''}</p>
+              <p style={{ color: 'rgba(0,0,0,0.48)' }} className="text-[10px] mt-0.5 line-clamp-1">{data?.details || ''}</p>
             </div>
           ))}
         </div>
         {evaluation.suggestion && (
-          <p className="text-[10px] text-blue-600 bg-blue-50 rounded px-2 py-1.5">{evaluation.suggestion}</p>
+          <p style={{ backgroundColor: '#e8f4ff', color: '#0066cc' }} className="text-[10px] rounded px-2 py-1.5">{evaluation.suggestion}</p>
         )}
       </div>
     )
@@ -314,12 +315,12 @@ export default function ProjectWorkspace() {
   const rightPanelWidth = 380
 
   return (
-    <div className="flex h-screen">
+    <div style={{ fontFamily: '-apple-system, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif' }} className="flex h-screen bg-white">
 
       {/* ===== LEFT: Asset Thumbnails Strip (80px) ===== */}
-      <div className="w-[80px] flex-shrink-0 bg-[var(--bg-secondary)] border-r border-[var(--border)] flex flex-col">
-        <div className="px-2 py-3 border-b border-[var(--border-light)]">
-          <button onClick={() => router.push('/project')} className="w-full flex items-center justify-center p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors" title="Back to Projects">
+      <div style={{ backgroundColor: '#f5f5f7', borderRight: '1px solid #e5e5e7' }} className="w-[80px] flex-shrink-0 flex flex-col">
+        <div style={{ borderBottom: '1px solid #e5e5e7' }} className="px-2 py-3">
+          <button onClick={() => router.push('/project')} style={{ color: 'rgba(0,0,0,0.48)' }} className="w-full flex items-center justify-center p-2 rounded-lg hover:bg-white transition-colors" title="Back to Projects">
             <ArrowLeft className="w-4 h-4" />
           </button>
         </div>
@@ -329,10 +330,12 @@ export default function ProjectWorkspace() {
             <div
               key={asset.id}
               onClick={() => store.selectAsset(projectId, asset.id)}
-              className={`
-                group relative rounded-lg overflow-hidden cursor-pointer border-2 transition-all
-                ${project.selectedAssetId === asset.id ? 'border-emerald-500 shadow-sm' : 'border-transparent hover:border-gray-300'}
-              `}
+              style={{
+                borderWidth: '2px',
+                borderColor: project.selectedAssetId === asset.id ? '#0071e3' : 'transparent',
+                boxShadow: project.selectedAssetId === asset.id ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
+              }}
+              className="group relative rounded-lg overflow-hidden cursor-pointer transition-all hover:border-gray-300"
             >
               {asset.type === 'image' && asset.imageData ? (
                 <img src={asset.imageData} alt="" className="w-full aspect-square object-cover" />
@@ -341,14 +344,14 @@ export default function ProjectWorkspace() {
                   <Play className="w-4 h-4 text-white" />
                 </div>
               ) : (
-                <div className="w-full aspect-square bg-gray-100 flex items-center justify-center">
-                  <ImageIcon className="w-4 h-4 text-gray-300" />
+                <div style={{ backgroundColor: '#f5f5f7' }} className="w-full aspect-square flex items-center justify-center">
+                  <ImageIcon className="w-4 h-4" style={{ color: 'rgba(0,0,0,0.2)' }} />
                 </div>
               )}
               {/* Delete button on hover */}
               <button
                 onClick={(e) => { e.stopPropagation(); store.removeAssetFromProject(projectId, asset.id) }}
-                className="absolute top-0.5 right-0.5 p-0.5 rounded bg-black/50 text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                className="absolute top-0.5 right-0.5 p-0.5 rounded-full bg-black/50 text-white opacity-0 group-hover:opacity-100 transition-opacity"
               >
                 <Trash2 className="w-2.5 h-2.5" />
               </button>
@@ -357,43 +360,43 @@ export default function ProjectWorkspace() {
 
           {assets.length === 0 && (
             <div className="text-center py-4">
-              <ImageIcon className="w-5 h-5 text-gray-300 mx-auto" />
-              <p className="text-[9px] text-gray-400 mt-1">No assets</p>
+              <ImageIcon className="w-5 h-5" style={{ color: 'rgba(0,0,0,0.1)' }} />
+              <p style={{ color: 'rgba(0,0,0,0.48)' }} className="text-[9px] mt-1">No assets</p>
             </div>
           )}
         </div>
       </div>
 
       {/* ===== CENTER: Main Canvas ===== */}
-      <div className="flex-1 flex flex-col min-w-0 bg-gray-50">
+      <div className="flex-1 flex flex-col min-w-0 bg-white">
         {selectedAsset ? (
           <>
             {/* Canvas toolbar */}
-            <div className="px-4 py-2.5 border-b border-[var(--border-light)] bg-white flex items-center gap-2">
-              <span className="text-xs text-gray-500 flex-1 truncate">{selectedAsset.prompt}</span>
-              <button className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-50 transition-colors" title="Zoom">
+            <div style={{ borderBottom: '1px solid #e5e5e7' }} className="px-4 py-3 bg-white flex items-center gap-2">
+              <span style={{ color: 'rgba(0,0,0,0.48)' }} className="text-xs flex-1 truncate">{selectedAsset.prompt}</span>
+              <button style={{ color: 'rgba(0,0,0,0.48)' }} className="p-2 rounded-lg hover:bg-gray-100 transition-colors" title="Zoom">
                 <ZoomIn className="w-4 h-4" />
               </button>
-              <button className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-50 transition-colors" title="Edit">
+              <button style={{ color: 'rgba(0,0,0,0.48)' }} className="p-2 rounded-lg hover:bg-gray-100 transition-colors" title="Edit">
                 <Pencil className="w-4 h-4" />
               </button>
-              <button className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-50 transition-colors" title="Download">
+              <button style={{ color: 'rgba(0,0,0,0.48)' }} className="p-2 rounded-lg hover:bg-gray-100 transition-colors" title="Download">
                 <Download className="w-4 h-4" />
               </button>
             </div>
             {/* Canvas content */}
-            <div className="flex-1 flex items-center justify-center p-6 overflow-auto">
+            <div style={{ backgroundColor: '#f5f5f7' }} className="flex-1 flex items-center justify-center p-6 overflow-auto">
               {selectedAsset.type === 'image' && selectedAsset.imageData ? (
-                <img src={selectedAsset.imageData} alt="Asset" className="max-w-full max-h-full object-contain rounded-lg shadow-md" />
+                <img src={selectedAsset.imageData} alt="Asset" className="max-w-full max-h-full object-contain rounded-xl" style={{ boxShadow: '0 3px 8px rgba(0,0,0,0.12)' }} />
               ) : selectedAsset.type === 'video' && (selectedAsset.videoData || selectedAsset.videoUrl) ? (
-                <video src={selectedAsset.videoData || selectedAsset.videoUrl} controls className="max-w-full max-h-full rounded-lg shadow-md bg-black" />
+                <video src={selectedAsset.videoData || selectedAsset.videoUrl} controls className="max-w-full max-h-full rounded-xl bg-black" style={{ boxShadow: '0 3px 8px rgba(0,0,0,0.12)' }} />
               ) : (
-                <div className="text-gray-400 text-sm">Loading...</div>
+                <div style={{ color: 'rgba(0,0,0,0.48)' }} className="text-sm">Loading...</div>
               )}
             </div>
             {/* Evaluation below canvas */}
             {selectedAsset.evaluation && (
-              <div className="px-6 py-3 border-t border-[var(--border-light)] bg-white">
+              <div style={{ borderTop: '1px solid #e5e5e7', backgroundColor: 'white' }} className="px-6 py-3">
                 {renderEvaluation(selectedAsset.evaluation)}
               </div>
             )}
@@ -401,22 +404,22 @@ export default function ProjectWorkspace() {
         ) : (
           <div className="flex-1 flex items-center justify-center">
             <div className="text-center">
-              <ImageIcon className="w-12 h-12 text-gray-200 mx-auto mb-3" />
-              <p className="text-sm text-gray-400">在右侧输入描述来生成素材</p>
-              <p className="text-xs text-gray-300 mt-1">生成的图片和视频会显示在这里</p>
+              <ImageIcon className="w-12 h-12 mx-auto mb-3" style={{ color: 'rgba(0,0,0,0.08)' }} />
+              <p style={{ color: 'rgba(0,0,0,0.48)' }} className="text-sm">在右侧输入描述来生成素材</p>
+              <p style={{ color: 'rgba(0,0,0,0.32)' }} className="text-xs mt-1">生成的图片和视频会显示在这里</p>
             </div>
           </div>
         )}
       </div>
 
       {/* ===== RIGHT: Chat & Thinking Panel ===== */}
-      <div style={{ width: rightPanelWidth, minWidth: rightPanelWidth }} className="flex-shrink-0 flex flex-col bg-white border-l border-[var(--border)]">
+      <div style={{ width: rightPanelWidth, minWidth: rightPanelWidth, backgroundColor: 'white', borderLeft: '1px solid #e5e5e7' }} className="flex-shrink-0 flex flex-col">
         {/* Chat messages */}
         <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
           {messages.map(msg => (
             <div key={msg.id} className={`animate-fade-in ${msg.role === 'user' ? 'flex justify-end' : ''}`}>
               {msg.role === 'user' && (
-                <div className="max-w-[90%] px-3 py-2 rounded-xl text-[13px] bg-emerald-50 text-emerald-900 border border-emerald-100">
+                <div style={{ backgroundColor: '#e8f4ff', color: '#0051ba', border: '1px solid #b3deff' }} className="max-w-[90%] px-3 py-2 rounded-2xl text-[13px]">
                   {msg.content}
                 </div>
               )}
@@ -427,15 +430,15 @@ export default function ProjectWorkspace() {
 
                   {/* Loading */}
                   {(msg.isGenerating || msg.isEvaluating) && !msg.evaluation && (
-                    <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gray-50 text-gray-500 border border-[var(--border-light)] text-[13px]">
-                      <Loader2 className="w-3.5 h-3.5 animate-spin text-emerald-500" />
+                    <div style={{ backgroundColor: '#f5f5f7', color: 'rgba(0,0,0,0.8)', border: '1px solid #e5e5e7' }} className="flex items-center gap-2 px-3 py-2 rounded-2xl text-[13px]">
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" style={{ color: '#0071e3' }} />
                       <span className="truncate">{msg.content}</span>
                     </div>
                   )}
 
                   {/* Error */}
                   {msg.error && !msg.isGenerating && !msg.evaluation && (
-                    <div className="px-3 py-2 rounded-xl bg-red-50 text-red-600 border border-red-100 text-[13px] flex items-start gap-2">
+                    <div style={{ backgroundColor: '#fee2e2', color: '#dc2626', border: '1px solid #fecaca' }} className="px-3 py-2 rounded-2xl text-[13px] flex items-start gap-2">
                       <AlertCircle className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
                       <span className="truncate">{msg.content}</span>
                     </div>
@@ -443,22 +446,22 @@ export default function ProjectWorkspace() {
 
                   {/* Image result */}
                   {!msg.isGenerating && !msg.error && !msg.evaluation && (msg.imageData || (msg.allImages && msg.allImages.length > 0)) && (
-                    <div className="rounded-xl border border-[var(--border)] overflow-hidden">
-                      <img src={msg.imageData || msg.allImages?.[0]} alt="" className="w-full max-h-[200px] object-contain bg-gray-50" />
-                      {msg.content && <p className="px-3 py-2 text-[11px] text-gray-500">{msg.content}</p>}
+                    <div style={{ border: '1px solid #e5e5e7' }} className="rounded-xl overflow-hidden">
+                      <img src={msg.imageData || msg.allImages?.[0]} alt="" className="w-full max-h-[200px] object-contain bg-white" />
+                      {msg.content && <p style={{ color: 'rgba(0,0,0,0.48)' }} className="px-3 py-2 text-[11px]">{msg.content}</p>}
                     </div>
                   )}
 
                   {/* Video result */}
                   {!msg.isGenerating && !msg.error && !msg.evaluation && (msg.videoData || msg.videoUrl) && (
-                    <div className="rounded-xl border border-[var(--border)] overflow-hidden">
+                    <div style={{ border: '1px solid #e5e5e7' }} className="rounded-xl overflow-hidden">
                       <video src={msg.videoData || msg.videoUrl} controls className="w-full max-h-[200px] bg-black" />
                     </div>
                   )}
 
                   {/* Plain text */}
                   {!msg.isGenerating && !msg.isEvaluating && !msg.error && !msg.imageData && !(msg.allImages?.length) && !msg.evaluation && !msg.videoData && !msg.videoUrl && msg.content && (
-                    <div className="px-3 py-2 rounded-xl text-[13px] bg-gray-50 text-gray-700 border border-[var(--border-light)]">
+                    <div style={{ backgroundColor: '#f5f5f7', color: 'rgba(0,0,0,0.8)', border: '1px solid #e5e5e7' }} className="px-3 py-2 rounded-2xl text-[13px]">
                       {msg.content}
                     </div>
                   )}
@@ -484,8 +487,8 @@ export default function ProjectWorkspace() {
         </div>
 
         {/* Input — bottom of right panel */}
-        <div className="px-3 py-3 border-t border-[var(--border-light)]">
-          <div className="bg-[var(--bg-secondary)] border border-[var(--border)] rounded-xl">
+        <div style={{ borderTop: '1px solid #e5e5e7' }} className="px-3 py-3">
+          <div style={{ backgroundColor: '#f5f5f7', border: '1px solid #e5e5e7' }} className="rounded-2xl">
             <div className="flex items-end gap-2 p-2.5">
               <textarea
                 ref={textareaRef}
@@ -494,14 +497,17 @@ export default function ProjectWorkspace() {
                 onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSubmit() } }}
                 placeholder="描述你想生成的内容..."
                 rows={2}
-                className="flex-1 bg-transparent text-[13px] text-gray-900 placeholder:text-gray-400 resize-none outline-none leading-relaxed"
+                style={{ color: 'rgba(0,0,0,0.8)' }}
+                className="flex-1 bg-transparent text-[13px] placeholder:text-gray-400 resize-none outline-none leading-relaxed"
               />
               <button
                 onClick={handleSubmit}
                 disabled={!input.trim() || isProcessing}
-                className={`p-2 rounded-lg transition-all flex-shrink-0 ${
-                  input.trim() && !isProcessing ? 'bg-emerald-500 text-white hover:bg-emerald-600' : 'bg-gray-100 text-gray-300 cursor-not-allowed'
-                }`}
+                style={{
+                  backgroundColor: input.trim() && !isProcessing ? '#0071e3' : '#e5e5e7',
+                  color: input.trim() && !isProcessing ? 'white' : 'rgba(0,0,0,0.2)'
+                }}
+                className="p-2 rounded-lg transition-all flex-shrink-0"
               >
                 {isProcessing ? <Loader2 className="w-4 h-4 animate-spin" /> : <ArrowUp className="w-4 h-4" />}
               </button>

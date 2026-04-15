@@ -1,0 +1,62 @@
+[
+  {
+    "title": "Short-Form Video and Playable Ads Dominate iGaming Ad Formats in 2026",
+    "summary": "Short-form video (≤15s) achieves 3.8–6.1% CTR with 180–320% ROI, while interstitial/playable formats deliver 4.5–7.2% CTR with 200–380% ROI. These formats significantly outperform declining popunders (0.2–0.8% CTR) and display banners (0.1–0.4% CTR) in 2026.",
+    "source_url": "https://reacheffect.com/blog/igaming-ad-creative-strategies/",
+    "tags": ["ad_formats", "performance_metrics", "2026", "video", "playable_ads", "CTR", "ROI"]
+  },
+  {
+    "title": "Playable Ads Achieve 4.8 IPM Average, Outperforming Video by 66% in 2026",
+    "summary": "Liftoff's 2026 Mobile Ad Creative Report shows playable ads deliver 4.8 IPM on average, surpassing video (2.9 IPM) by 66% and static (1.4 IPM) by 243%. Playable ads saw 23% YoY IPM increase driven by improved HTML5 rendering and Apple SKAdNetwork 5.0 support.",
+    "source_url": "https://www.rocketshiphq.com/liftoff-mobile-ad-creative-report-2025-summary/",
+    "tags": ["playable_ads", "IPM", "performance_data", "2026", "Liftoff", "video_ads", "static_ads"]
+  },
+  {
+    "title": "Creative Fatigue Accelerates to 9.2 Days for Video Ads on Meta in 2026",
+    "summary": "Creative fatigue onset for video ads on Meta has accelerated from 14 days in 2024 to 9.2 days in 2026, a 34% acceleration. Recommended refresh cadence is every 7 days. Static images now show fatigue in 6.5 days (35% acceleration from 2024).",
+    "source_url": "https://www.rocketshiphq.com/liftoff-mobile-ad-creative-report-2025-summary/",
+    "tags": ["creative_fatigue", "video_ads", "Meta", "2026", "refresh_cadence", "performance_decline"]
+  },
+  {
+    "title": "Top Advertisers Produce 2,400–2,600 Creative Variations Quarterly in 2025",
+    "summary": "ContentGrip's 2026 Gaming UA report shows top advertisers ($4M+/quarter) produced 2,400–2,600 creative variations per quarter in 2025, up 25–30% YoY. Mid-tier advertisers ($0.5–1M) stagnated unless scaling beyond 1,000 creatives, while smaller advertisers boosted production 20–40% YoY.",
+    "source_url": "https://www.contentgrip.com/gaming-marketing-trends-report/",
+    "tags": ["creative_production", "scale", "2025", "ContentGrip", "competitive_edge", "AI_tools"]
+  },
+  {
+    "title": "Multi-Variant Campaigns with AI Testing Reduce CPA by 31% in 2026",
+    "summary": "Industry analysis shows campaigns with 5+ creative variants and AI-assisted testing reduced CPA by an average of 31% compared to static single-creative campaigns in 2026. Creative is now viewed as a performance lever, not a design afterthought.",
+    "source_url": "https://reacheffect.com/blog/igaming-ad-creative-strategies/",
+    "tags": ["CPA_reduction", "AI_testing", "creative_variants", "2026", "performance_optimization"]
+  },
+  {
+    "title": "Playable Ads Achieve 11.4% D7 ROAS in Casual Gaming Vertical (2026)",
+    "summary": "Liftoff's 2026 benchmarks show playable ads deliver 11.4% D7 ROAS in casual gaming, outperforming video (8.2%) and static (5.1%). In hyper-casual, video leads at 14.1% D7 ROAS, with playable at 18.3% D30 ROAS, demonstrating vertical-specific performance variations.",
+    "source_url": "https://www.rocketshiphq.com/liftoff-mobile-ad-creative-report-2025-summary/",
+    "tags": ["ROAS", "playable_ads", "casual_gaming", "2026", "vertical_performance", "benchmarks"]
+  },
+  {
+    "title": "Video Accounts for 71% of Ad Spend Despite Playable Ads' Superior IPM",
+    "summary": "Sensor Tower's 2026 Q1 Ad Intelligence data shows video remains the highest-volume format, accounting for 71% of total ad spend across top 200 advertisers, despite playable ads delivering superior IPM performance (4.8 vs 2.9 IPM).",
+    "source_url": "https://www.rocketshiphq.com/liftoff-mobile-ad-creative-report-2025-summary/",
+    "tags": ["video_ads", "ad_spend", "market_share", "2026", "Sensor_Tower", "playable_ads"]
+  },
+  {
+    "title": "Popunder Ads Remain High-Performing Workhorse Format for iGaming in 2026",
+    "summary": "Despite declining CTR (0.2–0.8%), popunders remain the 'workhorse' for iGaming affiliates in 2026, delivering landing pages directly with massive daily volumes and accessible CPM rates. They perform best for volume-first CPM campaigns rather than CPA-focused efforts.",
+    "source_url": "https://ad-maven.com/blog-posts/igaming-monetization-guide-for-publishers-in-2025",
+    "tags": ["popunder_ads", "iGaming", "affiliate_marketing", "2026", "volume", "CPM"]
+  },
+  {
+    "title": "Native In-Feed Ads Achieve 1.9–3.4% CTR with 140–260% ROI in 2026",
+    "summary": "Native in-feed ads deliver 1.9–3.4% CTR with 140–260% ROI in 2026, making them effective for retargeting and content-match audiences. This format shows rising trend status alongside short-form video and playable formats.",
+    "source_url": "https://reacheffect.com/blog/igaming-ad-creative-strategies/",
+    "tags": ["native_ads", "in_feed", "CTR", "ROI", "2026", "retargeting"]
+  },
+  {
+    "title": "Playable Ads Show 27% Acceleration in Creative Fatigue Resistance (2024-2026)",
+    "summary": "Playable ads demonstrate the slowest creative fatigue acceleration at 27% (from 21 days in 2024 to 15.4 days in 2026), compared to video at 34% and static at 35%. Recommended refresh cadence for playables is every 12 days, offering longer campaign longevity.",
+    "source_url": "https://www.rocketshiphq.com/liftoff-mobile-ad-creative-report-2025-summary/",
+    "tags": ["playable_ads", "creative_fatigue", "longevity", "2026", "refresh_cadence", "performance"]
+  }
+]

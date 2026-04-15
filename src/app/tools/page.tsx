@@ -4,14 +4,15 @@ import { useState } from 'react'
 import {
   Wrench, Search, Image, Globe, FileText, Languages,
   BarChart3, Database, Shield, Cpu, ArrowRight, Star,
-  CheckCircle2, Clock, Zap, Video
+  CheckCircle2, Clock, Zap, Video,
+  type LucideIcon
 } from 'lucide-react'
 
 interface Tool {
   id: string
   name: string
   desc: string
-  icon: any
+  icon: LucideIcon
   category: 'intel' | 'creative' | 'landing' | 'management'
   status: 'available' | 'coming_soon'
   features: string[]
@@ -119,31 +120,32 @@ export default function ToolsPage() {
   const filteredTools = activeCategory === 'all' ? TOOLS : TOOLS.filter(t => t.category === activeCategory)
 
   return (
-    <div className="p-8">
+    <div className="p-8" style={{ fontFamily: '-apple-system, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif' }}>
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-1">
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900">MarTech Tools</h1>
-          <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600 font-semibold border border-emerald-100">
+          <h1 className="text-2xl font-bold tracking-tight text-black">MarTech Tools</h1>
+          <span className="text-xs px-2 py-0.5 rounded-full bg-blue-50 text-[#0071e3] font-semibold">
             {TOOLS.filter(t => t.status === 'available').length} active
           </span>
         </div>
-        <p className="text-sm text-gray-400">
+        <p className="text-sm text-[#6f6f77]">
           Professional marketing technology toolkit built for iGaming
         </p>
       </div>
 
       {/* Category tabs */}
-      <div className="flex gap-1 mb-6 bg-[var(--bg-secondary)] p-1 rounded-xl border border-[var(--border-light)] w-fit">
+      <div className="flex gap-1 mb-6 bg-[#f5f5f7] p-1 rounded-lg w-fit">
         {CATEGORIES.map(({ key, label }) => (
           <button
             key={key}
             onClick={() => setActiveCategory(key)}
-            className={`px-4 py-2 rounded-lg text-xs font-medium transition-all ${
+            className={`px-4 py-2 rounded-md text-xs font-medium transition-all ${
               activeCategory === key
-                ? 'bg-white text-gray-900 shadow-sm border border-[var(--border)]'
-                : 'text-gray-400 hover:text-gray-600'
+                ? 'bg-white text-black'
+                : 'text-[#6f6f77] hover:text-black'
             }`}
+            style={activeCategory === key ? { boxShadow: 'rgba(0,0,0,0.1) 0 1px 3px' } : {}}
           >
             {label}
           </button>
@@ -155,43 +157,41 @@ export default function ToolsPage() {
         {filteredTools.map(tool => (
           <div
             key={tool.id}
-            className={`
-              card-hover bg-white border border-[var(--border)] rounded-xl p-6
-              ${tool.status === 'coming_soon' ? 'opacity-70' : ''}
-            `}
+            className={`bg-white rounded-lg p-6 ${tool.status === 'coming_soon' ? 'opacity-70' : ''}`}
+            style={{ boxShadow: 'rgba(0,0,0,0.22) 0 3px 5px 30px' }}
           >
             <div className="flex items-start justify-between mb-4">
-              <div className="w-11 h-11 rounded-xl bg-emerald-50 flex items-center justify-center border border-emerald-100">
-                <tool.icon className="w-5 h-5 text-emerald-600" />
+              <div className="w-11 h-11 rounded-lg bg-[#f5f5f7] flex items-center justify-center">
+                <tool.icon className="w-5 h-5 text-[#0071e3]" />
               </div>
               {tool.status === 'available' ? (
                 <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
-                  <span className="text-[11px] text-emerald-600 font-medium">Available</span>
+                  <CheckCircle2 className="w-3.5 h-3.5 text-[#0071e3]" />
+                  <span className="text-[11px] text-[#0071e3] font-medium">Available</span>
                 </div>
               ) : (
                 <div className="flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5 text-gray-300" />
-                  <span className="text-[11px] text-gray-400 font-medium">Coming Soon</span>
+                  <Clock className="w-3.5 h-3.5 text-[#d5d5d7]" />
+                  <span className="text-[11px] text-[#6f6f77] font-medium">Coming Soon</span>
                 </div>
               )}
             </div>
 
-            <h3 className="text-[15px] font-semibold text-gray-900 mb-1.5">{tool.name}</h3>
-            <p className="text-xs text-gray-400 leading-relaxed mb-4">{tool.desc}</p>
+            <h3 className="text-[15px] font-semibold text-black mb-1.5">{tool.name}</h3>
+            <p className="text-xs text-[#6f6f77] leading-relaxed mb-4">{tool.desc}</p>
 
             {/* Features */}
             <div className="space-y-1.5">
               {tool.features.map((f, i) => (
-                <div key={i} className="flex items-center gap-2 text-[11px] text-gray-500">
-                  <div className="w-1 h-1 rounded-full bg-emerald-400 flex-shrink-0" />
+                <div key={i} className="flex items-center gap-2 text-[11px] text-[#6f6f77]">
+                  <div className="w-1 h-1 rounded-full bg-[#0071e3] flex-shrink-0" />
                   {f}
                 </div>
               ))}
             </div>
 
             {tool.status === 'available' && (
-              <button className="mt-5 w-full flex items-center justify-center gap-2 py-2.5 rounded-lg bg-[var(--bg-secondary)] text-sm font-medium text-gray-600 hover:bg-emerald-50 hover:text-emerald-700 border border-[var(--border)] hover:border-emerald-200 transition-all">
+              <button className="mt-5 w-full flex items-center justify-center gap-2 py-2.5 rounded-lg bg-[#0071e3] text-sm font-medium text-white hover:bg-[#0066cc] transition-all">
                 Open Tool
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>

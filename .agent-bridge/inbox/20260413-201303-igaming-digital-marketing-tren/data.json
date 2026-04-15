@@ -1,0 +1,116 @@
+[
+  {
+    "category": "trend",
+    "vertical": "iGaming",
+    "region": "全球",
+    "tags": [
+      "AI代理",
+      "iGaming",
+      "自动化",
+      "2026"
+    ],
+    "title": "AI代理在iGaming主流化：79%高管采用，66%报告生产力提升",
+    "summary": "79%的iGaming高管已在使用AI代理，66%报告生产力提升。2026年iGaming从客服、支付/KYC试点转向生产级系统。BetHarmony等平台展示客服代理与电商、支付代理的端到端自动化协作。",
+    "source_type": "agent",
+    "source_url": "https://symphony-solutions.com/insights/igaming-technology-trends-2026",
+    "source_query": "iGaming digital marketing trends 2026",
+    "confidence": 0.9,
+    "relevance": 0.92,
+    "collected_by": "openclaw"
+  },
+  {
+    "category": "trend",
+    "vertical": "iGaming",
+    "region": "全球",
+    "tags": [
+      "AR/VR",
+      "沉浸式体验",
+      "虚拟赌场",
+      "2026"
+    ],
+    "title": "AR/VR设备出货量2026年反弹87%：虚拟赌场与AR投注叠加成主流",
+    "summary": "IDC预测AR/VR头显出货量在2025年下降12%后，2026年将强势反弹87%。iGaming应用场景包括虚拟赌场、3D社交环境和AR投注叠加，为玩家提供沉浸式体验。",
+    "source_type": "agent",
+    "source_url": "https://symphony-solutions.com/insights/igaming-technology-trends-2026",
+    "source_query": "iGaming digital marketing trends 2026",
+    "confidence": 0.9,
+    "relevance": 0.85,
+    "collected_by": "openclaw"
+  },
+  {
+    "category": "trend",
+    "vertical": "iGaming",
+    "region": "全球",
+    "tags": [
+      "联盟营销",
+      "LTV",
+      "个性化",
+      "2026"
+    ],
+    "title": "iGaming联盟营销2026转型：从收入分成到LTV混合价值协议",
+    "summary": "联盟模式从传统收入分成转向LTV混合协议。2026年趋势包括超个性化激励、高边际产品参与度奖励、负责任游戏分数挂钩奖金，从单纯流量生成转向建立可持续客户终身价值。",
+    "source_type": "agent",
+    "source_url": "https://www.kodedice.com/blog/future-trends-in-global-igaming-industry",
+    "source_query": "iGaming digital marketing trends 2026",
+    "confidence": 0.9,
+    "relevance": 0.94,
+    "collected_by": "openclaw"
+  },
+  {
+    "category": "trend",
+    "vertical": "iGaming",
+    "region": "全球",
+    "tags": [
+      "AI个性化",
+      "忠诚度计划",
+      "玩家保留",
+      "ML"
+    ],
+    "title": "AI/ML驱动的忠诚度计划：通过行为分析提升玩家保留与LTV",
+    "summary": "运营商利用AI/ML基于行为和偏好个性化奖励，优化终身价值同时促进负责任游戏，成为2026年关键竞争差异化因素。实时AI个性化游戏、优惠和健康干预增强留存和LTV。",
+    "source_type": "agent",
+    "source_url": "https://www.kodedice.com/blog/future-trends-in-global-igaming-industry",
+    "source_query": "iGaming digital marketing trends 2026",
+    "confidence": 0.9,
+    "relevance": 0.91,
+    "collected_by": "openclaw"
+  },
+  {
+    "category": "trend",
+    "vertical": "iGaming",
+    "region": "全球",
+    "tags": [
+      "实时个性化",
+      "合规",
+      "EU AI Act",
+      "透明度"
+    ],
+    "title": "实时个性化2026年合规化：行为-风险-同意三元动态调整",
+    "summary": "实时决策系统根据玩家行为、风险评估和同意状态自适应调整，2026年需满足EU AI Act和MiCA框架要求，系统须能解释推荐逻辑以确保透明度和监管合规。",
+    "source_type": "agent",
+    "source_url": "https://symphony-solutions.com/insights/igaming-technology-trends-2026",
+    "source_query": "iGaming digital marketing trends 2026",
+    "confidence": 0.9,
+    "relevance": 0.88,
+    "collected_by": "openclaw"
+  },
+  {
+    "category": "trend",
+    "vertical": "iGaming",
+    "region": "全球",
+    "tags": [
+      "5G",
+      "微投注",
+      "低延迟",
+      "实时"
+    ],
+    "title": "5G驱动微投注时代：低延迟成iGaming竞争优势",
+    "summary": "5G连接数从2024年16亿预计增至2030年55亿。微投注成为革命性模式，5G将延迟转化为竞争优势，实时赛事内投注体验大幅提升，革新玩家互动方式。",
+    "source_type": "agent",
+    "source_url": "https://symphony-solutions.com/insights/igaming-technology-trends-2026",
+    "source_query": "iGaming digital marketing trends 2026",
+    "confidence": 0.9,
+    "relevance": 0.82,
+    "collected_by": "openclaw"
+  }
+]

@@ -1,0 +1,26 @@
+{
+  "version": "1.0",
+  "agents": {
+    "openclaw": {
+      "name": "OpenClaw",
+      "capabilities": ["web_fetch", "web_crawl", "api_call", "screenshot", "video_download"],
+      "trigger_method": "cli",
+      "cli_command": "claude -p"
+    },
+    "claude_code": {
+      "name": "Claude Code",
+      "capabilities": ["code_edit", "db_write", "llm_process", "evolution"],
+      "working_dir": "~/moboost AI/moboost-maas"
+    }
+  },
+  "supabase": {
+    "url_env": "NEXT_PUBLIC_SUPABASE_URL",
+    "key_env": "SUPABASE_SERVICE_ROLE_KEY"
+  },
+  "defaults": {
+    "priority": 5,
+    "language": "zh-CN",
+    "max_file_size_mb": 100,
+    "retention_days": 7
+  }
+}

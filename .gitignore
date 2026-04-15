@@ -17,6 +17,9 @@ next-env.d.ts
 data/users/
 data/
 
+# Local upload sink (served by /api/upload → /public/uploads)
+/public/uploads/
+
 # OS
 .DS_Store
 Thumbs.db
