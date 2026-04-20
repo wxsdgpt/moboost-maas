@@ -397,7 +397,7 @@ export default function ProjectWorkspace() {
             {/* Evaluation below canvas */}
             {selectedAsset.evaluation && (
               <div style={{ borderTop: '1px solid var(--border)', backgroundColor: 'var(--bg)' }} className="px-6 py-3">
-                {renderEvaluation(selectedAsset.evaluation)}
+                {renderEvaluation(selectedAsset.evaluation as unknown as AssetEvaluation)}
               </div>
             )}
           </>
@@ -426,7 +426,7 @@ export default function ProjectWorkspace() {
               {msg.role === 'assistant' && (
                 <div className="max-w-[95%]">
                   {/* Evaluation card */}
-                  {msg.evaluation && renderEvaluation(msg.evaluation)}
+                  {msg.evaluation && renderEvaluation(msg.evaluation as unknown as AssetEvaluation)}
 
                   {/* Loading */}
                   {(msg.isGenerating || msg.isEvaluating) && !msg.evaluation && (
