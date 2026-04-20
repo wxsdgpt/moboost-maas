@@ -35,3 +35,6 @@ yarn-error.log*
 
 # Large binary assets — keep in Notion / 飞书 instead
 *.pdf
+
+# Backup snapshots
+_backup_pre_apple/
