@@ -15,6 +15,7 @@ import {
   MessageCircle,
   X,
 } from 'lucide-react'
+import { useLocale } from '@/lib/i18n/LocaleProvider'
 
 // ──── Types ────
 
@@ -34,11 +35,11 @@ type Props = {
 }
 
 const QUICK_ACTIONS = [
-  { id: 'pipeline' as const, label: '一键联动', icon: Zap, description: 'Full pipeline' },
-  { id: 'asset' as const, label: '生成素材', icon: ImageIcon, description: 'Create assets' },
-  { id: 'intel' as const, label: '信息采集', icon: Search, description: 'Market intel' },
-  { id: 'landing' as const, label: '生成落地页', icon: Layout, description: 'Landing page' },
-]
+  { id: 'pipeline' as const, labelKey: 'collector.action.pipeline', icon: Zap, description: 'Full pipeline' },
+  { id: 'asset' as const, labelKey: 'collector.action.asset', icon: ImageIcon, description: 'Create assets' },
+  { id: 'intel' as const, labelKey: 'collector.action.intel', icon: Search, description: 'Market intel' },
+  { id: 'landing' as const, labelKey: 'collector.action.landing', icon: Layout, description: 'Landing page' },
+] as const
 
 // ──── Main Component ────
 
@@ -51,6 +52,7 @@ export default function UnifiedCollector({
   onProjectCreated,
 }: Props) {
   const router = useRouter()
+  const { t } = useLocale()
   const [input, setInput] = useState('')
   const [selectedAction, setSelectedAction] = useState<Intent>(null)
   const [processing, setProcessing] = useState(false)
@@ -124,7 +126,7 @@ export default function UnifiedCollector({
           {
             role: 'assistant',
             content: intent.clarificationQuestion ||
-              '请提供您想要分析的产品网址。您可以粘贴网站URL或应用商店链接。',
+              'Please provide the product URL you want to analyze. You can paste a website URL or app store link.',
           },
         ])
         setInput('')
@@ -139,7 +141,7 @@ export default function UnifiedCollector({
           {
             role: 'assistant',
             content: intent.clarificationQuestion ||
-              '请问您想要：1) 生成竞品情报报告 2) 生成营销素材（图片/视频）3) 生成落地页 还是 4) 全套一键联动？',
+              'Which would you like: 1) Generate a competitive intelligence report, 2) Generate marketing creatives (images/videos), 3) Generate a landing page, or 4) The full one-click pipeline?',
           },
         ])
         setInput('')
@@ -152,7 +154,7 @@ export default function UnifiedCollector({
       setError((e as Error).message)
       setMessages(prev => [
         ...prev,
-        { role: 'assistant', content: '抱歉，处理失败了。请再试一次。' },
+        { role: 'assistant', content: 'Sorry, something went wrong. Please try again.' },
       ])
     } finally {
       setProcessing(false)
@@ -239,20 +241,24 @@ export default function UnifiedCollector({
       {/* Chat messages (if in chat mode) */}
       {chatMode && messages.length > 0 && (
         <div
-          className="rounded-xl border border-gray-200 p-4 max-h-[250px] overflow-y-auto space-y-3"
-          style={{ background: '#fafafa', scrollbarWidth: 'thin' }}
+          className="rounded-xl p-4 max-h-[250px] overflow-y-auto space-y-3"
+          style={{
+            background: 'var(--surface-1)',
+            border: '1px solid var(--border)',
+            scrollbarWidth: 'thin',
+          }}
         >
           <div className="flex items-center justify-between mb-2">
-            <span className="text-[12px] font-medium" style={{ color: '#999' }}>
+            <span className="text-[12px] font-medium" style={{ color: 'var(--text-4)' }}>
               <MessageCircle className="w-3 h-3 inline mr-1" />
               Conversation
             </span>
             <button
               type="button"
               onClick={() => { setChatMode(false); setMessages([]) }}
-              className="p-1 rounded hover:bg-gray-200 transition-colors"
+              className="p-1 rounded hover:bg-white/10 transition-colors"
             >
-              <X className="w-3 h-3" style={{ color: '#999' }} />
+              <X className="w-3 h-3" style={{ color: 'var(--text-4)' }} />
             </button>
           </div>
           {messages.map((msg, i) => (
@@ -263,8 +269,10 @@ export default function UnifiedCollector({
               <div
                 className="rounded-xl px-3 py-2 max-w-[85%] text-[13px] leading-relaxed"
                 style={{
-                  background: msg.role === 'user' ? '#0071e3' : '#f0f0f3',
-                  color: msg.role === 'user' ? '#ffffff' : '#000000',
+                  background: msg.role === 'user'
+                    ? 'linear-gradient(135deg, #c0e463, #a8d44a)'
+                    : 'var(--surface-2)',
+                  color: msg.role === 'user' ? 'var(--brand-contrast)' : 'var(--text-1)',
                 }}
               >
                 {msg.content}
@@ -277,8 +285,11 @@ export default function UnifiedCollector({
 
       {/* Main input area */}
       <div
-        className="relative rounded-xl border border-gray-300 transition-all focus-within:border-blue-400 focus-within:shadow-sm"
-        style={{ background: '#ffffff' }}
+        className="relative rounded-xl transition-all"
+        style={{
+          background: 'var(--surface-1)',
+          border: '1px solid var(--border)',
+        }}
       >
         <textarea
           ref={textareaRef}
@@ -287,17 +298,17 @@ export default function UnifiedCollector({
           onKeyDown={handleKeyDown}
           placeholder={
             selectedAction === 'intel'
-              ? '输入产品URL或描述竞品…'
+              ? t('collector.placeholder.intel')
               : selectedAction === 'asset'
-              ? '描述你想要生成的素材…'
+              ? t('collector.placeholder.asset')
               : selectedAction === 'landing'
-              ? '描述落地页需求…'
-              : '描述你的需求，或选择下方快捷操作…'
+              ? t('collector.placeholder.landing')
+              : t('collector.placeholder.default')
           }
           disabled={processing}
-          className="w-full resize-none border-0 bg-transparent px-4 pt-4 pb-12 text-[15px] focus:outline-none disabled:opacity-50"
+          className="w-full resize-none border-0 bg-transparent px-4 pt-4 pb-12 text-[15px] focus:outline-none disabled:opacity-50 placeholder:text-white/30"
           style={{
-            color: '#000000',
+            color: 'var(--text-1)',
             fontFamily: 'inherit',
             minHeight: compact ? '60px' : '80px',
           }}
@@ -310,12 +321,12 @@ export default function UnifiedCollector({
             onClick={handleSubmit}
             disabled={processing || (!input.trim() && !selectedAction)}
             className="w-8 h-8 rounded-lg inline-flex items-center justify-center transition-all disabled:opacity-30"
-            style={{ background: '#0071e3' }}
+            style={{ background: 'var(--brand)' }}
           >
             {processing ? (
-              <Loader2 className="w-4 h-4 text-white animate-spin" />
+              <Loader2 className="w-4 h-4 animate-spin" style={{ color: 'var(--brand-contrast)' }} />
             ) : (
-              <Send className="w-4 h-4 text-white" />
+              <Send className="w-4 h-4" style={{ color: 'var(--brand-contrast)' }} />
             )}
           </button>
         </div>
@@ -334,15 +345,15 @@ export default function UnifiedCollector({
               disabled={processing}
               className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-all disabled:opacity-50"
               style={{
-                background: isSelected ? '#0071e3' : '#f5f5f7',
-                color: isSelected ? '#ffffff' : '#333333',
+                background: isSelected ? 'var(--brand)' : 'var(--surface-1)',
+                color: isSelected ? 'var(--brand-contrast)' : 'var(--text-2)',
                 border: isSelected
-                  ? '1px solid #0071e3'
-                  : '1px solid #e5e5e5',
+                  ? '1px solid var(--brand)'
+                  : '1px solid var(--border)',
               }}
             >
               <Icon className="w-3.5 h-3.5" />
-              {action.label}
+              {t(action.labelKey)}
             </button>
           )
         })}
@@ -353,9 +364,9 @@ export default function UnifiedCollector({
         <div
           className="text-[13px] rounded-lg px-3 py-2"
           style={{
-            background: '#ffe5e5',
-            border: '1px solid #ffc9c9',
-            color: '#d32f2f',
+            background: 'var(--danger-bg)',
+            border: '1px solid var(--danger)',
+            color: 'var(--danger)',
           }}
         >
           {error}

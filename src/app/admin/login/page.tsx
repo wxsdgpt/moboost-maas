@@ -52,13 +52,13 @@ export default function AdminLoginPage() {
             className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4"
             style={{
               background: 'linear-gradient(135deg, #e94560 0%, #0f3460 100%)',
-              boxShadow: '0 8px 32px rgba(233, 69, 96, 0.3)',
+              boxShadow: 'var(--shadow-md)',
             }}
           >
             <Shield className="w-8 h-8 text-white" />
           </div>
           <h1 className="text-2xl font-bold text-white tracking-tight">Moboost Admin</h1>
-          <p className="text-sm mt-1" style={{ color: 'rgba(255,255,255,0.5)' }}>
+          <p className="text-sm mt-1" style={{ color: 'var(--text-2)' }}>
             管理员控制台
           </p>
         </div>
@@ -68,14 +68,14 @@ export default function AdminLoginPage() {
           onSubmit={handleSubmit}
           className="rounded-2xl p-6"
           style={{
-            background: 'rgba(255, 255, 255, 0.05)',
+            background: 'var(--surface-3)',
             backdropFilter: 'blur(20px)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
+            border: '1px solid var(--border-strong)',
           }}
         >
           {/* Username */}
           <div className="mb-4">
-            <label className="block text-[11px] font-medium uppercase tracking-wider mb-1.5" style={{ color: 'rgba(255,255,255,0.5)' }}>
+            <label className="block text-[11px] font-medium uppercase tracking-wider mb-1.5" style={{ color: 'var(--text-2)' }}>
               用户名
             </label>
             <input
@@ -85,11 +85,11 @@ export default function AdminLoginPage() {
               placeholder="admin"
               className="w-full px-4 py-3 rounded-xl text-sm text-white placeholder:text-white/30 outline-none transition-all"
               style={{
-                background: 'rgba(255, 255, 255, 0.07)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
+                background: 'var(--surface-3)',
+                border: '1px solid var(--border-strong)',
               }}
               onFocus={(e) => { e.currentTarget.style.borderColor = '#e94560' }}
-              onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)' }}
+              onBlur={(e) => { e.currentTarget.style.borderColor = 'var(--border-strong)' }}
               autoComplete="username"
               autoFocus
             />
@@ -97,7 +97,7 @@ export default function AdminLoginPage() {
 
           {/* Password */}
           <div className="mb-5">
-            <label className="block text-[11px] font-medium uppercase tracking-wider mb-1.5" style={{ color: 'rgba(255,255,255,0.5)' }}>
+            <label className="block text-[11px] font-medium uppercase tracking-wider mb-1.5" style={{ color: 'var(--text-2)' }}>
               密码
             </label>
             <div className="relative">
@@ -108,18 +108,18 @@ export default function AdminLoginPage() {
                 placeholder="••••••••"
                 className="w-full px-4 py-3 rounded-xl text-sm text-white placeholder:text-white/30 outline-none transition-all pr-10"
                 style={{
-                  background: 'rgba(255, 255, 255, 0.07)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  background: 'var(--surface-3)',
+                  border: '1px solid var(--border-strong)',
                 }}
                 onFocus={(e) => { e.currentTarget.style.borderColor = '#e94560' }}
-                onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)' }}
+                onBlur={(e) => { e.currentTarget.style.borderColor = 'var(--border-strong)' }}
                 autoComplete="current-password"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 p-1"
-                style={{ color: 'rgba(255,255,255,0.3)' }}
+                style={{ color: 'var(--text-3)' }}
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
@@ -147,7 +147,7 @@ export default function AdminLoginPage() {
             className="w-full py-3 rounded-xl text-sm font-semibold text-white transition-all disabled:opacity-50"
             style={{
               background: 'linear-gradient(135deg, #e94560 0%, #c23152 100%)',
-              boxShadow: '0 4px 16px rgba(233, 69, 96, 0.3)',
+              boxShadow: 'var(--shadow-sm)',
             }}
           >
             {loading ? (
@@ -159,7 +159,7 @@ export default function AdminLoginPage() {
         </form>
 
         {/* Footer */}
-        <p className="text-center text-[11px] mt-6" style={{ color: 'rgba(255,255,255,0.25)' }}>
+        <p className="text-center text-[11px] mt-6" style={{ color: 'var(--text-3)' }}>
           Moboost AI MaaS · Admin Console
         </p>
       </div>

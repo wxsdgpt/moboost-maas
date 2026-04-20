@@ -10,9 +10,9 @@ function useStore<T>(selector: () => T): T {
 
 // Shared icon map — must be at module level so both components can use it
 const iconMap: Record<string, React.ReactNode> = {
-  success: <CheckCircle2 className="w-4 h-4 text-[#0071e3]" />,
-  error: <AlertCircle className="w-4 h-4 text-red-500" />,
-  info: <Info className="w-4 h-4 text-[#0071e3]" />,
+  success: <CheckCircle2 className="w-4 h-4 text-[#c0e463]" />,
+  error: <AlertCircle className="w-4 h-4 text-[#ff6b6b]" />,
+  info: <Info className="w-4 h-4 text-[#c0e463]" />,
 }
 
 export default function Notifications() {
@@ -42,17 +42,23 @@ export default function Notifications() {
       {toasts.map(toast => (
         <div
           key={toast.id}
-          className="pointer-events-auto animate-slide-up bg-white rounded-lg px-4 py-3 max-w-[340px] flex items-start gap-3"
-          style={{ boxShadow: 'rgba(0,0,0,0.22) 0 3px 5px 30px' }}
+          className="pointer-events-auto animate-slide-up rounded-lg px-4 py-3 max-w-[340px] flex items-start gap-3"
+          style={{
+            background: 'var(--glass-bg)',
+            backdropFilter: 'saturate(120%) blur(24px)',
+            border: '1px solid var(--border-strong)',
+            boxShadow: 'var(--shadow-md)',
+          }}
         >
           <div className="mt-0.5">{iconMap[toast.type]}</div>
           <div className="flex-1 min-w-0">
-            <div className="text-sm font-semibold text-black">{toast.title}</div>
-            <div className="text-xs text-[#6f6f77] mt-0.5 truncate">{toast.message}</div>
+            <div className="text-sm font-semibold" style={{ color: 'var(--text-1)' }}>{toast.title}</div>
+            <div className="text-xs mt-0.5 truncate" style={{ color: 'var(--text-3)' }}>{toast.message}</div>
           </div>
           <button
             onClick={() => dismissToast(toast.id)}
-            className="p-1 rounded-lg text-[#d5d5d7] hover:text-black hover:bg-[#f5f5f7] transition-colors"
+            className="p-1 rounded-lg transition-colors hover:bg-white/10"
+            style={{ color: 'var(--text-4)' }}
           >
             <X className="w-3.5 h-3.5" />
           </button>
@@ -74,7 +80,8 @@ export function NotificationBell() {
           setShowPanel(!showPanel)
           if (!showPanel) store.markAllRead()
         }}
-        className="relative p-2 rounded-lg text-[#6f6f77] hover:text-black hover:bg-[#f5f5f7] transition-colors"
+        className="relative p-2 rounded-lg transition-colors hover:bg-white/10"
+        style={{ color: 'var(--text-3)' }}
       >
         <Bell className="w-4 h-4" />
         {unreadCount > 0 && (
@@ -87,21 +94,29 @@ export function NotificationBell() {
       {showPanel && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setShowPanel(false)} />
-          <div className="absolute bottom-full left-0 mb-2 w-[300px] bg-white rounded-lg shadow-xl z-50 overflow-hidden" style={{ boxShadow: 'rgba(0,0,0,0.22) 0 3px 5px 30px' }}>
-            <div className="px-4 py-3 border-b border-[#d5d5d7]">
-              <span className="text-sm font-semibold text-black">Notifications</span>
+          <div
+            className="absolute bottom-full left-0 mb-2 w-[300px] rounded-lg z-50 overflow-hidden"
+            style={{
+              background: 'var(--glass-bg)',
+              backdropFilter: 'saturate(120%) blur(24px)',
+              border: '1px solid var(--border-strong)',
+              boxShadow: 'var(--shadow-md)',
+            }}
+          >
+            <div className="px-4 py-3" style={{ borderBottom: '1px solid var(--border)' }}>
+              <span className="text-sm font-semibold" style={{ color: 'var(--text-1)' }}>Notifications</span>
             </div>
             <div className="max-h-[300px] overflow-y-auto">
               {notifications.length === 0 ? (
-                <div className="px-4 py-6 text-center text-xs text-[#6f6f77]">No notifications yet</div>
+                <div className="px-4 py-6 text-center text-xs" style={{ color: 'var(--text-4)' }}>No notifications yet</div>
               ) : (
                 notifications.slice(0, 10).map(n => (
-                  <div key={n.id} className="px-4 py-3 border-b border-[#d5d5d7] last:border-0 hover:bg-[#f5f5f7]">
+                  <div key={n.id} className="px-4 py-3 last:border-0 hover:bg-white/5" style={{ borderBottom: '1px solid var(--border)' }}>
                     <div className="flex items-start gap-2">
                       {iconMap[n.type]}
                       <div className="flex-1 min-w-0">
-                        <div className="text-xs font-semibold text-black">{n.title}</div>
-                        <div className="text-[11px] text-[#6f6f77] mt-0.5 truncate">{n.message}</div>
+                        <div className="text-xs font-semibold" style={{ color: 'var(--text-1)' }}>{n.title}</div>
+                        <div className="text-[11px] mt-0.5 truncate" style={{ color: 'var(--text-3)' }}>{n.message}</div>
                       </div>
                     </div>
                   </div>

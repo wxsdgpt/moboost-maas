@@ -26,6 +26,7 @@ import type { TemplateId } from '@/lib/landingTemplates'
 import type { EnrichmentRecord } from '@/lib/productEnrichment'
 import { logPipelineStart } from '@/lib/eventLog'
 import { resolveProjectId } from '@/lib/projectResolver'
+import { notifyCollab } from '@/lib/collabWebhook'
 
 export const runtime = 'nodejs'
 export const maxDuration = 60 // landing gen is lighter than reports
@@ -175,6 +176,15 @@ export async function POST(req: NextRequest) {
     }
 
     endLog({ templateId, model: result.model, slots: result.filledSlots.length, landingId: landingRow.id, projectId })
+
+    notifyCollab('landing.created', {
+      landingId: landingRow.id,
+      reportId,
+      projectId,
+      productId,
+      templateId,
+    }).catch(() => {})
+
     return NextResponse.json({
       ok: true,
       landingId: landingRow.id,

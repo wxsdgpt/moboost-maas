@@ -7,31 +7,37 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
 import { supabaseService } from '@/lib/db'
+import { AUTH_BYPASS } from '@/lib/authBypass'
 
 export async function GET(
   _req: NextRequest,
   { params }: { params: { id: string } },
 ) {
-  const { userId: clerkId } = await auth()
-  if (!clerkId) return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
-
   const db = supabaseService()
 
-  const { data: userRow, error: userErr } = await db
-    .from('users')
-    .select('id')
-    .eq('clerk_user_id', clerkId)
-    .maybeSingle()
+  let userId: string | null = null
+  if (AUTH_BYPASS) {
+    // v1.0.2 test mode — skip user ownership check entirely
+  } else {
+    const { userId: clerkId } = await auth()
+    if (!clerkId) return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
 
-  if (userErr) return NextResponse.json({ error: 'db_error', detail: userErr.message }, { status: 500 })
-  if (!userRow) return NextResponse.json({ error: 'user_not_found' }, { status: 404 })
+    const { data: userRow, error: userErr } = await db
+      .from('users')
+      .select('id')
+      .eq('clerk_user_id', clerkId)
+      .maybeSingle()
 
-  const { data: report, error } = await db
+    if (userErr) return NextResponse.json({ error: 'db_error', detail: userErr.message }, { status: 500 })
+    if (!userRow) return NextResponse.json({ error: 'user_not_found' }, { status: 404 })
+    userId = userRow.id
+  }
+
+  const query = db
     .from('reports')
     .select('id, product_id, kind, status, output, credits_charged, created_at')
     .eq('id', params.id)
-    .eq('user_id', userRow.id)
-    .maybeSingle()
+  const { data: report, error } = await (userId ? query.eq('user_id', userId) : query).maybeSingle()
 
   if (error || !report) {
     return NextResponse.json({ error: 'report_not_found' }, { status: 404 })

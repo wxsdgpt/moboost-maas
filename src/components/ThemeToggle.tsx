@@ -22,7 +22,7 @@ export default function ThemeToggle({ compact = false }: { compact?: boolean }) 
 
   const isDark = theme === 'dark'
   const Icon = isDark ? Sun : Moon
-  const label = isDark ? '切换到浅色模式' : '切换到深色模式'
+  const label = isDark ? 'Switch to light mode' : 'Switch to dark mode'
 
   return (
     <button
@@ -33,14 +33,14 @@ export default function ThemeToggle({ compact = false }: { compact?: boolean }) 
       className={`
         flex items-center justify-center
         rounded-lg
-        bg-[#f5f5f7] dark:bg-[#1d1d1f]
-        text-[#6f6f77] dark:text-[#a1a1a6]
-        hover:bg-white dark:hover:bg-[#2a2a2f]
-        hover:text-black dark:hover:text-white
         transition-colors duration-150
         ${compact ? 'w-7 h-7' : 'w-8 h-8'}
       `}
-      style={{ fontFamily: '-apple-system, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif' }}
+      style={{
+        fontFamily: '-apple-system, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
+        backgroundColor: 'var(--surface-2)',
+        color: 'var(--text-3)',
+      }}
     >
       <Icon className="w-[14px] h-[14px]" />
     </button>

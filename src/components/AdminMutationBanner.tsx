@@ -68,7 +68,7 @@ export default function AdminMutationBanner() {
             <span className="text-sm font-semibold text-white">
               {visible.length} 项新进化修改待确认
             </span>
-            <span className="text-[11px] ml-2" style={{ color: 'rgba(255,255,255,0.5)' }}>
+            <span className="text-[11px] ml-2" style={{ color: 'var(--text-2)' }}>
               Evolution Agent 已自主产生修改，请审核
             </span>
           </div>
@@ -89,8 +89,8 @@ export default function AdminMutationBanner() {
           key={m.id}
           className="rounded-xl px-5 py-3 flex items-center justify-between"
           style={{
-            background: 'rgba(255,255,255,0.03)',
-            border: '1px solid rgba(255,255,255,0.08)',
+            background: 'var(--surface-3)',
+            border: '1px solid var(--border)',
           }}
         >
           <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -100,7 +100,7 @@ export default function AdminMutationBanner() {
             />
             <div className="min-w-0">
               <div className="text-xs font-medium text-white truncate">{m.description}</div>
-              <div className="text-[10px]" style={{ color: 'rgba(255,255,255,0.35)' }}>
+              <div className="text-[10px]" style={{ color: 'var(--text-3)' }}>
                 {m.mutationType} · {m.target} · {formatTime(m.createdAt)}
               </div>
             </div>
@@ -126,7 +126,7 @@ export default function AdminMutationBanner() {
               onClick={() => handleAction(m.id, 'rollback')}
               disabled={acting === m.id}
               className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] font-medium transition-all disabled:opacity-50"
-              style={{ background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.6)' }}
+              style={{ background: 'var(--border)', color: 'var(--text-2)' }}
             >
               <Undo2 className="w-3 h-3" />
               回滚
@@ -134,7 +134,7 @@ export default function AdminMutationBanner() {
             <button
               onClick={() => setDismissed((prev) => new Set(prev).add(m.id))}
               className="p-1 rounded transition-all"
-              style={{ color: 'rgba(255,255,255,0.2)' }}
+              style={{ color: 'var(--text-3)' }}
             >
               <X className="w-3 h-3" />
             </button>

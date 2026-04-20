@@ -81,10 +81,10 @@ export default function CreditBalance({
         className="flex flex-col items-center justify-center gap-0.5 px-1 py-1 rounded-lg"
         title={total !== null ? `${total} credits` : 'Loading credits…'}
       >
-        <Sparkles className="w-4 h-4" style={{ color: '#0071e3' }} />
+        <Sparkles className="w-4 h-4" style={{ color: 'var(--brand)' }} />
         <span
           className="text-[10px] font-medium leading-none tabular-nums"
-          style={{ color: '#ffffff' }}
+          style={{ color: 'var(--text-1)' }}
         >
           {total !== null ? total : '—'}
         </span>
@@ -96,8 +96,8 @@ export default function CreditBalance({
     <div
       className="flex items-center gap-2 px-3 py-1.5 rounded-full"
       style={{
-        background: 'rgba(255, 255, 255, 0.1)',
-        border: '1px solid rgba(255, 255, 255, 0.15)',
+        background: 'var(--border-strong)',
+        border: '1px solid var(--border-strong)',
       }}
       title={
         error
@@ -107,10 +107,10 @@ export default function CreditBalance({
             : 'Loading credits…'
       }
     >
-      <Sparkles className="w-3.5 h-3.5 flex-shrink-0" style={{ color: '#0071e3' }} />
+      <Sparkles className="w-3.5 h-3.5 flex-shrink-0" style={{ color: 'var(--brand)' }} />
       <span
         className="text-[12px] font-medium tabular-nums"
-        style={{ color: '#ffffff' }}
+        style={{ color: 'var(--text-1)' }}
       >
         {total !== null ? (
           <>

@@ -405,26 +405,26 @@ function generateFallbackInsights(
       : 0
 
   insights.push(
-    `系统总运行 ${totalRuns} 次，${reports.length} 个活跃Agent，平均质量分 ${avgQuality.toFixed(1)}`,
+    `${totalRuns} total runs across ${reports.length} active agent(s), average quality score ${avgQuality.toFixed(1)}`,
   )
 
   const degrading = reports.filter((r) => r.trends.qualityTrend === 'degrading')
   if (degrading.length > 0) {
     insights.push(
-      `${degrading.map((r) => r.agentId).join(', ')} 质量呈下降趋势，需要关注`,
+      `${degrading.map((r) => r.agentId).join(', ')} showing declining quality trend — needs attention`,
     )
   }
 
   const bottlenecks = patterns.filter((p) => p.type === 'bottleneck')
   if (bottlenecks.length > 0) {
     insights.push(
-      `管线瓶颈：${bottlenecks.map((p) => p.agents[0]).join(', ')}`,
+      `Pipeline bottleneck: ${bottlenecks.map((p) => p.agents[0]).join(', ')}`,
     )
   }
 
   if (totalRuns < RULES.MIN_RUNS_FOR_CONFIDENCE) {
     insights.push(
-      `数据量不足（${totalRuns} 次执行），建议积累更多数据后再做重大决策`,
+      `Insufficient data (${totalRuns} executions) — recommend accumulating more data before making major decisions`,
     )
   }
 
@@ -472,16 +472,16 @@ function generateExecutiveSummary(
 ): string {
   const parts: string[] = []
 
-  parts.push(`系统健康度 ${healthScore}/100。`)
+  parts.push(`System health ${healthScore}/100.`)
 
   const immediateCount = decisions.filter((d) => d.urgency === 'immediate').length
   if (immediateCount > 0) {
-    parts.push(`${immediateCount} 项需要立即处理。`)
+    parts.push(` ${immediateCount} item(s) require immediate attention.`)
   }
 
   const totalAnomalies = reports.reduce((s, r) => s + r.anomalies.length, 0)
   if (totalAnomalies > 0) {
-    parts.push(`检测到 ${totalAnomalies} 个异常。`)
+    parts.push(` ${totalAnomalies} anomaly(ies) detected.`)
   }
 
   const totalDecisions = decisions.length
@@ -496,9 +496,9 @@ function generateExecutiveSummary(
     const typeSummary = Object.entries(byType)
       .map(([t, c]) => `${t}×${c}`)
       .join(', ')
-    parts.push(`共 ${totalDecisions} 项进化建议 (${typeSummary})。`)
+    parts.push(` ${totalDecisions} evolution suggestion(s) (${typeSummary}).`)
   } else {
-    parts.push(`当前无进化建议，系统运行平稳。`)
+    parts.push(` No evolution suggestions at this time. System is running smoothly.`)
   }
 
   return parts.join('')

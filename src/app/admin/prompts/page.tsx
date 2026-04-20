@@ -68,14 +68,14 @@ export default function AdminPromptsPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" style={{ background: 'var(--bg)', minHeight: '100vh', padding: '32px' }}>
       <div className="flex items-center gap-3 mb-6">
-        <Cpu className="w-6 h-6" style={{ color: '#0071e3' }} />
+        <Cpu className="w-6 h-6" style={{ color: 'var(--brand)' }} />
         <div>
-          <h1 className="text-[24px] font-bold tracking-tight" style={{ color: '#000' }}>
+          <h1 className="text-[24px] font-bold tracking-tight" style={{ color: 'var(--text-1)' }}>
             Prompt Logs
           </h1>
-          <p className="text-[14px]" style={{ color: '#555' }}>
+          <p className="text-[14px]" style={{ color: 'var(--text-3)' }}>
             Monitor all LLM API calls — prompts, responses, and metrics
           </p>
         </div>
@@ -83,35 +83,35 @@ export default function AdminPromptsPage() {
 
       {/* Filters */}
       <div className="flex flex-wrap gap-3 items-center">
-        <Filter className="w-4 h-4" style={{ color: '#999' }} />
+        <Filter className="w-4 h-4" style={{ color: 'var(--text-3)' }} />
         <input
           type="text"
           value={callerFilter}
           onChange={e => { setCallerFilter(e.target.value); setOffset(0) }}
           placeholder="Filter by caller..."
-          className="rounded-lg border border-gray-200 px-3 py-1.5 text-[13px] focus:outline-none focus:border-blue-400"
-          style={{ background: '#fafafa', color: '#000', width: '160px' }}
+          className="rounded-lg px-3 py-1.5 text-[13px] focus:outline-none"
+          style={{ background: 'var(--surface-3)', color: 'var(--text-1)', width: '160px', border: '1px solid var(--border)' }}
         />
         <input
           type="text"
           value={modelFilter}
           onChange={e => { setModelFilter(e.target.value); setOffset(0) }}
           placeholder="Filter by model..."
-          className="rounded-lg border border-gray-200 px-3 py-1.5 text-[13px] focus:outline-none focus:border-blue-400"
-          style={{ background: '#fafafa', color: '#000', width: '200px' }}
+          className="rounded-lg px-3 py-1.5 text-[13px] focus:outline-none"
+          style={{ background: 'var(--surface-3)', color: 'var(--text-1)', width: '200px', border: '1px solid var(--border)' }}
         />
         <select
           value={statusFilter}
           onChange={e => { setStatusFilter(e.target.value); setOffset(0) }}
-          className="rounded-lg border border-gray-200 px-3 py-1.5 text-[13px] focus:outline-none focus:border-blue-400"
-          style={{ background: '#fafafa', color: '#000' }}
+          className="rounded-lg px-3 py-1.5 text-[13px] focus:outline-none"
+          style={{ background: 'var(--surface-3)', color: 'var(--text-1)', border: '1px solid var(--border)' }}
         >
           <option value="">All statuses</option>
           <option value="success">Success</option>
           <option value="error">Error</option>
           <option value="timeout">Timeout</option>
         </select>
-        <span className="text-[12px]" style={{ color: '#999' }}>
+        <span className="text-[12px]" style={{ color: 'var(--text-3)' }}>
           {total} total logs
         </span>
       </div>
@@ -119,10 +119,10 @@ export default function AdminPromptsPage() {
       {/* Logs list */}
       {loading ? (
         <div className="flex items-center justify-center py-12">
-          <Loader2 className="w-6 h-6 animate-spin" style={{ color: '#0071e3' }} />
+          <Loader2 className="w-6 h-6 animate-spin" style={{ color: 'var(--brand)' }} />
         </div>
       ) : logs.length === 0 ? (
-        <div className="text-center py-12 text-[14px]" style={{ color: '#999' }}>
+        <div className="text-center py-12 text-[14px]" style={{ color: 'var(--text-3)' }}>
           No prompt logs found
         </div>
       ) : (
@@ -130,14 +130,15 @@ export default function AdminPromptsPage() {
           {logs.map(log => (
             <div
               key={log.id}
-              className="rounded-xl border border-gray-200 overflow-hidden transition-all"
-              style={{ background: '#ffffff' }}
+              className="rounded-xl overflow-hidden transition-all"
+              style={{ background: 'var(--surface-3)', border: '1px solid var(--border)' }}
             >
               {/* Summary row */}
               <button
                 type="button"
                 onClick={() => setExpandedId(prev => prev === log.id ? null : log.id)}
-                className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-50 transition-colors"
+                className="w-full flex items-center gap-3 px-4 py-3 text-left transition-colors"
+                style={{ }}
               >
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
@@ -145,16 +146,16 @@ export default function AdminPromptsPage() {
                       className="inline-block w-2 h-2 rounded-full flex-shrink-0"
                       style={{ background: statusColor(log.status) }}
                     />
-                    <span className="text-[13px] font-medium truncate" style={{ color: '#000' }}>
+                    <span className="text-[13px] font-medium truncate" style={{ color: 'var(--text-1)' }}>
                       {log.caller}
                       {log.action ? ` → ${log.action}` : ''}
                     </span>
-                    <span className="text-[11px] px-2 py-0.5 rounded-full" style={{ background: '#f0f0f3', color: '#555' }}>
+                    <span className="text-[11px] px-2 py-0.5 rounded-full" style={{ background: 'var(--border)', color: 'var(--text-3)' }}>
                       {log.model?.split('/').pop()}
                     </span>
                   </div>
                 </div>
-                <div className="flex items-center gap-4 flex-shrink-0 text-[12px]" style={{ color: '#999' }}>
+                <div className="flex items-center gap-4 flex-shrink-0 text-[12px]" style={{ color: 'var(--text-3)' }}>
                   {log.total_tokens && (
                     <span>{log.total_tokens.toLocaleString()} tok</span>
                   )}
@@ -175,9 +176,9 @@ export default function AdminPromptsPage() {
 
               {/* Expanded detail */}
               {expandedId === log.id && (
-                <div className="border-t border-gray-100 px-4 py-4 space-y-4">
+                <div className="px-4 py-4 space-y-4" style={{ borderTop: '1px solid var(--border)' }}>
                   {log.error_message && (
-                    <div className="flex items-start gap-2 px-3 py-2 rounded-lg text-[13px]" style={{ background: '#ffe5e5', color: '#d32f2f' }}>
+                    <div className="flex items-start gap-2 px-3 py-2 rounded-lg text-[13px]" style={{ background: 'rgba(211,47,47,0.1)', color: '#ff6b6b' }}>
                       <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
                       <span>{log.error_message}</span>
                     </div>
@@ -194,7 +195,7 @@ export default function AdminPromptsPage() {
                     <DetailBlock label="Response" content={log.response_text} />
                   )}
 
-                  <div className="flex flex-wrap gap-4 text-[12px]" style={{ color: '#999' }}>
+                  <div className="flex flex-wrap gap-4 text-[12px]" style={{ color: 'var(--text-3)' }}>
                     <span>Input: {log.input_tokens?.toLocaleString() ?? '—'} tokens</span>
                     <span>Output: {log.output_tokens?.toLocaleString() ?? '—'} tokens</span>
                     <span>Latency: {log.latency_ms ? `${(log.latency_ms / 1000).toFixed(2)}s` : '—'}</span>
@@ -215,18 +216,18 @@ export default function AdminPromptsPage() {
             onClick={() => setOffset(prev => Math.max(0, prev - limit))}
             disabled={offset === 0}
             className="px-4 py-2 rounded-lg text-[13px] font-medium transition-all disabled:opacity-30"
-            style={{ background: '#f5f5f7', color: '#000', border: '1px solid #e5e5e5' }}
+            style={{ background: 'var(--surface-3)', color: 'var(--text-1)', border: '1px solid var(--border)' }}
           >
             Previous
           </button>
-          <span className="text-[13px]" style={{ color: '#555' }}>
+          <span className="text-[13px]" style={{ color: 'var(--text-3)' }}>
             {offset + 1}–{Math.min(offset + limit, total)} of {total}
           </span>
           <button
             onClick={() => setOffset(prev => prev + limit)}
             disabled={offset + limit >= total}
             className="px-4 py-2 rounded-lg text-[13px] font-medium transition-all disabled:opacity-30"
-            style={{ background: '#f5f5f7', color: '#000', border: '1px solid #e5e5e5' }}
+            style={{ background: 'var(--surface-3)', color: 'var(--text-1)', border: '1px solid var(--border)' }}
           >
             Next
           </button>
@@ -239,12 +240,12 @@ export default function AdminPromptsPage() {
 function DetailBlock({ label, content }: { label: string; content: string }) {
   return (
     <div>
-      <div className="text-[12px] font-medium mb-1" style={{ color: '#999' }}>
+      <div className="text-[12px] font-medium mb-1" style={{ color: 'var(--text-3)' }}>
         {label}
       </div>
       <pre
         className="rounded-lg px-3 py-2 text-[13px] overflow-x-auto whitespace-pre-wrap"
-        style={{ background: '#fafafa', color: '#000', maxHeight: '200px', overflowY: 'auto' }}
+        style={{ background: 'var(--surface-3)', color: 'var(--text-1)', maxHeight: '200px', overflowY: 'auto', border: '1px solid var(--border)' }}
       >
         {content}
       </pre>

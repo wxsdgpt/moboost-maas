@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, FolderKanban, Dna, Wrench, Sparkles, LogIn, User, Layout, FileText } from 'lucide-react'
+import { Home, FolderKanban, Dna, Wrench, Sparkles, LogIn, User, Layout, FileText, Lightbulb } from 'lucide-react'
 import { useState, useSyncExternalStore } from 'react'
 import { SignedIn, SignedOut, UserButton, SignInButton, SignUpButton, useUser } from '@clerk/nextjs'
 import { store } from '@/lib/store'
@@ -13,6 +13,7 @@ import { useLocale } from '@/lib/i18n/LocaleProvider'
 
 const navItems = [
   { href: '/', key: 'nav.home', icon: Home },
+  { href: '/inspire', key: 'nav.inspire', icon: Lightbulb },
   { href: '/project', key: 'nav.project', icon: FolderKanban },
   { href: '/reports', key: 'nav.reports', icon: FileText },
   { href: '/landing', key: 'nav.landing', icon: Layout },
@@ -63,37 +64,38 @@ export default function Sidebar() {
         ${isExpanded ? 'w-[240px]' : 'w-[64px]'}
       `}
       style={{
-        background: 'rgba(0, 0, 0, 0.8)',
-        backdropFilter: 'saturate(180%) blur(20px)',
+        background: 'var(--nav-bg)',
+        backdropFilter: 'saturate(120%) blur(24px)',
+        borderRight: '1px solid var(--border)',
       }}
     >
       {/* Logo + Theme toggle */}
       <div
         className={`px-5 py-5 flex items-center ${isExpanded ? 'justify-between' : 'justify-center px-3'}`}
         style={{
-          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+          borderBottom: '1px solid var(--border)',
         }}
       >
         <Link href="/" className="flex items-center gap-2.5 group">
           <div
             className="w-8 h-8 rounded-lg flex items-center justify-center shadow-sm flex-shrink-0"
             style={{
-              background: '#0071e3',
+              background: 'var(--brand)',
             }}
           >
-            <Sparkles className="w-4 h-4 text-white" />
+            <Sparkles className="w-4 h-4" style={{ color: 'var(--brand-contrast)' }} />
           </div>
           {isExpanded && (
             <div className="overflow-hidden whitespace-nowrap">
               <span
                 className="text-[15px] font-bold tracking-tight"
-                style={{ color: '#ffffff' }}
+                style={{ color: 'var(--text-1)' }}
               >
                 Moboost
               </span>
               <span
                 className="text-[15px] font-bold tracking-tight ml-1"
-                style={{ color: '#0071e3' }}
+                style={{ color: 'var(--brand)' }}
               >
                 AI
               </span>
@@ -119,15 +121,15 @@ export default function Sidebar() {
                 ${!isExpanded ? 'justify-center' : ''}
               `}
               style={{
-                color: isActive ? '#ffffff' : 'rgba(255, 255, 255, 0.7)',
-                borderBottom: isActive ? '2px solid #0071e3' : 'none',
+                color: isActive ? 'var(--text-1)' : 'var(--text-2)',
+                borderBottom: isActive ? '2px solid var(--brand)' : 'none',
                 paddingBottom: isActive ? 'calc(0.625rem - 2px)' : '0.625rem',
               }}
             >
               <Icon
                 className="w-[18px] h-[18px] flex-shrink-0"
                 style={{
-                  color: isActive ? '#0071e3' : 'rgba(255, 255, 255, 0.5)',
+                  color: isActive ? 'var(--brand)' : 'var(--text-3)',
                 }}
               />
               {isExpanded && <span className="overflow-hidden whitespace-nowrap">{label}</span>}
@@ -140,7 +142,7 @@ export default function Sidebar() {
       <div
         className="p-3 space-y-1"
         style={{
-          borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+          borderTop: '1px solid var(--border)',
         }}
       >
         {/* Credit balance pill — only renders for signed-in users
@@ -163,7 +165,7 @@ export default function Sidebar() {
                 ${!isExpanded ? 'justify-center' : ''}
               `}
               style={{
-                color: '#ffffff',
+                color: 'var(--text-1)',
               }}
             >
               {/* UserButton: avatar + click-to-open Clerk menu
@@ -184,13 +186,13 @@ export default function Sidebar() {
                 <div className="flex-1 min-w-0">
                   <div
                     className="text-[13px] font-medium truncate"
-                    style={{ color: '#ffffff' }}
+                    style={{ color: 'var(--text-1)' }}
                   >
                     {displayName}
                   </div>
                   <div
                     className="text-[11px] truncate"
-                    style={{ color: 'rgba(255, 255, 255, 0.6)' }}
+                    style={{ color: 'var(--text-2)' }}
                   >
                     {displaySub}
                   </div>
@@ -206,15 +208,16 @@ export default function Sidebar() {
               {isExpanded && (
                 <SignUpButton mode="redirect">
                   <button
-                    className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-white text-[13px] font-semibold shadow-sm transition-colors"
+                    className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-[13px] font-semibold shadow-sm transition-colors"
                     style={{
-                      background: '#0071e3',
+                      background: 'var(--brand)',
+                      color: 'var(--brand-contrast)',
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.background = '#0077ed'
+                      e.currentTarget.style.background = '#a8d44a'
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.background = '#0071e3'
+                      e.currentTarget.style.background = 'var(--brand)'
                     }}
                   >
                     <Sparkles className="w-3.5 h-3.5" />
@@ -229,10 +232,10 @@ export default function Sidebar() {
                     ${!isExpanded ? 'justify-center' : ''}
                   `}
                   style={{
-                    color: '#ffffff',
+                    color: 'var(--text-1)',
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'
+                    e.currentTarget.style.background = 'var(--surface-3)'
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.background = 'transparent'
@@ -241,14 +244,14 @@ export default function Sidebar() {
                   <div
                     className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
                     style={{
-                      background: 'rgba(0, 113, 227, 0.2)',
+                      background: 'var(--brand-light)',
                     }}
                   >
-                    <User className="w-4 h-4" style={{ color: '#0071e3' }} />
+                    <User className="w-4 h-4" style={{ color: 'var(--brand)' }} />
                   </div>
                   {isExpanded && (
                     <div className="flex-1 min-w-0 flex items-center gap-1.5">
-                      <LogIn className="w-3.5 h-3.5" style={{ color: '#0071e3' }} />
+                      <LogIn className="w-3.5 h-3.5" style={{ color: 'var(--brand)' }} />
                       <span className="text-[13px] font-medium">{t('nav.signIn')}</span>
                     </div>
                   )}

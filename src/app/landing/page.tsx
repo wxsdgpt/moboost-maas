@@ -185,26 +185,26 @@ export default function LandingPage() {
   // iframe now uses srcDoc — no manual write needed
 
   return (
-    <div className="min-h-screen bg-white" style={{ fontFamily: '-apple-system, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif' }}>
+    <div className="min-h-screen" style={{ background: 'var(--bg)', fontFamily: '-apple-system, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif' }}>
       {/* Header */}
-      <header className="bg-white border-b px-6 py-4" style={{ borderColor: 'rgba(0,0,0,0.1)' }}>
+      <header className="border-b px-6 py-4" style={{ background: 'var(--bg)', backdropFilter: 'saturate(120%) blur(24px)', borderBottom: `1px solid var(--border)` }}>
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <button
               onClick={() => router.push('/')}
               className="p-2 rounded-lg transition-colors"
-              style={{ color: 'rgba(0,0,0,0.48)', backgroundColor: 'transparent' }}
-              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f5f5f7'}
+              style={{ color: 'var(--text-4)', backgroundColor: 'transparent' }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--border)'}
               onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
             >
               <ArrowLeft className="w-4 h-4" />
             </button>
             <div className="flex items-center gap-2">
-              <Layout className="w-5 h-5" style={{ color: '#0071e3' }} />
-              <h1 className="text-lg font-bold" style={{ color: '#000' }}>Landing Page Builder</h1>
+              <Layout className="w-5 h-5" style={{ color: 'var(--brand)' }} />
+              <h1 className="text-lg font-bold" style={{ color: 'var(--text-1)' }}>Landing Page Builder</h1>
             </div>
             {productName && (
-              <span className="text-sm ml-2" style={{ color: 'rgba(0,0,0,0.48)' }}>
+              <span className="text-sm ml-2" style={{ color: 'var(--text-4)' }}>
                 for {productName}
               </span>
             )}
@@ -215,25 +215,25 @@ export default function LandingPage() {
                 onClick={handleCopyHtml}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm transition-colors border"
                 style={{
-                  color: '#000',
-                  borderColor: 'rgba(0,0,0,0.1)',
+                  color: 'var(--text-1)',
+                  borderColor: 'var(--surface-3)',
                   backgroundColor: 'transparent',
                 }}
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f5f5f7'}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--border)'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
               >
-                {copied ? <Check className="w-3.5 h-3.5" style={{ color: '#0071e3' }} /> : <Copy className="w-3.5 h-3.5" />}
+                {copied ? <Check className="w-3.5 h-3.5" style={{ color: 'var(--brand)' }} /> : <Copy className="w-3.5 h-3.5" />}
                 {copied ? 'Copied!' : 'Copy HTML'}
               </button>
               <button
                 onClick={handleDownload}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm transition-colors border"
                 style={{
-                  color: '#000',
-                  borderColor: 'rgba(0,0,0,0.1)',
+                  color: 'var(--text-1)',
+                  borderColor: 'var(--surface-3)',
                   backgroundColor: 'transparent',
                 }}
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f5f5f7'}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--border)'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
               >
                 <Download className="w-3.5 h-3.5" />
@@ -243,8 +243,8 @@ export default function LandingPage() {
                 onClick={handleOpenInNewTab}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors"
                 style={{
-                  color: 'white',
-                  backgroundColor: '#0071e3',
+                  color: 'var(--brand-contrast)',
+                  backgroundColor: 'var(--brand)',
                 }}
               >
                 <ExternalLink className="w-3.5 h-3.5" />
@@ -265,19 +265,19 @@ export default function LandingPage() {
                 <button
                   onClick={() => { setShowPreview(false); setLanding(null) }}
                   className="text-sm flex items-center gap-1 transition-colors"
-                  style={{ color: 'rgba(0,0,0,0.48)' }}
-                  onMouseEnter={(e) => e.currentTarget.style.color = '#000'}
-                  onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(0,0,0,0.48)'}
+                  style={{ color: 'var(--text-4)' }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = 'var(--text-1)'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-4)'}
                 >
                   <ArrowLeft className="w-3.5 h-3.5" /> Back to templates
                 </button>
-                <span className="text-sm" style={{ color: 'rgba(0,0,0,0.1)' }}>|</span>
-                <span className="text-sm" style={{ color: 'rgba(0,0,0,0.48)' }}>
-                  Generated with <span className="font-medium" style={{ color: '#000' }}>{landing.model}</span>
+                <span className="text-sm" style={{ color: 'var(--surface-3)' }}>|</span>
+                <span className="text-sm" style={{ color: 'var(--text-4)' }}>
+                  Generated with <span className="font-medium" style={{ color: 'var(--text-1)' }}>{landing.model}</span>
                 </span>
               </div>
               <div className="flex items-center gap-3">
-                <span className="text-xs" style={{ color: 'rgba(0,0,0,0.48)' }}>
+                <span className="text-xs" style={{ color: 'var(--text-4)' }}>
                   {new Date(landing.generatedAt).toLocaleString()}
                 </span>
                 <button
@@ -285,9 +285,9 @@ export default function LandingPage() {
                   disabled={generating}
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors border"
                   style={{
-                    color: '#0071e3',
-                    borderColor: '#0071e3',
-                    backgroundColor: 'rgba(0,113,227,0.05)',
+                    color: 'var(--brand)',
+                    borderColor: 'var(--brand)',
+                    backgroundColor: 'var(--brand-light)',
                     opacity: generating ? 0.5 : 1,
                   }}
                 >
@@ -298,29 +298,29 @@ export default function LandingPage() {
             </div>
 
             {/* Slot summary */}
-            <div className="bg-white rounded-lg border p-4 mb-4" style={{ borderColor: 'rgba(0,0,0,0.1)' }}>
-              <div className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: 'rgba(0,0,0,0.48)' }}>
+            <div className="rounded-lg border p-4 mb-4" style={{ backgroundColor: 'var(--surface-1)', borderColor: 'var(--surface-3)' }}>
+              <div className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: 'var(--text-4)' }}>
                 Generated Content Slots ({landing.filledSlots.length})
               </div>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                 {landing.filledSlots.map((slot) => (
-                  <div key={slot.slotId} className="px-3 py-2 rounded-lg border" style={{ backgroundColor: '#f5f5f7', borderColor: 'rgba(0,0,0,0.1)' }}>
-                    <div className="text-xs font-medium mb-0.5" style={{ color: '#000' }}>{slot.slotId}</div>
-                    <div className="text-xs truncate" style={{ color: 'rgba(0,0,0,0.48)' }}>{slot.content.slice(0, 60)}</div>
+                  <div key={slot.slotId} className="px-3 py-2 rounded-lg border" style={{ backgroundColor: 'var(--surface-1)', borderColor: 'var(--surface-3)' }}>
+                    <div className="text-xs font-medium mb-0.5" style={{ color: 'var(--text-1)' }}>{slot.slotId}</div>
+                    <div className="text-xs truncate" style={{ color: 'var(--text-4)' }}>{slot.content.slice(0, 60)}</div>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* HTML Preview iframe */}
-            <div className="bg-white rounded-lg border overflow-hidden" style={{ borderColor: 'rgba(0,0,0,0.1)', boxShadow: '0 3px 5px 30px rgba(0,0,0,0.08)' }}>
-              <div className="px-4 py-2 border-b flex items-center gap-2" style={{ backgroundColor: '#f5f5f7', borderColor: 'rgba(0,0,0,0.1)' }}>
+            <div className="rounded-lg border overflow-hidden" style={{ backgroundColor: 'var(--surface-1)', borderColor: 'var(--surface-3)', boxShadow: 'var(--shadow-lg)' }}>
+              <div className="px-4 py-2 border-b flex items-center gap-2" style={{ backgroundColor: 'var(--border)', borderColor: 'var(--surface-3)' }}>
                 <div className="flex gap-1.5">
                   <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#d70015' }} />
                   <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#f5a623' }} />
                   <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#34c759' }} />
                 </div>
-                <div className="flex-1 bg-white rounded-md px-3 py-0.5 text-xs ml-3" style={{ color: 'rgba(0,0,0,0.48)' }}>
+                <div className="flex-1 rounded-md px-3 py-0.5 text-xs ml-3" style={{ backgroundColor: 'var(--border)', color: 'var(--text-4)' }}>
                   {landing.productName.toLowerCase().replace(/\s+/g, '-')}.moboost.ai
                 </div>
               </div>
@@ -337,14 +337,14 @@ export default function LandingPage() {
           <div>
             {/* Template Selection */}
             <div className="text-center mb-8">
-              <h2 className="text-2xl font-bold mb-2" style={{ color: '#000' }}>Choose a Template</h2>
-              <p className="text-sm" style={{ color: 'rgba(0,0,0,0.48)' }}>
+              <h2 className="text-2xl font-bold mb-2" style={{ color: 'var(--text-1)' }}>Choose a Template</h2>
+              <p className="text-sm" style={{ color: 'var(--text-4)' }}>
                 Select a layout style for your landing page. AI will generate all content based on your product data.
               </p>
             </div>
 
             {error && (
-              <div className="mb-6 px-4 py-3 rounded-lg border text-sm" style={{ color: '#d70015', borderColor: 'rgba(215,0,21,0.2)', backgroundColor: 'rgba(215,0,21,0.06)' }}>
+              <div className="mb-6 px-4 py-3 rounded-lg border text-sm" style={{ color: 'var(--danger)', borderColor: 'rgba(255,107,107,0.2)', backgroundColor: 'rgba(255,107,107,0.06)' }}>
                 {error}
               </div>
             )}
@@ -359,24 +359,24 @@ export default function LandingPage() {
                     onClick={() => setSelectedTemplate(template)}
                     className="relative text-left p-6 rounded-lg border-2 transition-all"
                     style={{
-                      backgroundColor: isSelected ? 'white' : 'white',
-                      borderColor: isSelected ? '#0071e3' : 'rgba(0,0,0,0.1)',
-                      boxShadow: isSelected ? '0 3px 5px 30px rgba(0,113,227,0.15)' : '0 3px 5px 30px rgba(0,0,0,0.08)',
+                      backgroundColor: 'var(--surface-1)',
+                      borderColor: isSelected ? 'var(--brand)' : 'var(--surface-3)',
+                      boxShadow: isSelected ? '0 8px 32px rgba(192,228,99,0.12)' : 'var(--shadow-lg)',
                     }}
                   >
                     {isSelected && (
                       <div className="absolute top-3 right-3">
-                        <Check className="w-5 h-5" style={{ color: '#0071e3' }} />
+                        <Check className="w-5 h-5" style={{ color: 'var(--brand)' }} />
                       </div>
                     )}
                     <div className="text-3xl mb-3">{template.preview}</div>
                     <div className="flex items-center gap-2 mb-2">
-                      <Icon className="w-4 h-4" style={{ color: isSelected ? '#0071e3' : 'rgba(0,0,0,0.48)' }} />
-                      <h3 className="font-bold" style={{ color: isSelected ? '#0071e3' : '#000' }}>
+                      <Icon className="w-4 h-4" style={{ color: isSelected ? 'var(--brand)' : 'var(--text-4)' }} />
+                      <h3 className="font-bold" style={{ color: isSelected ? 'var(--brand)' : 'var(--text-1)' }}>
                         {template.name}
                       </h3>
                     </div>
-                    <p className="text-sm leading-relaxed" style={{ color: 'rgba(0,0,0,0.48)' }}>
+                    <p className="text-sm leading-relaxed" style={{ color: 'var(--text-4)' }}>
                       {template.description}
                     </p>
                   </button>
@@ -391,10 +391,10 @@ export default function LandingPage() {
                 disabled={generating || !productId}
                 className="inline-flex items-center gap-2 px-8 py-3 rounded-full text-base font-bold transition-all"
                 style={{
-                  backgroundColor: generating || !productId ? '#f5f5f7' : '#0071e3',
-                  color: generating || !productId ? 'rgba(0,0,0,0.3)' : 'white',
+                  backgroundColor: generating || !productId ? 'var(--surface-1)' : 'var(--brand)',
+                  color: generating || !productId ? 'var(--text-5)' : 'var(--brand-contrast)',
                   cursor: generating || !productId ? 'not-allowed' : 'pointer',
-                  boxShadow: generating || !productId ? 'none' : '0 3px 5px 30px rgba(0,113,227,0.3)',
+                  boxShadow: generating || !productId ? 'none' : '0 8px 32px rgba(192,228,99,0.25)',
                 }}
               >
                 {generating ? (
@@ -410,16 +410,16 @@ export default function LandingPage() {
                 )}
               </button>
               {!productId && (
-                <p className="mt-3 text-sm" style={{ color: 'rgba(0,0,0,0.48)' }}>
+                <p className="mt-3 text-sm" style={{ color: 'var(--text-4)' }}>
                   Complete onboarding to set up your product first.{' '}
-                  <a href="/onboarding" className="transition-colors" style={{ color: '#0071e3' }} onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'} onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}>
+                  <a href="/onboarding" className="transition-colors" style={{ color: 'var(--brand)' }} onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'} onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}>
                     Go to onboarding →
                   </a>
                 </p>
               )}
               {productId && !generating && (
-                <p className="mt-3 text-sm" style={{ color: 'rgba(0,0,0,0.48)' }}>
-                  Using template: <span className="font-medium" style={{ color: '#000' }}>{selectedTemplate.name}</span>
+                <p className="mt-3 text-sm" style={{ color: 'var(--text-4)' }}>
+                  Using template: <span className="font-medium" style={{ color: 'var(--text-1)' }}>{selectedTemplate.name}</span>
                 </p>
               )}
             </div>

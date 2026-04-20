@@ -35,10 +35,10 @@ function timeAgo(iso: string): string {
 }
 
 function statusColor(s: string): string {
-  if (s === 'done') return '#0071e3'
+  if (s === 'done') return 'var(--brand)'
   if (s === 'running') return '#f59e0b'
   if (s === 'failed') return '#ef4444'
-  return 'rgba(0,0,0,0.4)'
+  return 'var(--text-4)'
 }
 
 export default function ReportsPage() {
@@ -74,37 +74,37 @@ export default function ReportsPage() {
 
   return (
     <div
-      style={{ fontFamily: '-apple-system, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif' }}
-      className="min-h-screen bg-white"
+      style={{ fontFamily: '-apple-system, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif', background: 'var(--bg)' }}
+      className="min-h-screen"
     >
       <div className="mx-auto max-w-5xl px-6 py-12">
         <div className="mb-12">
           <h1
-            style={{ lineHeight: '1.07' }}
-            className="text-5xl font-semibold tracking-tight text-black mb-2"
+            style={{ lineHeight: '1.07', color: 'var(--text-1)' }}
+            className="text-5xl font-semibold tracking-tight mb-2"
           >
             Reports
           </h1>
-          <p style={{ color: 'rgba(0,0,0,0.48)' }} className="text-base">
+          <p style={{ color: 'var(--text-4)' }} className="text-base">
             {loading ? 'Loading…' : `${total} report${total !== 1 ? 's' : ''}`}
           </p>
         </div>
 
         {error && (
           <div
-            style={{ backgroundColor: '#fff5f5', borderColor: '#fca5a5' }}
+            style={{ backgroundColor: 'rgba(255,82,82,0.08)', borderColor: 'rgba(255,82,82,0.2)' }}
             className="rounded-lg p-4 mb-8 border max-w-2xl text-sm flex items-start gap-3"
           >
-            <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0 text-red-500" />
+            <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: 'var(--danger)' }} />
             <div>
-              <div className="font-medium text-red-700 mb-1">Failed to load reports</div>
-              <div className="text-red-600 text-xs">{error}</div>
+              <div className="font-medium mb-1" style={{ color: 'var(--danger)' }}>Failed to load reports</div>
+              <div className="text-xs" style={{ color: 'var(--danger)' }}>{error}</div>
             </div>
           </div>
         )}
 
         {loading && (
-          <div className="flex items-center gap-2 text-gray-400 text-sm py-12">
+          <div className="flex items-center gap-2 text-sm py-12" style={{ color: 'var(--text-4)' }}>
             <Loader2 className="w-4 h-4 animate-spin" />
             Loading reports…
           </div>
@@ -112,13 +112,13 @@ export default function ReportsPage() {
 
         {!loading && total === 0 && !error && (
           <div className="text-center py-24">
-            <div className="w-20 h-20 rounded-2xl bg-gray-100 flex items-center justify-center mx-auto mb-6">
-              <FileText className="w-10 h-10" style={{ color: 'rgba(0,0,0,0.2)' }} />
+            <div className="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6" style={{ backgroundColor: 'var(--surface-1)' }}>
+              <FileText className="w-10 h-10" style={{ color: 'var(--text-5)' }} />
             </div>
-            <h2 style={{ lineHeight: '1.1' }} className="text-2xl font-semibold text-black mb-3">
+            <h2 style={{ lineHeight: '1.1', color: 'var(--text-1)' }} className="text-2xl font-semibold mb-3">
               No reports yet
             </h2>
-            <p style={{ color: 'rgba(0,0,0,0.48)' }} className="text-base">
+            <p style={{ color: 'var(--text-4)' }} className="text-base">
               Generate one from Home — it&apos;ll appear here automatically.
             </p>
           </div>
@@ -129,40 +129,40 @@ export default function ReportsPage() {
             <button
               key={r.id}
               onClick={() => router.push(`/report/${r.id}`)}
-              style={{ backgroundColor: '#f5f5f7' }}
-              className="w-full text-left rounded-lg overflow-hidden hover:bg-gray-100 transition-colors"
+              style={{ backgroundColor: 'var(--surface-1)' }}
+              className="w-full text-left rounded-lg overflow-hidden transition-colors"
             >
               <div className="flex items-center gap-4 p-4">
                 <div
-                  style={{ backgroundColor: '#e8f4ff' }}
+                  style={{ backgroundColor: 'var(--brand-light)' }}
                   className="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0"
                 >
-                  <FileText className="w-6 h-6" style={{ color: '#0071e3' }} />
+                  <FileText className="w-6 h-6" style={{ color: 'var(--brand)' }} />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <h3
-                      style={{ lineHeight: '1.1' }}
-                      className="text-base font-semibold text-black truncate"
+                      style={{ lineHeight: '1.1', color: 'var(--text-1)' }}
+                      className="text-base font-semibold truncate"
                     >
                       {r.kind === 'competitive-brief' ? 'Competitive Brief' : `${r.kind[0].toUpperCase()}${r.kind.slice(1)} Report`}
                     </h3>
                     <span
                       className="text-[10px] uppercase tracking-wide font-semibold px-2 py-0.5 rounded-full"
-                      style={{ color: statusColor(r.status), backgroundColor: 'white' }}
+                      style={{ color: statusColor(r.status), backgroundColor: 'var(--border)' }}
                     >
                       {r.status}
                     </span>
                   </div>
                   <div className="flex items-center gap-2 mt-1">
-                    <Clock className="w-3 h-3" style={{ color: 'rgba(0,0,0,0.48)' }} />
-                    <span style={{ color: 'rgba(0,0,0,0.48)' }} className="text-xs">
+                    <Clock className="w-3 h-3" style={{ color: 'var(--text-4)' }} />
+                    <span style={{ color: 'var(--text-4)' }} className="text-xs">
                       {timeAgo(r.created_at)}
                     </span>
                     {r.credits_charged !== null && (
                       <>
-                        <span style={{ color: 'rgba(0,0,0,0.2)' }}>·</span>
-                        <span style={{ color: 'rgba(0,0,0,0.48)' }} className="text-xs">
+                        <span style={{ color: 'var(--text-5)' }}>·</span>
+                        <span style={{ color: 'var(--text-4)' }} className="text-xs">
                           {r.credits_charged} credit{r.credits_charged !== 1 ? 's' : ''}
                         </span>
                       </>
@@ -171,7 +171,7 @@ export default function ReportsPage() {
                 </div>
                 <ChevronRight
                   className="w-5 h-5 flex-shrink-0"
-                  style={{ color: 'rgba(0,0,0,0.32)' }}
+                  style={{ color: 'var(--text-5)' }}
                 />
               </div>
             </button>

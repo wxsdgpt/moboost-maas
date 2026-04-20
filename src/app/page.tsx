@@ -8,6 +8,7 @@ import {
 import { store } from '@/lib/store'
 import WelcomeBanner from '@/components/WelcomeBanner'
 import UnifiedCollector from '@/components/UnifiedCollector'
+import { useLocale } from '@/lib/i18n/LocaleProvider'
 
 const TEMPLATES = [
   { id: 't1', name: 'Sports Betting Hero', category: 'Sports', preview: '🏈', desc: 'High-energy sports CTA with live odds' },
@@ -34,6 +35,7 @@ function timeAgo(iso: string): string {
 
 export default function HomePage() {
   const router = useRouter()
+  const { t } = useLocale()
   const projects = useStoreValue(store.getProjects)
 
   // Fetch user's product info for the collector context
@@ -61,13 +63,13 @@ export default function HomePage() {
   }, [])
 
   return (
-    <div className="w-full bg-white" style={{ minHeight: '100vh' }}>
-      {/* Dark Hero Section */}
+    <div className="w-full" style={{ minHeight: '100vh', background: 'var(--bg)' }}>
+      {/* Hero Section */}
       <div
         className="w-full py-16 px-8 text-center"
         style={{
-          background: '#000000',
-          color: '#ffffff',
+          background: 'var(--bg)',
+          color: 'var(--text-1)',
         }}
       >
         <div className="max-w-[720px] mx-auto">
@@ -75,14 +77,15 @@ export default function HomePage() {
             <div
               className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-4"
               style={{
-                background: 'rgba(255,255,255,0.08)',
-                border: '1px solid rgba(255,255,255,0.12)',
+                background: 'var(--brand-light)',
+                border: '1px solid rgba(192,228,99,0.15)',
                 fontFamily: 'SF Pro Text, -apple-system, BlinkMacSystemFont, sans-serif',
                 fontSize: '12px',
                 fontWeight: '500',
+                color: 'var(--brand)',
               }}
             >
-              <Sparkles className="w-3.5 h-3.5" />
+              <Sparkles className="w-3.5 h-3.5" style={{ color: 'var(--brand)' }} />
               <span>Moboost AI</span>
             </div>
           </div>
@@ -94,6 +97,7 @@ export default function HomePage() {
               fontWeight: '600',
               lineHeight: '1.07',
               letterSpacing: '-0.5px',
+              color: 'var(--text-1)',
             }}
           >
             Create with AI
@@ -103,28 +107,29 @@ export default function HomePage() {
               fontFamily: 'SF Pro Text, -apple-system, BlinkMacSystemFont, sans-serif',
               fontSize: '17px',
               fontWeight: '400',
-              color: '#a1a1a6',
+              color: 'var(--text-3)',
               lineHeight: '1.47',
               letterSpacing: '-0.374px',
             }}
           >
-            Ad creatives, landing pages, and competitive intelligence for iGaming
+            {t('home.tagline')}
           </p>
         </div>
       </div>
 
-      {/* Light Section: Welcome Banner + Unified Collector */}
-      <div className="w-full px-8 py-12" style={{ background: '#f5f5f7' }}>
+      {/* Collector Section */}
+      <div className="w-full px-8 py-12" style={{ background: 'var(--bg)' }}>
         <div className="max-w-[720px] mx-auto">
           <WelcomeBanner />
 
-          {/* Unified Collector — replaces old input box + quick actions */}
+          {/* Unified Collector — dark glass surface */}
           <div
             className="rounded-2xl p-6 mb-8"
             style={{
-              background: '#ffffff',
-              border: '1px solid #d5d5d7',
-              boxShadow: 'rgba(0,0,0,0.22) 3px 5px 30px',
+              background: 'var(--surface-1)',
+              backdropFilter: 'saturate(120%) blur(24px)',
+              border: '1px solid var(--border)',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
             }}
           >
             <UnifiedCollector
@@ -137,16 +142,16 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Dark Section: Recent Projects */}
-      <div className="w-full px-8 py-12" style={{ background: '#272729' }}>
+      {/* Recent Projects */}
+      <div className="w-full px-8 py-12" style={{ background: 'var(--bg)' }}>
         <div className="max-w-[720px] mx-auto">
           <h2
             className="mb-6"
             style={{
               fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif',
               fontSize: '28px',
-              fontWeight: '400',
-              color: '#ffffff',
+              fontWeight: '600',
+              color: 'var(--text-1)',
               lineHeight: '1.14',
               letterSpacing: '-0.3px',
             }}
@@ -158,9 +163,9 @@ export default function HomePage() {
               <div
                 className="flex-1 px-6 py-8 rounded-2xl text-center"
                 style={{
-                  background: '#323234',
-                  border: '1px solid #424245',
-                  color: '#a1a1a6',
+                  background: 'var(--surface-1)',
+                  border: '1px solid var(--border)',
+                  color: 'var(--text-3)',
                   fontFamily: 'SF Pro Text, -apple-system, BlinkMacSystemFont, sans-serif',
                   fontSize: '14px',
                 }}
@@ -173,18 +178,26 @@ export default function HomePage() {
                   <button
                     key={proj.id}
                     onClick={() => router.push(`/project/${proj.id}`)}
-                    className="card-hover flex-1 px-5 py-5 rounded-2xl text-left transition-all hover:bg-[#3c3c3e]"
+                    className="card-hover flex-1 px-5 py-5 rounded-2xl text-left transition-all"
                     style={{
-                      background: '#323234',
-                      border: '1px solid #424245',
+                      background: 'var(--surface-1)',
+                      border: '1px solid var(--border)',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = 'var(--surface-3)'
+                      e.currentTarget.style.borderColor = 'rgba(192,228,99,0.12)'
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = 'var(--surface-1)'
+                      e.currentTarget.style.borderColor = 'var(--border)'
                     }}
                   >
                     <div className="flex items-center gap-2 mb-2">
-                      <FolderKanban className="w-4 h-4" style={{ color: '#0071e3' }} />
+                      <FolderKanban className="w-4 h-4" style={{ color: 'var(--brand)' }} />
                       <div
                         className="text-sm font-semibold truncate"
                         style={{
-                          color: '#ffffff',
+                          color: 'var(--text-1)',
                           fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif',
                         }}
                       >
@@ -194,7 +207,7 @@ export default function HomePage() {
                     <div
                       className="flex items-center gap-2 text-xs"
                       style={{
-                        color: '#a1a1a6',
+                        color: 'var(--text-3)',
                         fontFamily: 'SF Pro Text, -apple-system, BlinkMacSystemFont, sans-serif',
                       }}
                     >
@@ -208,12 +221,20 @@ export default function HomePage() {
                 {projects.length <= 3 && (
                   <button
                     onClick={() => router.push('/project')}
-                    className="flex-shrink-0 px-5 py-5 rounded-2xl text-sm flex items-center justify-center gap-1.5 min-w-[100px] transition-colors hover:bg-[#3c3c3e]"
+                    className="flex-shrink-0 px-5 py-5 rounded-2xl text-sm flex items-center justify-center gap-1.5 min-w-[100px] transition-colors"
                     style={{
                       background: 'transparent',
-                      border: '1px solid #424245',
-                      color: '#a1a1a6',
+                      border: '1px solid var(--border)',
+                      color: 'var(--text-3)',
                       fontFamily: 'SF Pro Text, -apple-system, BlinkMacSystemFont, sans-serif',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.borderColor = 'rgba(192,228,99,0.2)'
+                      e.currentTarget.style.color = 'var(--brand)'
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.borderColor = 'var(--border)'
+                      e.currentTarget.style.color = 'var(--text-3)'
                     }}
                   >
                     All →
@@ -225,16 +246,16 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Light Section: Templates */}
-      <div className="w-full px-8 py-12" style={{ background: '#f5f5f7' }}>
+      {/* Templates */}
+      <div className="w-full px-8 py-12" style={{ background: 'var(--bg)' }}>
         <div className="max-w-[720px] mx-auto">
           <h2
             className="mb-6"
             style={{
               fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif',
               fontSize: '28px',
-              fontWeight: '400',
-              color: '#1d1d1f',
+              fontWeight: '600',
+              color: 'var(--text-1)',
               lineHeight: '1.14',
               letterSpacing: '-0.3px',
             }}
@@ -245,11 +266,20 @@ export default function HomePage() {
             {TEMPLATES.map(t => (
               <button
                 key={t.id}
-                className="px-5 py-6 rounded-2xl text-left transition-all hover:shadow-lg"
+                className="px-5 py-6 rounded-2xl text-left transition-all"
                 style={{
-                  background: '#ffffff',
-                  border: '1px solid #d5d5d7',
-                  boxShadow: 'rgba(0,0,0,0.22) 3px 5px 30px',
+                  background: 'var(--surface-1)',
+                  border: '1px solid var(--border)',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'var(--surface-3)'
+                  e.currentTarget.style.borderColor = 'rgba(192,228,99,0.12)'
+                  e.currentTarget.style.boxShadow = 'var(--shadow-lg)'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'var(--surface-1)'
+                  e.currentTarget.style.borderColor = 'var(--border)'
+                  e.currentTarget.style.boxShadow = 'none'
                 }}
               >
                 <div
@@ -261,7 +291,7 @@ export default function HomePage() {
                 <div
                   className="font-semibold mb-1"
                   style={{
-                    color: '#1d1d1f',
+                    color: 'var(--text-1)',
                     fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif',
                     fontSize: '16px',
                   }}
@@ -271,7 +301,7 @@ export default function HomePage() {
                 <div
                   className="mb-4"
                   style={{
-                    color: '#5a5a5e',
+                    color: 'var(--text-3)',
                     fontFamily: 'SF Pro Text, -apple-system, BlinkMacSystemFont, sans-serif',
                     fontSize: '13px',
                     lineHeight: '1.4',
@@ -282,9 +312,9 @@ export default function HomePage() {
                 <span
                   className="inline-block text-xs px-3 py-1.5 rounded-full"
                   style={{
-                    color: '#0071e3',
-                    background: 'rgba(0,113,227,0.08)',
-                    border: '1px solid rgba(0,113,227,0.2)',
+                    color: 'var(--brand)',
+                    background: 'var(--brand-light)',
+                    border: '1px solid rgba(192,228,99,0.2)',
                     fontFamily: 'SF Pro Text, -apple-system, BlinkMacSystemFont, sans-serif',
                     fontWeight: '500',
                   }}

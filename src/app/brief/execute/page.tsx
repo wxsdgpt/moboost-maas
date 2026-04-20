@@ -24,14 +24,14 @@ import type { AudienceGroup } from '@/lib/reportTypes'
 import DevicePreviewModal from '@/components/DevicePreviewModal'
 
 const C = {
-  black: '#000000',
-  nearBlack: '#1d1d1f',
-  lightGray: '#f5f5f7',
-  blue: '#0071e3',
-  brightBlue: '#2997ff',
-  white: '#ffffff',
-  text80: 'rgba(0,0,0,0.8)',
-  text48: 'rgba(0,0,0,0.48)',
+  black: 'var(--bg)',
+  nearBlack: 'var(--text-1)',
+  lightGray: 'var(--surface-1)',
+  blue: 'var(--brand)',
+  brightBlue: 'var(--brand)',
+  white: 'var(--text-1)',
+  text80: 'var(--text-2)',
+  text48: 'var(--text-3)',
 }
 
 /* ── Thinking Steps ── */
@@ -526,7 +526,7 @@ export default function BriefExecutePage() {
       }}>
         <div style={{ textAlign: 'center' }}>
           <Loader2 size={32} color={C.brightBlue} style={{ animation: 'spin 1s linear infinite', marginBottom: 16 }} />
-          <p style={{ fontSize: 17, color: 'rgba(255,255,255,0.48)' }}>Loading campaign brief...</p>
+          <p style={{ fontSize: 17, color: 'var(--text-3)' }}>Loading campaign brief...</p>
           <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
         </div>
       </div>
@@ -545,7 +545,7 @@ export default function BriefExecutePage() {
             <h1 style={{ fontSize: 56, fontWeight: 600, lineHeight: 1.07, letterSpacing: -0.28, marginBottom: 16 }}>
               {productName}
             </h1>
-            <p style={{ fontSize: 21, fontWeight: 400, lineHeight: 1.19, color: 'rgba(255,255,255,0.48)', maxWidth: 600, margin: '0 auto 40px' }}>
+            <p style={{ fontSize: 21, fontWeight: 400, lineHeight: 1.19, color: 'var(--text-3)', maxWidth: 600, margin: '0 auto 40px' }}>
               Ready to generate {groups.length} sets of creatives + landing pages in parallel.
               Each tailored to a unique audience.
             </p>
@@ -556,7 +556,7 @@ export default function BriefExecutePage() {
                 const isVideo = /video|动态|短视频|15s|30s|motion/i.test(g.creativeDirection)
                 return (
                   <div key={g.id} style={{
-                    background: 'rgba(255,255,255,0.06)', borderRadius: 12, padding: '20px 16px',
+                    background: 'var(--border)', borderRadius: 12, padding: '20px 16px',
                     textAlign: 'left',
                   }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
@@ -574,7 +574,7 @@ export default function BriefExecutePage() {
                       </span>
                     </div>
                     <div style={{ fontSize: 14, fontWeight: 600, lineHeight: 1.29, marginBottom: 4 }}>{g.audienceTag}</div>
-                    <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.48)', lineHeight: 1.43 }}>
+                    <div style={{ fontSize: 12, color: 'var(--text-3)', lineHeight: 1.43 }}>
                       {g.creativeDirection.slice(0, 80)}...
                     </div>
                   </div>
@@ -585,14 +585,14 @@ export default function BriefExecutePage() {
             <button
               onClick={startExecution}
               style={{
-                background: C.blue, color: C.white, border: 'none', borderRadius: 8,
+                background: C.blue, color: 'var(--brand-text)', border: 'none', borderRadius: 8,
                 padding: '14px 36px', fontSize: 17, fontWeight: 400, cursor: 'pointer',
                 display: 'inline-flex', alignItems: 'center', gap: 10,
               }}
             >
               <Play size={18} /> Start Parallel Generation
             </button>
-            <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.32)', marginTop: 16 }}>
+            <p style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 16 }}>
               All {groups.length} groups generate simultaneously • Estimated: ~45s
             </p>
           </div>
@@ -609,7 +609,7 @@ export default function BriefExecutePage() {
         @keyframes pulse { 0%,100% { opacity: 1 } 50% { opacity: 0.5 } }
         @keyframes blink { 0%,100% { opacity: 1 } 50% { opacity: 0 } }
         .code-stream::-webkit-scrollbar { width: 4px; }
-        .code-stream::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 2px; }
+        .code-stream::-webkit-scrollbar-thumb { background: var(--text-3); border-radius: 2px; }
       `}</style>
 
       {/* Status Header */}
@@ -625,20 +625,20 @@ export default function BriefExecutePage() {
                   <div style={{
                     width: 28, height: 28, borderRadius: '50%',
                     display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 600,
-                    background: isDone ? '#30d158' : isActive ? C.blue : 'rgba(255,255,255,0.1)',
-                    color: C.white, transition: 'all 0.3s',
+                    background: isDone ? '#30d158' : isActive ? C.blue : 'var(--surface-1)',
+                    color: 'var(--text-1)', transition: 'all 0.3s',
                   }}>
                     {isDone ? <Check size={14} /> : i + 1}
                   </div>
-                  <span style={{ fontSize: 12, fontWeight: 600, color: isActive || isDone ? C.white : 'rgba(255,255,255,0.48)' }}>
+                  <span style={{ fontSize: 12, fontWeight: 600, color: isActive || isDone ? 'var(--text-1)' : 'var(--text-3)' }}>
                     {g.region}
                   </span>
                   {gs && (
-                    <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.32)' }}>
+                    <span style={{ fontSize: 10, color: 'var(--text-3)' }}>
                       {isDone ? '✓' : isActive ? (gs.assetPhase === 'polling' ? 'rendering video...' : gs.landingPhase === 'generating' ? 'landing page...' : 'generating...') : ''}
                     </span>
                   )}
-                  {i < groups.length - 1 && <div style={{ width: 40, height: 1, background: 'rgba(255,255,255,0.1)' }} />}
+                  {i < groups.length - 1 && <div style={{ width: 40, height: 1, background: 'var(--surface-1)' }} />}
                 </div>
               )
             })}
@@ -656,7 +656,7 @@ export default function BriefExecutePage() {
 
         return (
           <section key={group.id} style={{
-            background: i % 2 === 0 ? C.lightGray : C.white,
+            background: 'var(--bg)',
             padding: '48px 0',
             opacity: !isActive ? 0.4 : 1,
             transition: 'opacity 0.5s',
@@ -694,7 +694,7 @@ export default function BriefExecutePage() {
 
                 {/* ── LEFT: Asset Card ── */}
                 <div style={{
-                  background: C.white, borderRadius: 12, overflow: 'hidden',
+                  background: 'var(--surface-1)', border: '1px solid var(--border)', borderRadius: 12, overflow: 'hidden',
                   boxShadow: isActive && !isDone ? 'rgba(0,0,0,0.12) 0 4px 24px' : 'rgba(0,0,0,0.06) 0 2px 12px',
                   transition: 'box-shadow 0.3s',
                 }}>
@@ -707,7 +707,7 @@ export default function BriefExecutePage() {
                       <CheckCircle2 size={14} color="#30d158" style={{ marginLeft: 'auto' }} />
                     )}
                     {gs.assetPhase === 'polling' && (
-                      <span style={{ marginLeft: 'auto', fontSize: 10, color: 'rgba(255,255,255,0.48)', animation: 'pulse 2s infinite' }}>
+                      <span style={{ marginLeft: 'auto', fontSize: 10, color: 'var(--text-3)', animation: 'pulse 2s infinite' }}>
                         Rendering...
                       </span>
                     )}
@@ -817,7 +817,7 @@ export default function BriefExecutePage() {
                             onClick={() => retryAsset(i, group)}
                             style={{
                               flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-                              background: C.blue, color: C.white, border: 'none', borderRadius: 8,
+                              background: C.blue, color: 'var(--brand-text)', border: 'none', borderRadius: 8,
                               padding: '10px 16px', fontSize: 13, fontWeight: 600, cursor: 'pointer',
                             }}
                           >
@@ -827,7 +827,7 @@ export default function BriefExecutePage() {
                             onClick={() => updateGroup(i, { showAssetPromptEditor: !gs.showAssetPromptEditor })}
                             style={{
                               flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-                              background: 'none', color: C.nearBlack, border: `1px solid rgba(0,0,0,0.12)`,
+                              background: 'none', color: C.nearBlack, border: '1px solid var(--border)',
                               borderRadius: 8, padding: '10px 16px', fontSize: 13, fontWeight: 600, cursor: 'pointer',
                             }}
                           >
@@ -838,7 +838,7 @@ export default function BriefExecutePage() {
                             onClick={() => useFallbackAsset(i, group)}
                             style={{
                               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-                              background: 'none', color: C.text48, border: `1px solid rgba(0,0,0,0.08)`,
+                              background: 'none', color: C.text48, border: '1px solid var(--border)',
                               borderRadius: 8, padding: '10px 12px', fontSize: 12, cursor: 'pointer',
                             }}
                             title="Use a simple placeholder"
@@ -855,7 +855,7 @@ export default function BriefExecutePage() {
                               onChange={(e) => updateGroup(i, { editedAssetPrompt: e.target.value })}
                               style={{
                                 width: '100%', height: 160, padding: 12, borderRadius: 8,
-                                border: '1px solid rgba(0,0,0,0.12)', fontSize: 12, lineHeight: 1.5,
+                                border: '1px solid var(--border)', fontSize: 12, lineHeight: 1.5,
                                 fontFamily: '"SF Mono", "Fira Code", monospace', resize: 'vertical',
                                 color: C.nearBlack, background: C.lightGray, outline: 'none',
                               }}
@@ -864,7 +864,7 @@ export default function BriefExecutePage() {
                               onClick={() => retryAsset(i, group, gs.editedAssetPrompt || gs.assetPrompt)}
                               style={{
                                 marginTop: 8, display: 'flex', alignItems: 'center', gap: 6,
-                                background: C.blue, color: C.white, border: 'none', borderRadius: 8,
+                                background: C.blue, color: 'var(--brand-text)', border: 'none', borderRadius: 8,
                                 padding: '10px 20px', fontSize: 13, fontWeight: 600, cursor: 'pointer',
                               }}
                             >
@@ -879,7 +879,7 @@ export default function BriefExecutePage() {
 
                 {/* ── RIGHT: Landing Page Card ── */}
                 <div style={{
-                  background: C.white, borderRadius: 12, overflow: 'hidden',
+                  background: 'var(--surface-1)', border: '1px solid var(--border)', borderRadius: 12, overflow: 'hidden',
                   boxShadow: isActive && !isDone ? 'rgba(0,0,0,0.12) 0 4px 24px' : 'rgba(0,0,0,0.06) 0 2px 12px',
                   transition: 'box-shadow 0.3s',
                 }}>
@@ -945,10 +945,10 @@ export default function BriefExecutePage() {
                           <button
                             onClick={() => setPreviewModal({ open: true, html: gs.landingPageHtml || '', title: `${group.audienceTag} - ${group.region}` })}
                             style={{
-                              background: C.blue, color: C.white, border: 'none', borderRadius: 980,
+                              background: C.blue, color: 'var(--brand-text)', border: 'none', borderRadius: 980,
                               padding: '8px 24px', fontSize: 13, fontWeight: 600, cursor: 'pointer',
                               display: 'flex', alignItems: 'center', gap: 6,
-                              boxShadow: '0 4px 12px rgba(0,113,227,0.4)',
+                              boxShadow: '0 4px 12px rgba(192,228,99,0.4)',
                             }}
                           >
                             <Smartphone size={14} /> Preview on Device
@@ -984,7 +984,7 @@ export default function BriefExecutePage() {
                           onClick={() => retryLanding(i, group)}
                           style={{
                             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-                            width: '100%', background: C.blue, color: C.white, border: 'none', borderRadius: 8,
+                            width: '100%', background: C.blue, color: 'var(--brand-text)', border: 'none', borderRadius: 8,
                             padding: '10px 16px', fontSize: 13, fontWeight: 600, cursor: 'pointer',
                           }}
                         >
@@ -1008,7 +1008,7 @@ export default function BriefExecutePage() {
             <h2 style={{ fontSize: 40, fontWeight: 600, lineHeight: 1.10, marginBottom: 12 }}>
               Campaign Ready
             </h2>
-            <p style={{ fontSize: 17, color: 'rgba(255,255,255,0.48)', marginBottom: 32 }}>
+            <p style={{ fontSize: 17, color: 'var(--text-3)', marginBottom: 32 }}>
               {groups.length} sets of creatives + landing pages generated in parallel.
             </p>
             <div style={{ display: 'flex', justifyContent: 'center', gap: 16 }}>
@@ -1024,7 +1024,7 @@ export default function BriefExecutePage() {
               <a
                 href="/"
                 style={{
-                  background: C.blue, color: C.white, borderRadius: 8,
+                  background: 'var(--brand)', color: 'var(--brand-text)', borderRadius: 8,
                   padding: '12px 28px', fontSize: 17, textDecoration: 'none',
                 }}
               >
@@ -1052,8 +1052,8 @@ export default function BriefExecutePage() {
    ═══════════════════════════════════════════ */
 
 const miniBtn: React.CSSProperties = {
-  background: 'none', border: '1px solid rgba(255,255,255,0.2)',
-  color: 'rgba(255,255,255,0.6)', borderRadius: 6,
+  background: 'none', border: '1px solid var(--border)',
+  color: 'var(--text-2)', borderRadius: 6,
   padding: '3px 8px', cursor: 'pointer', display: 'flex',
   alignItems: 'center', gap: 4, fontSize: 10,
 }
@@ -1143,7 +1143,7 @@ function MiniModelRouter({ models }: { models: typeof IMAGE_MODELS }) {
         }}>
           <span style={{ flex: 1, fontWeight: selected === i ? 600 : 400, color: C.nearBlack }}>{m.name}</span>
           <span style={{ color: C.text48, fontSize: 10 }}>{m.speed}</span>
-          <div style={{ width: 40, height: 3, borderRadius: 2, background: 'rgba(0,0,0,0.06)', overflow: 'hidden' }}>
+          <div style={{ width: 40, height: 3, borderRadius: 2, background: 'var(--border)', overflow: 'hidden' }}>
             <div style={{
               width: i < visible ? `${m.score}%` : '0%',
               height: '100%', borderRadius: 2,
@@ -1180,7 +1180,7 @@ function MiniThinkingSteps({ steps, currentStep }: { steps: { id: string; label:
           <div style={{
             width: 14, height: 14, borderRadius: '50%', flexShrink: 0,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            background: i < currentStep ? 'rgba(48,209,88,0.1)' : i === currentStep ? 'rgba(0,113,227,0.1)' : C.lightGray,
+            background: i < currentStep ? 'rgba(48,209,88,0.1)' : i === currentStep ? 'rgba(192,228,99,0.1)' : C.lightGray,
           }}>
             {i < currentStep ? <Check size={8} color="#30d158" /> :
              i === currentStep ? <Loader2 size={8} color={C.blue} style={{ animation: 'spin 1s linear infinite' }} /> :
@@ -1266,14 +1266,14 @@ function buildFallbackSvg(productName: string, group: AudienceGroup): string {
     <defs>
       <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
         <stop offset="0%" style="stop-color:#1d1d1f"/>
-        <stop offset="100%" style="stop-color:#0071e3"/>
+        <stop offset="100%" style="stop-color:#c0e463"/>
       </linearGradient>
     </defs>
     <rect width="1200" height="628" fill="url(#bg)" rx="12"/>
     <text x="600" y="260" font-family="-apple-system,SF Pro Display,Helvetica Neue,Arial,sans-serif" font-size="52" font-weight="600" fill="white" text-anchor="middle">${productName}</text>
     <text x="600" y="320" font-family="-apple-system,SF Pro Display,Helvetica Neue,Arial,sans-serif" font-size="24" fill="rgba(255,255,255,0.6)" text-anchor="middle">${group.audienceTag} · ${group.region}</text>
     <text x="600" y="380" font-family="-apple-system,SF Pro Display,Helvetica Neue,Arial,sans-serif" font-size="16" fill="rgba(255,255,255,0.4)" text-anchor="middle">${group.sellingPoint.slice(0, 80)}</text>
-    <rect x="500" y="420" width="200" height="48" rx="24" fill="#0071e3"/>
+    <rect x="500" y="420" width="200" height="48" rx="24" fill="#c0e463"/>
     <text x="600" y="450" font-family="-apple-system,SF Pro Display,Helvetica Neue,Arial,sans-serif" font-size="16" font-weight="600" fill="white" text-anchor="middle">Get Started</text>
     <text x="600" y="590" font-family="-apple-system,SF Pro Display,Helvetica Neue,Arial,sans-serif" font-size="11" fill="rgba(255,255,255,0.25)" text-anchor="middle">Fallback placeholder — retry with a different prompt for AI-generated visuals</text>
   </svg>`

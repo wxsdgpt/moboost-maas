@@ -14,6 +14,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
 import { supabaseService } from '@/lib/db'
+import { AUTH_BYPASS } from '@/lib/authBypass'
 import type { AudienceGroup } from '@/lib/reportTypes'
 import { callLLM } from '@/lib/callLLM'
 
@@ -43,12 +44,20 @@ type GroupResult = {
 
 export async function POST(req: NextRequest) {
   try {
-    const { userId: clerkId } = await auth()
-    if (!clerkId) return NextResponse.json({ ok: false, error: 'unauthorized' }, { status: 401 })
-
     const db = supabaseService()
-    const { data: userRow, error: userErr } = await db.from('users').select('id').eq('clerk_user_id', clerkId).maybeSingle()
-    if (userErr) return NextResponse.json({ ok: false, error: 'db_error', detail: userErr.message }, { status: 500 })
+    let userRow: { id: string } | null = null
+
+    if (AUTH_BYPASS) {
+      // v1.0.2 test mode — grab any user (first row) to satisfy FK constraints
+      const { data } = await db.from('users').select('id').limit(1).maybeSingle()
+      userRow = data
+    } else {
+      const { userId: clerkId } = await auth()
+      if (!clerkId) return NextResponse.json({ ok: false, error: 'unauthorized' }, { status: 401 })
+      const { data, error: userErr } = await db.from('users').select('id').eq('clerk_user_id', clerkId).maybeSingle()
+      if (userErr) return NextResponse.json({ ok: false, error: 'db_error', detail: userErr.message }, { status: 500 })
+      userRow = data
+    }
     if (!userRow) return NextResponse.json({ ok: false, error: 'user_not_found' }, { status: 404 })
 
     const body = (await req.json()) as ExecRequest

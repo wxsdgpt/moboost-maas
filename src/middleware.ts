@@ -21,6 +21,7 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { AUTH_BYPASS } from '@/lib/authBypass'
 
 // Routes that don't require authentication at the middleware level.
 // API routes are public here because each route handler checks auth itself
@@ -53,6 +54,12 @@ export default clerkMiddleware(async (auth, req) => {
   // Inject pathname header for layout detection
   const res = NextResponse.next()
   res.headers.set('x-pathname', pathname)
+
+  // v1.0.2 — global auth bypass for QA / testing.
+  // Short-circuits both the login gate and the onboarding gate.
+  if (AUTH_BYPASS) {
+    return res
+  }
 
   // If not a public route, enforce auth
   if (!isPublicRoute(req)) {

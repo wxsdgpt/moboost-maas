@@ -24,6 +24,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getOrCreateCurrentUser } from '@/lib/auth'
 import { supabaseService } from '@/lib/db'
+import { ensureStableUrl } from '@/lib/supabaseStorage'
+import { notifyCollab } from '@/lib/collabWebhook'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -111,6 +113,22 @@ export async function POST(req: NextRequest) {
   if (error) {
     return NextResponse.json({ ok: false, error: 'db_error', detail: error.message }, { status: 500 })
   }
+
+  // Migrate to Supabase Storage so the URL is stable for collaborators.
+  const stableUrl = await ensureStableUrl(data.id)
+  if (stableUrl) data.url = stableUrl
+
+  // Fire-and-forget collaborator notification.
+  notifyCollab('asset.created', {
+    assetId: data.id,
+    reportId,
+    projectId,
+    type: data.type,
+    url: data.url,
+    audienceTag: data.audience_tag,
+    region: data.region,
+    createdAt: data.created_at,
+  }).catch(() => {})
 
   return NextResponse.json({ ok: true, asset: data })
 }

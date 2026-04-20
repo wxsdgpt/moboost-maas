@@ -28,12 +28,22 @@
 import { useEffect, useRef } from 'react'
 import { useUser } from '@clerk/nextjs'
 import { store } from '@/lib/store'
+import { AUTH_BYPASS, BYPASS_USER_ID } from '@/lib/authBypass'
 
 export default function UserScopeGuard() {
   const { isLoaded, isSignedIn, user } = useUser()
   const lastUserIdRef = useRef<string | null>(null)
 
   useEffect(() => {
+    // v1.0.2 test mode — treat as always signed in, hydrate once.
+    if (AUTH_BYPASS) {
+      if (lastUserIdRef.current !== BYPASS_USER_ID) {
+        lastUserIdRef.current = BYPASS_USER_ID
+        store.hydrate().catch(() => {})
+      }
+      return
+    }
+
     // Wait for Clerk to report a definitive state before touching the store.
     if (!isLoaded) return
 

@@ -37,10 +37,7 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
     if (typeof document === 'undefined') return
     const el = document.documentElement
 
-    const isLogin = pathname === '/login'
-    const shouldBeDark = theme === 'dark' && !isLogin
-
-    if (shouldBeDark) {
+    if (theme === 'dark') {
       el.classList.add('dark')
       el.setAttribute('data-theme', 'dark')
     } else {

@@ -1,12 +1,12 @@
 'use client'
 
 /**
- * ReportView — Apple-inspired marketing diagnostic report.
+ * ReportView — Orbital Noir dark-theme marketing diagnostic report.
  *
- * Design language: Apple DESIGN.md
- *   - Binary light/dark section rhythm
+ * Design language: Orbital Noir
+ *   - Deep dark surfaces with subtle transparency
  *   - SF Pro typography (system-ui fallback)
- *   - Single accent: #0071e3 for interactive
+ *   - Single accent: #c0e463 (acid green) for interactive
  *   - Product-as-hero, generous whitespace
  *   - Diagnose → Brief → Execute closed loop
  */
@@ -33,19 +33,19 @@ import {
 import type { ReportOutput, ReportSection, AudienceGroup } from '@/lib/reportTypes'
 import ReportArtifacts from './ReportArtifacts'
 
-/* ── Apple Design Tokens ── */
+/* ── Orbital Noir Design Tokens ── */
 const C = {
-  black: '#000000',
-  nearBlack: '#1d1d1f',
-  lightGray: '#f5f5f7',
-  blue: '#0071e3',
-  linkBlue: '#0066cc',
-  brightBlue: '#2997ff',
-  white: '#ffffff',
-  text80: 'rgba(0,0,0,0.8)',
-  text48: 'rgba(0,0,0,0.48)',
-  darkSurface: '#272729',
-  shadow: 'rgba(0,0,0,0.22) 3px 5px 30px 0px',
+  black: 'var(--bg)',
+  nearBlack: 'var(--text-1)',
+  lightGray: 'var(--surface-1)',
+  blue: 'var(--brand)',
+  linkBlue: 'var(--brand)',
+  brightBlue: 'var(--brand)',
+  white: 'var(--surface-1)',
+  text80: 'var(--text-2)',
+  text48: 'var(--text-3)',
+  darkSurface: 'var(--bg)',
+  shadow: '0 8px 32px rgba(0,0,0,0.4)',
 }
 
 type Props = {
@@ -158,7 +158,7 @@ export default function ReportView({ report }: Props) {
           <div style={{ fontSize: 12, color: C.text48, marginBottom: 40, letterSpacing: -0.12 }}>
             <a href="/" style={{ color: C.brightBlue, textDecoration: 'none' }}>Dashboard</a>
             <span style={{ margin: '0 8px' }}>/</span>
-            <span style={{ color: 'rgba(255,255,255,0.48)' }}>Report</span>
+            <span style={{ color: 'var(--text-3)' }}>Report</span>
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 40 }}>
@@ -172,7 +172,7 @@ export default function ReportView({ report }: Props) {
                 }}>
                   {output.kind} Report
                 </span>
-                <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.48)' }}>
+                <span style={{ fontSize: 12, color: 'var(--text-3)' }}>
                   {new Date(output.generatedAt).toLocaleDateString('en-US', {
                     month: 'short', day: 'numeric', year: 'numeric',
                   })}
@@ -207,7 +207,7 @@ export default function ReportView({ report }: Props) {
             <div style={{ textAlign: 'center', flexShrink: 0 }}>
               <div style={{ position: 'relative', width: 120, height: 120 }}>
                 <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%', transform: 'rotate(-90deg)' }}>
-                  <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="6" />
+                  <circle cx="50" cy="50" r="42" fill="none" stroke="var(--border)" strokeWidth="6" />
                   <circle
                     cx="50" cy="50" r="42" fill="none"
                     stroke={healthScore >= 70 ? '#30d158' : healthScore >= 40 ? '#ffd60a' : '#ff453a'}
@@ -223,7 +223,7 @@ export default function ReportView({ report }: Props) {
                   <span style={{ fontSize: 32, fontWeight: 600, letterSpacing: -0.28 }}>{healthScore}</span>
                 </div>
               </div>
-              <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.48)', marginTop: 8, letterSpacing: -0.12 }}>
+              <div style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 8, letterSpacing: -0.12 }}>
                 Marketing Score
               </div>
             </div>
@@ -232,21 +232,21 @@ export default function ReportView({ report }: Props) {
           {/* Quick Stats */}
           <div style={{
             display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 24,
-            marginTop: 48, paddingTop: 32, borderTop: '1px solid rgba(255,255,255,0.1)',
+            marginTop: 48, paddingTop: 32, borderTop: '1px solid var(--border)',
           }}>
             <div>
               <div style={{ fontSize: 40, fontWeight: 600, lineHeight: 1.07, color: '#ff453a' }}>{issues.length}</div>
-              <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.48)', marginTop: 4 }}>Issues Found</div>
+              <div style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 4 }}>Issues Found</div>
             </div>
             <div>
               <div style={{ fontSize: 40, fontWeight: 600, lineHeight: 1.07, color: '#ffd60a' }}>{opportunities.length}</div>
-              <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.48)', marginTop: 4 }}>Opportunities</div>
+              <div style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 4 }}>Opportunities</div>
             </div>
             <div>
               <div style={{ fontSize: 40, fontWeight: 600, lineHeight: 1.07, color: '#30d158' }}>
                 {output.sections.filter(s => !s.gated).length}/{output.sections.length}
               </div>
-              <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.48)', marginTop: 4 }}>Sections Analyzed</div>
+              <div style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 4 }}>Sections Analyzed</div>
             </div>
           </div>
         </div>
@@ -333,13 +333,13 @@ export default function ReportView({ report }: Props) {
       {isLite && !unlocked && (
         <section style={{ background: C.black, color: C.white, padding: '80px 0', textAlign: 'center' }}>
           <div style={{ maxWidth: 980, margin: '0 auto', padding: '0 24px' }}>
-            <Lock size={32} color="rgba(255,255,255,0.32)" style={{ marginBottom: 16 }} />
+            <Lock size={32} color="var(--text-3)" style={{ marginBottom: 16 }} />
             <h2 style={{ fontSize: 40, fontWeight: 600, lineHeight: 1.10, marginBottom: 12 }}>
               Unlock Full Analysis
             </h2>
             <p style={{
               fontSize: 17, fontWeight: 400, lineHeight: 1.47, letterSpacing: -0.374,
-              color: 'rgba(255,255,255,0.48)', maxWidth: 480, margin: '0 auto 32px',
+              color: 'var(--text-3)', maxWidth: 480, margin: '0 auto 32px',
             }}>
               Get competitor deep-dives, creative analysis, audience insights, channel strategy, and a 30-day action plan.
             </p>
@@ -347,7 +347,7 @@ export default function ReportView({ report }: Props) {
               <button
                 onClick={handleUnlock}
                 style={{
-                  background: C.blue, color: C.white, border: 'none',
+                  background: C.blue, color: 'var(--brand-text)', border: 'none',
                   borderRadius: 8, padding: '12px 24px',
                   fontSize: 17, fontWeight: 400, cursor: 'pointer',
                 }}
@@ -380,7 +380,7 @@ export default function ReportView({ report }: Props) {
               </h2>
               <p style={{
                 fontSize: 21, fontWeight: 400, lineHeight: 1.19, letterSpacing: 0.231,
-                color: 'rgba(255,255,255,0.48)', maxWidth: 600, margin: '0 auto',
+                color: 'var(--text-3)', maxWidth: 600, margin: '0 auto',
               }}>
                 3 audience groups. Each with a tailored selling point, creative direction, and landing page.
                 Edit or execute directly.
@@ -464,7 +464,7 @@ export default function ReportView({ report }: Props) {
                     }
                   }}
                   style={{
-                    background: navigating ? '#555' : C.blue, color: C.white, border: 'none',
+                    background: navigating ? 'var(--surface-1)' : C.blue, color: 'var(--brand-text)', border: 'none',
                     borderRadius: 8, padding: '12px 28px',
                     fontSize: 17, fontWeight: 400,
                     cursor: navigating ? 'wait' : 'pointer',
@@ -473,7 +473,7 @@ export default function ReportView({ report }: Props) {
                   }}
                 >
                   {navigating ? (
-                    <span style={{ display: 'inline-block', width: 16, height: 16, border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+                    <span style={{ display: 'inline-block', width: 16, height: 16, border: '2px solid var(--border)', borderTopColor: 'var(--text-1)', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
                   ) : (
                     <Play size={16} />
                   )}
@@ -481,7 +481,7 @@ export default function ReportView({ report }: Props) {
                 </button>
               </div>
               <p style={{
-                fontSize: 14, color: 'rgba(255,255,255,0.48)', marginTop: 20,
+                fontSize: 14, color: 'var(--text-3)', marginTop: 20,
                 letterSpacing: -0.224,
               }}>
                 Generates 1 creative + 1 landing page per audience group (3 sets total)
@@ -587,7 +587,7 @@ function SectionCard({
               <button
                 onClick={onUnlock}
                 style={{
-                  background: C.nearBlack, color: C.white, border: 'none',
+                  background: C.blue, color: 'var(--brand-text)', border: 'none',
                   borderRadius: 8, padding: '10px 20px',
                   fontSize: 14, fontWeight: 600, cursor: 'pointer',
                 }}
@@ -599,7 +599,7 @@ function SectionCard({
             <div>
               <SectionContent content={section.content} />
               {/* Contextual action */}
-              <div style={{ marginTop: 20, paddingTop: 16, borderTop: '1px solid rgba(0,0,0,0.06)' }}>
+              <div style={{ marginTop: 20, paddingTop: 16, borderTop: '1px solid var(--border)' }}>
                 {(section.id === 'product_overview' || section.id === 'creative_analysis' || section.id === 'asset_evaluation') && (
                   <button
                     onClick={() => router.push(`/brief/new?productId=${productId}`)}

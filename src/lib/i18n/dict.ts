@@ -34,9 +34,12 @@ export const en: Dict = {
   'settings.language': 'Language',
   'settings.close': 'Close',
   'settings.openButton': 'Open settings',
+  'settings.account': 'Account',
+  'settings.signOut': 'Sign out',
 
   // Navigation (sidebar)
   'nav.home': 'Home',
+  'nav.inspire': 'Inspire',
   'nav.project': 'Project',
   'nav.reports': 'Reports',
   'nav.landing': 'Landing Pages',
@@ -63,6 +66,30 @@ export const en: Dict = {
   'auth.signUp.headline': 'Create your account',
   'auth.signUp.tagline': 'Start with 50 free credits — no card required',
   'auth.signUp.settingUp': 'Setting up your account…',
+
+  // Home / hero
+  'home.tagline': 'Ad creatives, landing pages, and competitive intelligence for iGaming',
+
+  // Welcome banner
+  'welcome.title': 'Welcome to Moboost',
+  'welcome.title.withProduct': 'Welcome to Moboost — let\u2019s grow',
+  'welcome.body.before': 'You have',
+  'welcome.body.credits': '50 free credits',
+  'welcome.body.after': '. Spin up your first lite report to see how it works.',
+  'welcome.cta.generate': 'Generate first report',
+  'welcome.cta.generating': 'Generating…',
+  'welcome.error.noProduct': 'No product found. Complete onboarding first.',
+  'welcome.error.failed': 'Report generation failed',
+
+  // Unified collector
+  'collector.action.pipeline': 'One-click pipeline',
+  'collector.action.asset': 'Generate assets',
+  'collector.action.intel': 'Market intel',
+  'collector.action.landing': 'Generate landing page',
+  'collector.placeholder.default': 'Describe what you need, or pick a quick action below…',
+  'collector.placeholder.intel': 'Enter a product URL or describe a competitor…',
+  'collector.placeholder.asset': 'Describe the asset you want to generate…',
+  'collector.placeholder.landing': 'Describe what the landing page should do…',
 
   // Common
   'common.loading': 'Loading…',
@@ -101,9 +128,12 @@ export const zh: Dict = {
   'settings.language': '语言',
   'settings.close': '关闭',
   'settings.openButton': '打开设置',
+  'settings.account': '账户',
+  'settings.signOut': '退出登录',
 
   // Navigation
   'nav.home': '首页',
+  'nav.inspire': '灵感库',
   'nav.project': '项目',
   'nav.reports': '报告',
   'nav.landing': '落地页',
@@ -130,6 +160,30 @@ export const zh: Dict = {
   'auth.signUp.headline': '创建账户',
   'auth.signUp.tagline': '免费获得 50 积分 — 无需信用卡',
   'auth.signUp.settingUp': '正在设置账户…',
+
+  // Home / hero
+  'home.tagline': '为 iGaming 提供广告创意、落地页与竞品情报',
+
+  // Welcome banner
+  'welcome.title': '欢迎使用 Moboost',
+  'welcome.title.withProduct': '欢迎使用 Moboost — 一起成长',
+  'welcome.body.before': '您拥有',
+  'welcome.body.credits': '50 个免费积分',
+  'welcome.body.after': '。生成第一份精简版报告，体验一下吧。',
+  'welcome.cta.generate': '生成首份报告',
+  'welcome.cta.generating': '生成中…',
+  'welcome.error.noProduct': '未找到产品，请先完成引导。',
+  'welcome.error.failed': '报告生成失败',
+
+  // Unified collector
+  'collector.action.pipeline': '一键联动',
+  'collector.action.asset': '生成素材',
+  'collector.action.intel': '信息采集',
+  'collector.action.landing': '生成落地页',
+  'collector.placeholder.default': '描述你的需求，或选择下方快捷操作…',
+  'collector.placeholder.intel': '输入产品 URL 或描述竞品…',
+  'collector.placeholder.asset': '描述你想要生成的素材…',
+  'collector.placeholder.landing': '描述落地页需求…',
 
   // Common
   'common.loading': '加载中…',

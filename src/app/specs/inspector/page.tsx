@@ -44,11 +44,11 @@ const PRESETS = [
     asset: { width: 1080, height: 1920, mediaType: 'video', durationSec: 30, fps: 30, format: 'mp4', fileSizeMB: 50 },
   },
   {
-    label: '方图 1080×1080 jpg',
+    label: 'Square 1080×1080 jpg',
     asset: { width: 1080, height: 1080, mediaType: 'image', format: 'jpg', fileSizeMB: 1 },
   },
   {
-    label: '横图 1920×1080 webp',
+    label: 'Landscape 1920×1080 webp',
     asset: { width: 1920, height: 1080, mediaType: 'image', format: 'webp', fileSizeMB: 1 },
   },
   {
@@ -56,7 +56,7 @@ const PRESETS = [
     asset: { width: 300, height: 250, mediaType: 'image', format: 'jpg', fileSizeMB: 0.1 },
   },
   {
-    label: 'TikTok 60s 4K (会被裁剪建议)',
+    label: 'TikTok 60s 4K (will trigger crop suggestion)',
     asset: { width: 3840, height: 2160, mediaType: 'video', durationSec: 60, fps: 30, format: 'mp4', fileSizeMB: 200 },
   },
 ] as const
@@ -69,7 +69,7 @@ function severityClass(sev: string): string {
 
 function scoreColor(score: number, ok: boolean): string {
   if (!ok) return 'text-rose-400'
-  if (score >= 95) return 'text-[#2997ff]'
+  if (score >= 95) return 'text-[var(--brand)]'
   if (score >= 80) return 'text-lime-400'
   return 'text-amber-300'
 }
@@ -145,7 +145,7 @@ export default function SpecsInspectorPage() {
       const bits: string[] = [`mime=${p.mime}`, `${p.fileSizeMB}MB`]
       if (p.brand) bits.push(`brand=${p.brand.trim()}`)
       if (p.codec) bits.push(`codec=${p.codec.trim()}`)
-      if (p.mediaType === 'video' && !p.hasVideoTrack) bits.push('（音频或未识别）')
+      if (p.mediaType === 'video' && !p.hasVideoTrack) bits.push('(audio-only or unrecognized)')
       setProbeInfo(`✓ ${file.name} → ${bits.join(' · ')}`)
     } catch (e) {
       setProbeInfo(`✗ ${e instanceof Error ? e.message : String(e)}`)
@@ -194,14 +194,14 @@ export default function SpecsInspectorPage() {
   }
 
   return (
-    <main className="min-h-screen bg-white text-[#1d1d1f] px-6 py-8" style={{ fontFamily: '-apple-system, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif' }}>
+    <main className="min-h-screen text-white px-6 py-8" style={{ background: 'var(--bg)', fontFamily: '-apple-system, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif' }}>
       <div className="max-w-5xl mx-auto">
         <header className="mb-6">
-          <h1 className="text-2xl font-semibold text-black">Spec Validator · Inspector</h1>
-          <p className="text-sm text-[#6f6f77] mt-1">
-            交互式调试页面 — 输入素材的 width / height / 时长 / 格式 / 体积，
-            实时看 catalog 里哪些规格可以原样复用、哪些近似可救、哪些彻底不行。
-            完全跑在 <code className="bg-[#f5f5f7] px-1 rounded text-[#1d1d1f]">/api/spec/validate</code> 上。
+          <h1 className="text-2xl font-semibold text-white">Spec Validator · Inspector</h1>
+          <p className="text-sm text-[var(--text-3)] mt-1">
+            Interactive debug tool — enter an asset's width / height / duration / format / size
+            and instantly see which catalog specs are a perfect match, which are salvageable, and which are unusable.
+            Powered entirely by <code className="bg-[var(--surface-3)] px-1 rounded text-white">/api/spec/validate</code>.
           </p>
         </header>
 
@@ -211,7 +211,7 @@ export default function SpecsInspectorPage() {
             <button
               key={p.label}
               onClick={() => applyPreset(p)}
-              className="text-xs rounded-full px-3 py-1 border border-[#d5d5d7] hover:border-black bg-[#f5f5f7] text-black hover:bg-white"
+              className="text-xs rounded-full px-3 py-1 border border-[var(--border)] hover:border-[var(--brand)] bg-[var(--surface-3)] text-white hover:bg-[var(--border)]"
             >
               {p.label}
             </button>
@@ -219,12 +219,12 @@ export default function SpecsInspectorPage() {
         </div>
 
         {/* Probe a real file (image or video) */}
-        <div className="mb-4 rounded-lg border border-dashed border-[#d5d5d7] bg-[#f5f5f7] p-3 flex flex-wrap items-center gap-3">
-          <span className="text-xs text-black">
-            或者直接丢一个真实文件 (png/jpg/webp/mp4/mov) — 自动用 imageProbe / videoProbe 填充上面的字段：
+        <div className="mb-4 rounded-lg border border-dashed border-[var(--border)] bg-[var(--surface-3)] p-3 flex flex-wrap items-center gap-3">
+          <span className="text-xs text-white">
+            Or drop in a real file (png/jpg/webp/mp4/mov) — imageProbe / videoProbe will auto-fill the fields above:
           </span>
-          <label className="text-xs rounded-md bg-[#0071e3] hover:bg-[#0066cc] px-3 py-1 cursor-pointer text-white">
-            {probing ? '正在解析…' : '选择文件'}
+          <label className="text-xs rounded-md bg-[var(--brand)] hover:bg-[var(--brand)] px-3 py-1 cursor-pointer text-[var(--brand-contrast)]">
+            {probing ? 'Probing…' : 'Choose file'}
             <input
               type="file"
               accept="image/*,video/*"
@@ -239,7 +239,7 @@ export default function SpecsInspectorPage() {
           {probeInfo && (
             <span
               className={`text-[11px] ${
-                probeInfo.startsWith('✓') ? 'text-[#2997ff]' : 'text-rose-300'
+                probeInfo.startsWith('✓') ? 'text-[var(--brand)]' : 'text-rose-300'
               }`}
             >
               {probeInfo}
@@ -248,8 +248,8 @@ export default function SpecsInspectorPage() {
         </div>
 
         {/* Inputs */}
-        <section className="grid grid-cols-2 md:grid-cols-4 gap-3 bg-[#f5f5f7] border border-[#d5d5d7] rounded-lg p-4">
-          <Field label="宽度 (px)">
+        <section className="grid grid-cols-2 md:grid-cols-4 gap-3 bg-[var(--surface-3)] border border-[var(--border)] rounded-lg p-4">
+          <Field label="Width (px)">
             <input
               type="number"
               value={width}
@@ -257,7 +257,7 @@ export default function SpecsInspectorPage() {
               className="input"
             />
           </Field>
-          <Field label="高度 (px)">
+          <Field label="Height (px)">
             <input
               type="number"
               value={height}
@@ -265,7 +265,7 @@ export default function SpecsInspectorPage() {
               className="input"
             />
           </Field>
-          <Field label="媒体类型">
+          <Field label="Media type">
             <select
               value={mediaType}
               onChange={(e) => setMediaType(e.target.value as 'image' | 'video')}
@@ -275,11 +275,11 @@ export default function SpecsInspectorPage() {
               <option value="video">video</option>
             </select>
           </Field>
-          <Field label="格式 (mp4 / jpg / webp …)">
+          <Field label="Format (mp4 / jpg / webp …)">
             <input value={format} onChange={(e) => setFormat(e.target.value)} className="input" />
           </Field>
 
-          <Field label="时长 (秒, 仅视频)">
+          <Field label="Duration (sec, video only)">
             <input
               type="number"
               value={durationSec}
@@ -288,7 +288,7 @@ export default function SpecsInspectorPage() {
               className="input"
             />
           </Field>
-          <Field label="帧率 fps">
+          <Field label="Frame rate (fps)">
             <input
               type="number"
               value={fps}
@@ -297,7 +297,7 @@ export default function SpecsInspectorPage() {
               className="input"
             />
           </Field>
-          <Field label="体积 (MB)">
+          <Field label="Size (MB)">
             <input
               type="number"
               step="0.1"
@@ -306,7 +306,7 @@ export default function SpecsInspectorPage() {
               className="input"
             />
           </Field>
-          <Field label="池 / 容差">
+          <Field label="Pool / Tolerance">
             <div className="flex gap-2">
               <select value={pool} onChange={(e) => setPool(e.target.value as typeof pool)} className="input flex-1">
                 <option value="core">core</option>
@@ -330,9 +330,9 @@ export default function SpecsInspectorPage() {
           <button
             onClick={runBestFit}
             disabled={loading}
-            className="rounded-lg bg-[#0071e3] hover:bg-[#0066cc] disabled:opacity-50 px-5 py-2 text-sm font-medium text-white"
+            className="rounded-lg bg-[var(--brand)] hover:bg-[var(--brand)] disabled:opacity-50 px-5 py-2 text-sm font-medium text-[var(--brand-contrast)]"
           >
-            {loading ? '校验中…' : '查找最佳匹配 →'}
+            {loading ? 'Validating…' : 'Find best match →'}
           </button>
           {error && <span className="text-xs text-rose-400">{error}</span>}
         </div>
@@ -340,8 +340,8 @@ export default function SpecsInspectorPage() {
         {/* Results — best fits */}
         {reports.length > 0 && (
           <section className="mt-8">
-            <h2 className="text-sm uppercase tracking-wide text-[#6f6f77] mb-3">
-              ✓ 完美匹配（{reports.length}）
+            <h2 className="text-sm uppercase tracking-wide text-[var(--text-3)] mb-3">
+              ✓ Perfect matches ({reports.length})
             </h2>
             <div className="space-y-3">
               {reports.map((r) => (
@@ -353,8 +353,8 @@ export default function SpecsInspectorPage() {
 
         {nearMisses.length > 0 && (
           <section className="mt-8">
-            <h2 className="text-sm uppercase tracking-wide text-[#6f6f77] mb-3">
-              △ 近似可救（{nearMisses.length}）— 跟着 fix 建议处理就能用
+            <h2 className="text-sm uppercase tracking-wide text-[var(--text-3)] mb-3">
+              △ Near misses ({nearMisses.length}) — usable after applying the fix suggestions
             </h2>
             <div className="space-y-3">
               {nearMisses.map((r) => (
@@ -368,18 +368,18 @@ export default function SpecsInspectorPage() {
       {/* tiny inline styles for inputs (avoid bringing in a form lib) */}
       <style jsx>{`
         .input {
-          background: white;
-          border: 1px solid #d5d5d7;
+          background: var(--surface-3);
+          border: 1px solid var(--border);
           padding: 6px 8px;
           border-radius: 6px;
-          color: #1d1d1f;
+          color: var(--text-1);
           font-size: 12px;
           width: 100%;
         }
         .input:focus {
           outline: none;
-          border-color: #0071e3;
-          box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.1);
+          border-color: var(--brand);
+          box-shadow: 0 0 0 3px var(--brand-light);
         }
       `}</style>
     </main>
@@ -387,7 +387,7 @@ export default function SpecsInspectorPage() {
 
   function Field({ label, children }: { label: string; children: React.ReactNode }) {
     return (
-      <label className="text-xs text-black space-y-1 block">
+      <label className="text-xs text-white space-y-1 block">
         <div>{label}</div>
         {children}
       </label>
@@ -396,11 +396,11 @@ export default function SpecsInspectorPage() {
 
   function ReportCard({ report }: { report: ValidationReport }) {
     return (
-      <div className="border border-[#d5d5d7] rounded-lg bg-[#f5f5f7] p-4" style={{ boxShadow: 'rgba(0,0,0,0.1) 0 1px 3px' }}>
+      <div className="border border-[var(--border)] rounded-lg bg-[var(--surface-3)] p-4" style={{ boxShadow: 'var(--shadow-sm)' }}>
         <div className="flex items-center justify-between mb-2">
           <div>
-            <div className="font-medium text-black">{report.specNameZh}</div>
-            <div className="text-[11px] text-[#6f6f77]">
+            <div className="font-medium text-white">{report.specNameZh}</div>
+            <div className="text-[11px] text-[var(--text-3)]">
               {report.specId} · {report.specName}
             </div>
           </div>
@@ -408,7 +408,7 @@ export default function SpecsInspectorPage() {
             {report.score}
           </div>
         </div>
-        <div className="text-xs text-[#1d1d1f] mb-2">{report.summary}</div>
+        <div className="text-xs text-white mb-2">{report.summary}</div>
         {report.violations.length > 0 && (
           <ul className="space-y-1.5">
             {report.violations.map((v, i) => (

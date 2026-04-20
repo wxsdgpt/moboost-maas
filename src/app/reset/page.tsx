@@ -19,16 +19,16 @@ import {
 } from 'lucide-react'
 
 const C = {
-  black: '#000000',
-  nearBlack: '#1d1d1f',
-  lightGray: '#f5f5f7',
-  blue: '#0071e3',
-  brightBlue: '#2997ff',
-  white: '#ffffff',
+  black: 'var(--bg)',
+  nearBlack: 'var(--text-1)',
+  lightGray: 'var(--bg)',
+  blue: 'var(--brand)',
+  brightBlue: 'var(--brand)',
+  white: 'var(--surface-3)',
   red: '#ff453a',
   green: '#30d158',
-  text80: 'rgba(0,0,0,0.8)',
-  text48: 'rgba(0,0,0,0.48)',
+  text80: 'rgba(255,255,255,0.8)',
+  text48: 'var(--text-3)',
 }
 
 type ResetScope = 'all' | 'supabase' | 'files' | 'clerk'
@@ -85,7 +85,7 @@ export default function ResetPage() {
       <section style={{ background: C.black, color: C.white, padding: '48px 0' }}>
         <div style={{ maxWidth: 800, margin: '0 auto', padding: '0 24px' }}>
           <h1 style={{ fontSize: 40, fontWeight: 600, lineHeight: 1.10, letterSpacing: -0.2, marginBottom: 8 }}>Admin Tools</h1>
-          <p style={{ fontSize: 17, color: 'rgba(255,255,255,0.48)' }}>全局数据管理 · 独立页面（无 Clerk/Sidebar） · 清除所有用户数据用于测试</p>
+          <p style={{ fontSize: 17, color: 'var(--text-3)' }}>全局数据管理 · 独立页面（无 Clerk/Sidebar） · 清除所有用户数据用于测试</p>
         </div>
       </section>
 
@@ -101,7 +101,7 @@ export default function ResetPage() {
           {loadingCounts ? (
             <div style={{ textAlign: 'center', padding: 32, color: C.text48 }}><Loader2 size={20} style={{ animation: 'spin 1s linear infinite' }} /></div>
           ) : users.length === 0 ? (
-            <div style={{ background: C.white, borderRadius: 12, padding: '32px 24px', textAlign: 'center', boxShadow: 'rgba(0,0,0,0.04) 0 2px 8px' }}>
+            <div style={{ background: C.white, borderRadius: 12, padding: '32px 24px', textAlign: 'center', boxShadow: 'var(--shadow-md)' }}>
               <div style={{ fontSize: 32, marginBottom: 8 }}>✓</div>
               <div style={{ fontSize: 17, fontWeight: 600, color: C.nearBlack, marginBottom: 4 }}>暂无用户</div>
               <div style={{ fontSize: 14, color: C.text48 }}>数据库和 Clerk 中均无注册用户</div>
@@ -109,8 +109,8 @@ export default function ResetPage() {
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {users.map((u, i) => (
-                <div key={u.id} style={{ background: C.white, borderRadius: 12, padding: '16px 20px', boxShadow: 'rgba(0,0,0,0.04) 0 2px 8px', display: 'flex', alignItems: 'center', gap: 16 }}>
-                  <div style={{ width: 36, height: 36, borderRadius: '50%', background: ['#ff453a', '#ff9f0a', '#30d158', '#0071e3', '#bf5af2'][i % 5], display: 'flex', alignItems: 'center', justifyContent: 'center', color: C.white, fontSize: 14, fontWeight: 600 }}>
+                <div key={u.id} style={{ background: C.white, borderRadius: 12, padding: '16px 20px', boxShadow: 'var(--shadow-md)', display: 'flex', alignItems: 'center', gap: 16 }}>
+                  <div style={{ width: 36, height: 36, borderRadius: '50%', background: ['#ff453a', '#ff9f0a', '#30d158', 'var(--brand)', '#bf5af2'][i % 5], display: 'flex', alignItems: 'center', justifyContent: 'center', color: C.white, fontSize: 14, fontWeight: 600 }}>
                     {(u.email || '?')[0].toUpperCase()}
                   </div>
                   <div style={{ flex: 1 }}>
@@ -132,7 +132,7 @@ export default function ResetPage() {
           {counts ? (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
               {[
-                { icon: <Users size={16} />, label: '用户', count: counts.users, color: '#0071e3' },
+                { icon: <Users size={16} />, label: '用户', count: counts.users, color: 'var(--brand)' },
                 { icon: <Package size={16} />, label: '产品', count: counts.products, color: '#ff9f0a' },
                 { icon: <FileText size={16} />, label: '报告', count: counts.reports, color: '#30d158' },
                 { icon: <Globe size={16} />, label: '落地页', count: counts.landing_pages, color: '#bf5af2' },
@@ -141,7 +141,7 @@ export default function ResetPage() {
                 { icon: <BarChart3 size={16} />, label: '事件日志', count: counts.events, color: '#64d2ff' },
                 { icon: <Database size={16} />, label: '市场情报', count: counts.market_intel, color: '#ff6482' },
               ].map(item => (
-                <div key={item.label} style={{ background: C.white, borderRadius: 12, padding: '16px 12px', textAlign: 'center', boxShadow: 'rgba(0,0,0,0.04) 0 2px 8px' }}>
+                <div key={item.label} style={{ background: C.white, borderRadius: 12, padding: '16px 12px', textAlign: 'center', boxShadow: 'var(--shadow-md)' }}>
                   <div style={{ color: item.color, marginBottom: 8 }}>{item.icon}</div>
                   <div style={{ fontSize: 24, fontWeight: 600, color: C.nearBlack, marginBottom: 2 }}>{item.count}</div>
                   <div style={{ fontSize: 11, color: C.text48, fontWeight: 500 }}>{item.label}</div>
@@ -159,7 +159,7 @@ export default function ResetPage() {
               const isConfirming = status === 'confirming' && pendingScope === action.scope
               const isResetting = status === 'resetting' && pendingScope === action.scope
               return (
-                <div key={action.scope} style={{ background: C.white, borderRadius: 12, padding: '20px 24px', boxShadow: 'rgba(0,0,0,0.04) 0 2px 8px', border: isConfirming ? `2px solid ${action.color}` : '2px solid transparent', transition: 'border-color 0.2s' }}>
+                <div key={action.scope} style={{ background: C.white, borderRadius: 12, padding: '20px 24px', boxShadow: 'var(--shadow-md)', border: isConfirming ? `2px solid ${action.color}` : '2px solid transparent', transition: 'border-color 0.2s' }}>
                   <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
                     <div style={{ color: action.color, marginTop: 2 }}>{action.icon}</div>
                     <div style={{ flex: 1 }}>
@@ -191,7 +191,7 @@ export default function ResetPage() {
 
         {/* Result */}
         {status === 'done' && result && (
-          <div style={{ marginTop: 24, background: C.white, borderRadius: 12, padding: '20px 24px', boxShadow: 'rgba(0,0,0,0.04) 0 2px 8px', border: `2px solid ${C.green}` }}>
+          <div style={{ marginTop: 24, background: C.white, borderRadius: 12, padding: '20px 24px', boxShadow: 'var(--shadow-md)', border: `2px solid ${C.green}` }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
               <CheckCircle2 size={18} color={C.green} />
               <span style={{ fontSize: 17, fontWeight: 600, color: C.nearBlack }}>{String((result as Record<string, unknown>).message || '')}</span>
