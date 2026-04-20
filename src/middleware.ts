@@ -61,6 +61,11 @@ export default clerkMiddleware(async (auth, req) => {
     return res
   }
 
+  // If Clerk keys are not configured, skip auth entirely (allows demo deploy)
+  if (!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || !process.env.CLERK_SECRET_KEY) {
+    return res
+  }
+
   // If not a public route, enforce auth
   if (!isPublicRoute(req)) {
     let userId: string | null = null
@@ -98,12 +103,16 @@ export default clerkMiddleware(async (auth, req) => {
       const onboardedCookie = req.cookies.get('moboost:onboarded')?.value
 
       if (onboardedCookie !== '1') {
-        // No cookie — check Supabase
+        // No cookie — check Supabase (skip if env vars missing)
+        const sbUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+        const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+        if (!sbUrl || !sbKey) {
+          // Supabase not configured — skip onboarding check
+          console.warn('[middleware] Supabase env vars missing, skipping onboarding check')
+          return res
+        }
         try {
-          const supabase = createClient(
-            process.env.NEXT_PUBLIC_SUPABASE_URL!,
-            process.env.SUPABASE_SERVICE_ROLE_KEY!,
-          )
+          const supabase = createClient(sbUrl, sbKey)
           const { data } = await supabase
             .from('users')
             .select('onboarded_at')
