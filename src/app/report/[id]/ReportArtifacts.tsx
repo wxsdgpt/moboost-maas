@@ -53,14 +53,14 @@ type ApiResponse = {
 type Tab = 'landings' | 'creatives'
 
 const C = {
-  black: '#000',
-  nearBlack: '#1d1d1f',
-  lightGray: '#f5f5f7',
-  blue: '#0071e3',
-  linkBlue: '#0066cc',
-  white: '#fff',
-  text48: 'rgba(0,0,0,0.48)',
-  border: 'rgba(0,0,0,0.08)',
+  black: 'var(--bg)',
+  nearBlack: 'var(--text-1)',
+  lightGray: 'var(--surface-3)',
+  blue: 'var(--brand)',
+  linkBlue: 'var(--brand)',
+  white: 'var(--surface-3)',
+  text48: 'var(--text-3)',
+  border: 'var(--border)',
 }
 
 export default function ReportArtifacts({ reportId }: { reportId: string }) {
@@ -120,7 +120,7 @@ export default function ReportArtifacts({ reportId }: { reportId: string }) {
         </div>
 
         {loading && <div style={{ textAlign: 'center', padding: 40, color: C.text48 }}>{t('artifacts.loading')}</div>}
-        {error && <div style={{ textAlign: 'center', padding: 40, color: '#ff453a' }}>{t('common.error')}: {error}</div>}
+        {error && <div style={{ textAlign: 'center', padding: 40, color: '#ff6b6b' }}>{t('common.error')}: {error}</div>}
 
         {!loading && !error && tab === 'landings' && (
           landings.length === 0
@@ -253,7 +253,7 @@ function LandingRow({ landing, reportId, onRegenerated }: {
         <iframe
           src={previewUrl}
           title={`landing-${landing.id}`}
-          style={{ width: '100%', height: 320, border: 'none', display: 'block', background: '#fff' }}
+          style={{ width: '100%', height: 320, border: 'none', display: 'block', background: 'var(--bg)' }}
           sandbox="allow-same-origin"
         />
       )}
@@ -271,13 +271,13 @@ function LandingRow({ landing, reportId, onRegenerated }: {
               boxSizing: 'border-box',
             }}
           />
-          {err && <div style={{ color: '#ff453a', fontSize: 12, marginTop: 8 }}>{err}</div>}
+          {err && <div style={{ color: '#ff6b6b', fontSize: 12, marginTop: 8 }}>{err}</div>}
           <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 12 }}>
             <button
               onClick={regenerate}
               disabled={busy}
               style={{
-                background: busy ? '#999' : C.blue, color: C.white, border: 'none',
+                background: busy ? '#999' : C.blue, color: 'var(--bg)', border: 'none',
                 borderRadius: 8, padding: '8px 18px', fontSize: 14,
                 cursor: busy ? 'wait' : 'pointer',
               }}
@@ -334,7 +334,7 @@ function CreativeCard({ creative, reportId, onRegenerated }: {
 
   return (
     <div style={{ border: `1px solid ${C.border}`, borderRadius: 8, overflow: 'hidden', background: C.white }}>
-      <div style={{ aspectRatio: '16 / 9', background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ aspectRatio: '16 / 9', background: 'var(--bg)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         {creative.type === 'image'
           ? <img src={creative.url} alt={creative.prompt || 'creative'} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           : <video src={creative.url} controls style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -392,13 +392,13 @@ function CreativeCard({ creative, reportId, onRegenerated }: {
                 boxSizing: 'border-box',
               }}
             />
-            {err && <div style={{ color: '#ff453a', fontSize: 11, marginTop: 4 }}>{err}</div>}
+            {err && <div style={{ color: '#ff6b6b', fontSize: 11, marginTop: 4 }}>{err}</div>}
             <button
               onClick={regenerate}
               disabled={busy}
               style={{
                 marginTop: 8, width: '100%',
-                background: busy ? '#999' : C.blue, color: C.white, border: 'none',
+                background: busy ? '#999' : C.blue, color: 'var(--bg)', border: 'none',
                 borderRadius: 6, padding: '6px 12px', fontSize: 12,
                 cursor: busy ? 'wait' : 'pointer',
               }}

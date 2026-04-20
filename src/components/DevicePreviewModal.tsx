@@ -178,7 +178,7 @@ export default function DevicePreviewModal({ html, title, onClose, initialDevice
       data-testid="device-preview-modal"
       style={{
         position: 'fixed', inset: 0, zIndex: 9999,
-        background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(8px)',
+        background: 'var(--overlay)', backdropFilter: 'blur(8px)',
         display: 'flex', flexDirection: 'column',
         fontFamily: '-apple-system, "SF Pro Display", Arial, sans-serif',
       }}
@@ -188,34 +188,34 @@ export default function DevicePreviewModal({ html, title, onClose, initialDevice
       <div style={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         width: '100%', padding: '14px 24px',
-        borderBottom: '1px solid rgba(255,255,255,0.08)',
+        borderBottom: '1px solid var(--border)',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, minWidth: 0 }}>
-          <Eye size={16} color="#0A84FF" />
-          <span style={{ color: '#fff', fontSize: 14, fontWeight: 600 }}>
+          <Eye size={16} color="var(--brand)" />
+          <span style={{ color: 'var(--text-1)', fontSize: 14, fontWeight: 600 }}>
             Landing Page Preview
           </span>
           <span style={{
-            color: 'rgba(255,255,255,0.4)', fontSize: 12,
+            color: 'var(--text-3)', fontSize: 12,
             overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
           }}>
             {title}
           </span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: 11, fontFamily: 'SF Mono, monospace' }}>
+          <span style={{ color: 'var(--text-3)', fontSize: 11, fontFamily: 'SF Mono, monospace' }}>
             {htmlLen.toLocaleString()} bytes
           </span>
           <button
             onClick={onClose}
             aria-label="Close preview"
             style={{
-              background: 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '50%',
+              background: 'var(--surface-3)', border: 'none', borderRadius: '50%',
               width: 32, height: 32, cursor: 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}
           >
-            <X size={16} color="rgba(255,255,255,0.6)" />
+            <X size={16} color="var(--text-2)" />
           </button>
         </div>
       </div>
@@ -225,7 +225,7 @@ export default function DevicePreviewModal({ html, title, onClose, initialDevice
         {/* ── LEFT: device list ─────────────────────────── */}
         <aside style={{
           width: 240, flexShrink: 0,
-          borderRight: '1px solid rgba(255,255,255,0.08)',
+          borderRight: '1px solid var(--border)',
           overflowY: 'auto', padding: '16px 0',
         }}>
           {groups.map((g) => (
@@ -234,7 +234,7 @@ export default function DevicePreviewModal({ html, title, onClose, initialDevice
                 padding: '6px 20px',
                 fontSize: 10, fontWeight: 700,
                 letterSpacing: 1.5, textTransform: 'uppercase',
-                color: 'rgba(255,255,255,0.35)',
+                color: 'var(--text-3)',
               }}>
                 {g.brand}
               </div>
@@ -249,16 +249,16 @@ export default function DevicePreviewModal({ html, title, onClose, initialDevice
                     style={{
                       display: 'flex', alignItems: 'center', gap: 10,
                       width: '100%', padding: '8px 20px',
-                      background: isActive ? 'rgba(10,132,255,0.15)' : 'transparent',
-                      borderLeft: isActive ? '2px solid #0A84FF' : '2px solid transparent',
+                      background: isActive ? 'var(--brand-light)' : 'transparent',
+                      borderLeft: isActive ? '2px solid var(--brand)' : '2px solid transparent',
                       border: 'none', borderRightWidth: 0, borderTopWidth: 0, borderBottomWidth: 0,
-                      color: isActive ? '#fff' : 'rgba(255,255,255,0.6)',
+                      color: isActive ? 'var(--text-1)' : 'var(--text-2)',
                       fontSize: 13, fontWeight: isActive ? 600 : 400,
                       textAlign: 'left', cursor: 'pointer',
                       transition: 'background 0.15s',
                     }}
                     onMouseEnter={(e) => {
-                      if (!isActive) (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.05)'
+                      if (!isActive) (e.currentTarget as HTMLButtonElement).style.background = 'var(--surface-3)'
                     }}
                     onMouseLeave={(e) => {
                       if (!isActive) (e.currentTarget as HTMLButtonElement).style.background = 'transparent'
@@ -270,7 +270,7 @@ export default function DevicePreviewModal({ html, title, onClose, initialDevice
                         {d.label}
                       </div>
                       <div style={{
-                        fontSize: 10, color: 'rgba(255,255,255,0.35)',
+                        fontSize: 10, color: 'var(--text-3)',
                         fontFamily: 'SF Mono, monospace', marginTop: 1,
                       }}>
                         {d.width}×{d.height}
@@ -302,10 +302,10 @@ export default function DevicePreviewModal({ html, title, onClose, initialDevice
             {/* Device bezel */}
             <div style={{
               position: 'absolute', inset: 0,
-              border: device.brand === 'Desktop' ? '2px solid rgba(255,255,255,0.15)' : '3px solid rgba(255,255,255,0.25)',
+              border: device.brand === 'Desktop' ? '2px solid var(--border-strong)' : '3px solid var(--border-strong)',
               borderRadius: device.radius + 6,
-              background: device.brand === 'Desktop' ? 'rgba(255,255,255,0.03)' : '#1d1d1f',
-              boxShadow: '0 8px 40px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.05)',
+              background: device.brand === 'Desktop' ? 'var(--surface-3)' : 'var(--surface-2)',
+              boxShadow: 'var(--shadow-lg), inset 0 0 0 1px var(--surface-3)',
             }} />
 
             {/* Dynamic island / notch indicator */}
@@ -313,7 +313,7 @@ export default function DevicePreviewModal({ html, title, onClose, initialDevice
               <div style={{
                 position: 'absolute', top: 16, left: '50%', transform: 'translateX(-50%)',
                 width: 120, height: 32, borderRadius: 20,
-                background: '#000', zIndex: 2,
+                background: 'var(--bg)', zIndex: 2,
               }} />
             )}
 
@@ -354,7 +354,7 @@ export default function DevicePreviewModal({ html, title, onClose, initialDevice
                     }}>
                       <div style={{
                         width: 20, height: 20, borderRadius: '50%',
-                        border: '2px solid #e5e5e7', borderTopColor: '#0071e3',
+                        border: '2px solid #e5e5e7', borderTopColor: 'var(--brand)',
                         animation: 'spin 0.8s linear infinite',
                       }} />
                       <span>Rendering…</span>
@@ -376,7 +376,7 @@ export default function DevicePreviewModal({ html, title, onClose, initialDevice
           <div style={{
             position: 'absolute', bottom: 16, left: 0, right: 0,
             textAlign: 'center',
-            color: 'rgba(255,255,255,0.3)', fontSize: 11,
+            color: 'var(--text-3)', fontSize: 11,
             pointerEvents: 'none',
           }}>
             {device.label} · {device.width} × {device.height}px · {Math.round(safeScale * 100)}% · Esc to close

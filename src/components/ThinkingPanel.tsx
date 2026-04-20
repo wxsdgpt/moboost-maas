@@ -40,12 +40,12 @@ export default function ThinkingPanel({ steps, isActive }: Props) {
   if (!isActive && animatedSteps.every(s => s.status === 'pending')) return null
 
   return (
-    <div className="h-full flex flex-col bg-white border-l border-[#d5d5d7]" style={{ fontFamily: '-apple-system, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif' }}>
+    <div className="h-full flex flex-col" style={{ background: 'var(--surface-3)', borderLeft: '1px solid var(--border)', fontFamily: '-apple-system, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif' }}>
       {/* Header */}
-      <div className="px-4 py-3 border-b border-[#d5d5d7]">
+      <div className="px-4 py-3" style={{ borderBottom: '1px solid var(--border)' }}>
         <div className="flex items-center gap-2">
-          <Brain className="w-4 h-4 text-[#0071e3]" />
-          <span className="text-xs font-semibold text-black uppercase tracking-wider">Thinking Process</span>
+          <Brain className="w-4 h-4 text-[var(--brand)]" />
+          <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--text-1)' }}>Thinking Process</span>
         </div>
       </div>
 
@@ -57,46 +57,42 @@ export default function ThinkingPanel({ steps, isActive }: Props) {
               key={step.id}
               className={`
                 flex items-start gap-3 px-3 py-2.5 rounded-lg transition-all duration-500
-                ${step.status === 'active' ? 'bg-blue-50' : ''}
                 ${step.status === 'done' ? 'opacity-60' : ''}
                 ${step.status === 'pending' ? 'opacity-30' : ''}
               `}
+              style={step.status === 'active' ? { background: 'var(--brand-light)' } : undefined}
             >
               {/* Status indicator */}
               <div className="mt-0.5 flex-shrink-0">
                 {step.status === 'done' && (
-                  <div className="w-5 h-5 rounded-full bg-blue-50 flex items-center justify-center">
-                    <Check className="w-3 h-3 text-[#0071e3]" />
+                  <div className="w-5 h-5 rounded-full flex items-center justify-center" style={{ background: 'var(--brand-light)' }}>
+                    <Check className="w-3 h-3 text-[var(--brand)]" />
                   </div>
                 )}
                 {step.status === 'active' && (
-                  <div className="w-5 h-5 rounded-full bg-blue-50 flex items-center justify-center">
-                    <Loader2 className="w-3 h-3 text-[#0071e3] animate-spin" />
+                  <div className="w-5 h-5 rounded-full flex items-center justify-center" style={{ background: 'var(--brand-light)' }}>
+                    <Loader2 className="w-3 h-3 text-[var(--brand)] animate-spin" />
                   </div>
                 )}
                 {step.status === 'pending' && (
-                  <div className="w-5 h-5 rounded-full bg-[#f5f5f7] flex items-center justify-center">
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#d5d5d7]" />
+                  <div className="w-5 h-5 rounded-full flex items-center justify-center" style={{ background: 'var(--surface-3)' }}>
+                    <div className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--border)' }} />
                   </div>
                 )}
               </div>
 
               {/* Content */}
               <div className="flex-1 min-w-0">
-                <div className={`text-xs font-semibold ${
-                  step.status === 'active' ? 'text-black' : 'text-[#1d1d1f]'
-                }`}>
+                <div className="text-xs font-semibold" style={{ color: 'var(--text-1)' }}>
                   {step.label}
                 </div>
-                <div className={`text-[11px] mt-0.5 leading-relaxed ${
-                  step.status === 'active' ? 'text-[#6f6f77]' : 'text-[#9a9a9f]'
-                }`}>
+                <div className="text-[11px] mt-0.5 leading-relaxed" style={{ color: 'var(--text-3)' }}>
                   {step.detail}
                 </div>
               </div>
 
               {/* Step number */}
-              <span className="text-[10px] text-[#d5d5d7] font-mono mt-0.5">
+              <span className="text-[10px] font-mono mt-0.5" style={{ color: 'var(--border)' }}>
                 {String(i + 1).padStart(2, '0')}
               </span>
             </div>
@@ -105,14 +101,14 @@ export default function ThinkingPanel({ steps, isActive }: Props) {
       </div>
 
       {/* Footer status */}
-      <div className="px-4 py-3 border-t border-[#d5d5d7]">
+      <div className="px-4 py-3" style={{ borderTop: '1px solid var(--border)' }}>
         {isActive ? (
-          <div className="flex items-center gap-2 text-xs text-[#0071e3]">
+          <div className="flex items-center gap-2 text-xs text-[var(--brand)]">
             <Loader2 className="w-3 h-3 animate-spin" />
             <span>Processing...</span>
           </div>
         ) : (
-          <div className="flex items-center gap-2 text-xs text-[#6f6f77]">
+          <div className="flex items-center gap-2 text-xs" style={{ color: 'var(--text-3)' }}>
             <Check className="w-3 h-3" />
             <span>{animatedSteps.filter(s => s.status === 'done').length}/{animatedSteps.length} steps completed</span>
           </div>

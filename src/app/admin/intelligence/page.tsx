@@ -253,7 +253,7 @@ export default function IntelligencePage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-full" style={{ color: 'rgba(255,255,255,0.5)' }}>
+      <div className="flex items-center justify-center h-full" style={{ color: 'var(--text-2)' }}>
         <Loader2 className="w-6 h-6 animate-spin mr-3" />
         加载中...
       </div>
@@ -276,7 +276,7 @@ export default function IntelligencePage() {
             <Cpu className="w-6 h-6" style={{ color: '#e94560' }} />
             情报中心
           </h1>
-          <p className="text-[13px] mt-1" style={{ color: 'rgba(255,255,255,0.45)' }}>
+          <p className="text-[13px] mt-1" style={{ color: 'var(--text-3)' }}>
             自主互联网探索 · 行业知识采集 · 进化情报基础
           </p>
         </div>
@@ -322,14 +322,14 @@ export default function IntelligencePage() {
       )}
 
       {/* Tabs */}
-      <div className="flex gap-1 mb-4" style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+      <div className="flex gap-1 mb-4" style={{ borderBottom: '1px solid var(--border)' }}>
         {tabs.map(({ key, label, icon: Icon }) => (
           <button
             key={key}
             onClick={() => setTab(key)}
             className="px-4 py-2 text-[13px] font-medium flex items-center gap-1.5 transition-colors"
             style={{
-              color: tab === key ? '#e94560' : 'rgba(255,255,255,0.5)',
+              color: tab === key ? '#e94560' : 'var(--text-2)',
               borderBottom: tab === key ? '2px solid #e94560' : '2px solid transparent',
             }}
           >
@@ -365,10 +365,10 @@ function StatCard({ label, value, icon: Icon, color }: {
   label: string; value: string | number; icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>; color: string
 }) {
   return (
-    <div className="rounded-xl p-3" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
+    <div className="rounded-xl p-3" style={{ background: 'var(--surface-3)', border: '1px solid var(--border)' }}>
       <div className="flex items-center gap-2 mb-2">
         <Icon className="w-3.5 h-3.5" style={{ color }} />
-        <span className="text-[11px]" style={{ color: 'rgba(255,255,255,0.4)' }}>{label}</span>
+        <span className="text-[11px]" style={{ color: 'var(--text-3)' }}>{label}</span>
       </div>
       <div className="text-[20px] font-bold text-white">{value}</div>
     </div>
@@ -381,14 +381,14 @@ function DashboardTab({ stats, entries }: { stats: KnowledgeStats | null; entrie
   return (
     <div className="space-y-4">
       {/* Category Distribution */}
-      <div className="rounded-xl p-4" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
+      <div className="rounded-xl p-4" style={{ background: 'var(--surface-3)', border: '1px solid var(--border)' }}>
         <h3 className="text-[14px] font-semibold text-white mb-3">知识分类分布</h3>
         <div className="grid grid-cols-3 gap-3">
           {Object.entries(stats.byCategory).map(([cat, count]) => (
-            <div key={cat} className="flex items-center justify-between p-2 rounded-lg" style={{ background: 'rgba(255,255,255,0.02)' }}>
+            <div key={cat} className="flex items-center justify-between p-2 rounded-lg" style={{ background: 'var(--surface-3)' }}>
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full" style={{ background: categoryColors[cat] || '#666' }} />
-                <span className="text-[12px]" style={{ color: 'rgba(255,255,255,0.7)' }}>
+                <span className="text-[12px]" style={{ color: 'var(--text-2)' }}>
                   {categoryLabels[cat] || cat}
                 </span>
               </div>
@@ -399,23 +399,23 @@ function DashboardTab({ stats, entries }: { stats: KnowledgeStats | null; entrie
       </div>
 
       {/* Recent Entries */}
-      <div className="rounded-xl p-4" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
+      <div className="rounded-xl p-4" style={{ background: 'var(--surface-3)', border: '1px solid var(--border)' }}>
         <h3 className="text-[14px] font-semibold text-white mb-3">最新情报</h3>
         <div className="space-y-2">
           {entries.slice(0, 8).map((entry) => (
-            <div key={entry.id} className="flex items-start gap-3 p-2 rounded-lg" style={{ background: 'rgba(255,255,255,0.02)' }}>
+            <div key={entry.id} className="flex items-start gap-3 p-2 rounded-lg" style={{ background: 'var(--surface-3)' }}>
               <div className="w-2 h-2 rounded-full mt-1.5 flex-shrink-0" style={{ background: categoryColors[entry.category] || '#666' }} />
               <div className="flex-1 min-w-0">
                 <div className="text-[12px] font-medium text-white truncate">{entry.title}</div>
-                <div className="text-[11px] mt-0.5 line-clamp-2" style={{ color: 'rgba(255,255,255,0.4)' }}>{entry.summary}</div>
+                <div className="text-[11px] mt-0.5 line-clamp-2" style={{ color: 'var(--text-3)' }}>{entry.summary}</div>
               </div>
-              <div className="text-[10px] flex-shrink-0" style={{ color: 'rgba(255,255,255,0.3)' }}>
+              <div className="text-[10px] flex-shrink-0" style={{ color: 'var(--text-3)' }}>
                 {timeAgo(entry.collectedAt)}
               </div>
             </div>
           ))}
           {entries.length === 0 && (
-            <div className="text-center py-8 text-[13px]" style={{ color: 'rgba(255,255,255,0.3)' }}>
+            <div className="text-center py-8 text-[13px]" style={{ color: 'var(--text-3)' }}>
               知识库为空，点击"启动探索"开始采集情报
             </div>
           )}
@@ -437,8 +437,8 @@ function KnowledgeTab({ entries }: { entries: KnowledgeEntry[] }) {
           onClick={() => setFilter(null)}
           className="px-2.5 py-1 rounded-lg text-[11px] font-medium"
           style={{
-            background: !filter ? 'rgba(233, 69, 96, 0.15)' : 'rgba(255,255,255,0.05)',
-            color: !filter ? '#e94560' : 'rgba(255,255,255,0.5)',
+            background: !filter ? 'rgba(233, 69, 96, 0.15)' : 'var(--surface-3)',
+            color: !filter ? '#e94560' : 'var(--text-2)',
           }}
         >
           全部
@@ -449,8 +449,8 @@ function KnowledgeTab({ entries }: { entries: KnowledgeEntry[] }) {
             onClick={() => setFilter(key)}
             className="px-2.5 py-1 rounded-lg text-[11px] font-medium"
             style={{
-              background: filter === key ? `${categoryColors[key]}22` : 'rgba(255,255,255,0.05)',
-              color: filter === key ? categoryColors[key] : 'rgba(255,255,255,0.5)',
+              background: filter === key ? `${categoryColors[key]}22` : 'var(--surface-3)',
+              color: filter === key ? categoryColors[key] : 'var(--text-2)',
             }}
           >
             {label}
@@ -464,7 +464,7 @@ function KnowledgeTab({ entries }: { entries: KnowledgeEntry[] }) {
           <div
             key={entry.id}
             className="rounded-xl p-4"
-            style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}
+            style={{ background: 'var(--surface-3)', border: '1px solid var(--border)' }}
           >
             <div className="flex items-start justify-between mb-2">
               <div className="flex items-center gap-2">
@@ -475,40 +475,40 @@ function KnowledgeTab({ entries }: { entries: KnowledgeEntry[] }) {
                   {categoryLabels[entry.category] || entry.category}
                 </span>
                 {entry.vertical && (
-                  <span className="text-[10px] px-1.5 py-0.5 rounded" style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.5)' }}>
+                  <span className="text-[10px] px-1.5 py-0.5 rounded" style={{ background: 'var(--surface-3)', color: 'var(--text-2)' }}>
                     {entry.vertical}
                   </span>
                 )}
               </div>
-              <span className="text-[10px]" style={{ color: 'rgba(255,255,255,0.3)' }}>
+              <span className="text-[10px]" style={{ color: 'var(--text-3)' }}>
                 {timeAgo(entry.collectedAt)}
               </span>
             </div>
             <h4 className="text-[13px] font-medium text-white mb-1">{entry.title}</h4>
-            <p className="text-[12px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.5)' }}>{entry.summary}</p>
+            <p className="text-[12px] leading-relaxed" style={{ color: 'var(--text-2)' }}>{entry.summary}</p>
             <div className="flex items-center gap-3 mt-2">
               <div className="flex items-center gap-1">
                 <Zap className="w-3 h-3" style={{ color: '#f59e0b' }} />
-                <span className="text-[10px]" style={{ color: 'rgba(255,255,255,0.4)' }}>
+                <span className="text-[10px]" style={{ color: 'var(--text-3)' }}>
                   相关度 {(entry.relevance * 100).toFixed(0)}%
                 </span>
               </div>
               <div className="flex items-center gap-1">
                 <Shield className="w-3 h-3" style={{ color: '#8b5cf6' }} />
-                <span className="text-[10px]" style={{ color: 'rgba(255,255,255,0.4)' }}>
+                <span className="text-[10px]" style={{ color: 'var(--text-3)' }}>
                   置信度 {(entry.confidence * 100).toFixed(0)}%
                 </span>
               </div>
               <div className="flex items-center gap-1">
                 <Globe className="w-3 h-3" style={{ color: '#3b82f6' }} />
-                <span className="text-[10px]" style={{ color: 'rgba(255,255,255,0.4)' }}>
+                <span className="text-[10px]" style={{ color: 'var(--text-3)' }}>
                   {entry.sourceType}
                 </span>
               </div>
               {entry.tags.length > 0 && (
                 <div className="flex items-center gap-1">
-                  <Tag className="w-3 h-3" style={{ color: 'rgba(255,255,255,0.3)' }} />
-                  <span className="text-[10px]" style={{ color: 'rgba(255,255,255,0.3)' }}>
+                  <Tag className="w-3 h-3" style={{ color: 'var(--text-3)' }} />
+                  <span className="text-[10px]" style={{ color: 'var(--text-3)' }}>
                     {entry.tags.slice(0, 3).join(', ')}
                   </span>
                 </div>
@@ -517,7 +517,7 @@ function KnowledgeTab({ entries }: { entries: KnowledgeEntry[] }) {
           </div>
         ))}
         {filtered.length === 0 && (
-          <div className="text-center py-12 text-[13px]" style={{ color: 'rgba(255,255,255,0.3)' }}>
+          <div className="text-center py-12 text-[13px]" style={{ color: 'var(--text-3)' }}>
             {filter ? '该分类下暂无数据' : '知识库为空，启动探索开始采集'}
           </div>
         )}
@@ -541,7 +541,7 @@ function ExploreTab({
   return (
     <div className="space-y-4">
       {/* Quick Search */}
-      <div className="rounded-xl p-4" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
+      <div className="rounded-xl p-4" style={{ background: 'var(--surface-3)', border: '1px solid var(--border)' }}>
         <h3 className="text-[14px] font-semibold text-white mb-3 flex items-center gap-2">
           <Search className="w-4 h-4" style={{ color: '#e94560' }} />
           快速探索
@@ -554,13 +554,13 @@ function ExploreTab({
             onKeyDown={(e) => e.key === 'Enter' && onQuickSearch()}
             placeholder="输入搜索主题，如：iGaming AI creative trends 2026"
             className="flex-1 px-3 py-2 rounded-lg text-[13px] text-white placeholder:text-white/30 outline-none"
-            style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}
+            style={{ background: 'var(--surface-3)', border: '1px solid var(--border-strong)' }}
           />
           <select
             value={quickCategory}
             onChange={(e) => setQuickCategory(e.target.value)}
             className="px-3 py-2 rounded-lg text-[12px] text-white outline-none appearance-none"
-            style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}
+            style={{ background: 'var(--surface-3)', border: '1px solid var(--border-strong)' }}
           >
             {Object.entries(categoryLabels).map(([key, label]) => (
               <option key={key} value={key}>{label}</option>
@@ -584,27 +584,27 @@ function ExploreTab({
       </div>
 
       {/* Live Log Console */}
-      <div className="rounded-xl overflow-hidden" style={{ border: '1px solid rgba(255,255,255,0.06)' }}>
-        <div className="px-4 py-2 flex items-center gap-2" style={{ background: 'rgba(255,255,255,0.03)' }}>
+      <div className="rounded-xl overflow-hidden" style={{ border: '1px solid var(--border)' }}>
+        <div className="px-4 py-2 flex items-center gap-2" style={{ background: 'var(--surface-3)' }}>
           <Terminal className="w-3.5 h-3.5" style={{ color: '#e94560' }} />
           <span className="text-[12px] font-medium text-white">探索日志</span>
           {exploring && (
             <span className="ml-auto flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-              <span className="text-[10px]" style={{ color: 'rgba(255,255,255,0.4)' }}>运行中</span>
+              <span className="text-[10px]" style={{ color: 'var(--text-3)' }}>运行中</span>
             </span>
           )}
         </div>
         <div
           className="p-4 font-mono text-[11px] leading-relaxed overflow-y-auto"
           style={{
-            background: '#0a0a0f',
+            background: 'var(--bg)',
             height: '360px',
-            color: 'rgba(255,255,255,0.6)',
+            color: 'var(--text-2)',
           }}
         >
           {logs.length === 0 ? (
-            <div style={{ color: 'rgba(255,255,255,0.2)' }}>
+            <div style={{ color: 'var(--text-3)' }}>
               等待探索任务...<br />
               使用上方搜索框进行快速探索，或点击"启动探索"运行完整周期。
             </div>
@@ -618,8 +618,8 @@ function ExploreTab({
                     : line.includes('[System]')
                       ? '#e94560'
                       : line.includes('→')
-                        ? 'rgba(255,255,255,0.5)'
-                        : 'rgba(255,255,255,0.6)',
+                        ? 'var(--text-2)'
+                        : 'var(--text-2)',
               }}>
                 {line}
               </div>
@@ -655,7 +655,7 @@ function TasksTab({ tasks }: { tasks: ExplorationTask[] }) {
         <div
           key={task.id}
           className="rounded-xl p-3 flex items-center gap-3"
-          style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}
+          style={{ background: 'var(--surface-3)', border: '1px solid var(--border)' }}
         >
           <div
             className="w-2 h-2 rounded-full flex-shrink-0"
@@ -668,7 +668,7 @@ function TasksTab({ tasks }: { tasks: ExplorationTask[] }) {
                 {categoryLabels[task.category] || task.category}
               </span>
               {task.collector && (
-                <span className="text-[10px]" style={{ color: 'rgba(255,255,255,0.3)' }}>
+                <span className="text-[10px]" style={{ color: 'var(--text-3)' }}>
                   via {task.collector}
                 </span>
               )}
@@ -688,13 +688,13 @@ function TasksTab({ tasks }: { tasks: ExplorationTask[] }) {
           >
             {statusLabels[task.status] || task.status}
           </span>
-          <span className="text-[10px] flex-shrink-0" style={{ color: 'rgba(255,255,255,0.25)' }}>
+          <span className="text-[10px] flex-shrink-0" style={{ color: 'var(--text-3)' }}>
             {timeAgo(task.createdAt)}
           </span>
         </div>
       ))}
       {tasks.length === 0 && (
-        <div className="text-center py-12 text-[13px]" style={{ color: 'rgba(255,255,255,0.3)' }}>
+        <div className="text-center py-12 text-[13px]" style={{ color: 'var(--text-3)' }}>
           暂无探索任务
         </div>
       )}

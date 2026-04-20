@@ -12,6 +12,8 @@ import {
   Send,
   Globe,
   Sparkles,
+  Gift,
+  Zap,
 } from 'lucide-react'
 
 // ──── Types ────
@@ -20,16 +22,16 @@ type Step = 'welcome' | 'product' | 'chat' | 'hybrid' | 'report' | 'done'
 type Variant = 'form' | 'chat' | 'hybrid'
 
 type ReportPhase =
-  | 'scraping'     // Fetching website data
-  | 'enriching'    // Analyzing product info
-  | 'generating'   // Generating the report
-  | 'done'         // Report ready
-  | 'failed'       // Something went wrong
+  | 'scraping'
+  | 'enriching'
+  | 'generating'
+  | 'done'
+  | 'failed'
 
 type Props = {
   initialEmail: string
   bonusAmount: number
-  variant?: Variant  // A/B test variant — defaults to 'form'
+  variant?: Variant
 }
 
 const VERTICALS = [
@@ -43,37 +45,6 @@ const VERTICALS = [
   'Other iGaming',
 ]
 
-// ──── Shared styles ────
-
-const APPLE_BG = '#f5f5f7'
-const APPLE_FONT =
-  '-apple-system, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif'
-
-const inputStyle: React.CSSProperties = {
-  background: '#ffffff',
-  border: '1px solid #d2d2d7',
-  color: '#000000',
-  borderRadius: '0.5rem',
-  padding: '0.6rem 0.8rem',
-  width: '100%',
-  fontSize: '14px',
-  outline: 'none',
-  fontFamily: 'inherit',
-}
-const labelStyle: React.CSSProperties = {
-  color: '#000000',
-  fontSize: '13px',
-  fontWeight: 600,
-  display: 'block',
-  marginBottom: '0.4rem',
-}
-const optionalStyle: React.CSSProperties = {
-  color: '#999999',
-  fontSize: '12px',
-  fontWeight: 400,
-  marginLeft: '0.3rem',
-}
-
 // ──────────────────────────────────────────────────────────────────
 // Main Component
 // ──────────────────────────────────────────────────────────────────
@@ -85,7 +56,6 @@ export default function OnboardingFlow({
 }: Props) {
   const router = useRouter()
 
-  // Determine starting step based on variant
   const getProductStep = (): Step => {
     if (variant === 'chat') return 'chat'
     if (variant === 'hybrid') return 'hybrid'
@@ -109,6 +79,10 @@ export default function OnboardingFlow({
   const [projectId, setProjectId] = useState<string | null>(null)
   const [reportError, setReportError] = useState<string | null>(null)
 
+  // Animate key to re-trigger entrance animation on step change
+  const [animKey, setAnimKey] = useState(0)
+  useEffect(() => { setAnimKey(k => k + 1) }, [step])
+
   // ── Submit product info → create project → trigger report ──
 
   async function submitProduct() {
@@ -124,7 +98,6 @@ export default function OnboardingFlow({
     }
     setSubmitting(true)
     try {
-      // 1. Complete onboarding (creates product, grants credits, stamps onboarded_at)
       const res = await fetch('/api/onboarding/complete', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -143,7 +116,6 @@ export default function OnboardingFlow({
       const newProductId = data.productId
       setProductId(newProductId)
 
-      // 2. Create a project for this onboarding
       if (newProductId) {
         try {
           const projRes = await fetch('/api/projects', {
@@ -160,14 +132,12 @@ export default function OnboardingFlow({
             setProjectId(projData.project.id)
           }
         } catch {
-          // Non-critical — project creation can fail silently
+          // Non-critical
         }
       }
 
-      // 3. Move to report generation step
       setStep('report')
 
-      // 4. Trigger report generation
       if (newProductId) {
         generateReport(newProductId)
       }
@@ -185,16 +155,9 @@ export default function OnboardingFlow({
     setReportError(null)
 
     try {
-      // Phase 1: Scraping — simulate the website data collection phase
-      // In reality, onboarding/complete already did the scrape, but we show
-      // the progress to the user so it doesn't feel instant.
       await delay(1800)
-
-      // Phase 2: Enriching — product analysis phase
       setReportPhase('enriching')
       await delay(2200)
-
-      // Phase 3: Generating — the actual LLM report generation
       setReportPhase('generating')
 
       const res = await fetch('/api/reports/generate', {
@@ -216,7 +179,6 @@ export default function OnboardingFlow({
     }
   }
 
-  // Small delay helper for phased progress UX
   function delay(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms))
   }
@@ -224,110 +186,115 @@ export default function OnboardingFlow({
   // ── Navigation ──
 
   function goToReport() {
-    if (reportId) {
-      router.push(`/report/${reportId}`)
-    }
+    if (reportId) router.push(`/report/${reportId}`)
   }
+  function goToDashboard() { router.push('/') }
+  function skipReport() { router.push('/') }
 
-  function goToDashboard() {
-    router.push('/')
-  }
-
-  function skipReport() {
-    router.push('/')
-  }
+  // ── Step number for indicator ──
+  const stepNum =
+    step === 'welcome' ? 1 :
+    step === 'report' || step === 'done' ? 3 : 2
 
   // ── Render ──
 
   return (
     <div
-      className="relative min-h-screen flex items-center justify-center px-4 py-12"
-      style={{ background: APPLE_BG, fontFamily: APPLE_FONT }}
+      className="ob-bg relative min-h-screen flex items-center justify-center px-4 py-12 overflow-hidden"
+      style={{
+        fontFamily:
+          '-apple-system, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
+      }}
     >
-      <div className="w-full max-w-[480px]">
-        {/* Step indicator */}
-        {step !== 'welcome' && (
-          <StepIndicator
-            current={step === 'report' || step === 'done' ? 3 : 2}
-            total={3}
-          />
-        )}
+      {/* Floating background orbs */}
+      <div className="ob-orb-1" style={{ top: '10%', left: '-5%' }} />
+      <div className="ob-orb-2" style={{ bottom: '5%', right: '-3%' }} />
 
-        {step === 'welcome' && (
-          <WelcomeStep
-            email={initialEmail}
-            bonusAmount={bonusAmount}
-            onContinue={() => setStep(getProductStep())}
-          />
-        )}
+      <div className="w-full max-w-[480px] relative z-10">
+        {/* Step indicator — always visible */}
+        <StepIndicator current={stepNum} />
 
-        {/* Variant A: Form */}
-        {step === 'product' && (
-          <ProductFormStep
-            productName={productName}
-            setProductName={setProductName}
-            productUrl={productUrl}
-            setProductUrl={setProductUrl}
-            vertical={vertical}
-            setVertical={setVertical}
-            description={description}
-            setDescription={setDescription}
-            error={error}
-            submitting={submitting}
-            onBack={() => setStep('welcome')}
-            onSubmit={submitProduct}
-          />
-        )}
+        {/* Animated step container */}
+        <div key={animKey} className="ob-step-enter">
+          {step === 'welcome' && (
+            <WelcomeStep
+              email={initialEmail}
+              bonusAmount={bonusAmount}
+              onContinue={() => setStep(getProductStep())}
+            />
+          )}
 
-        {/* Variant B: Chat */}
-        {step === 'chat' && (
-          <ProductChatStep
-            onComplete={(url, name, vert, desc) => {
-              setProductUrl(url)
-              setProductName(name || '')
-              setVertical(vert || '')
-              setDescription(desc || '')
-              // Trigger submit after setting state
-              setTimeout(() => submitProduct(), 0)
-            }}
-            onBack={() => setStep('welcome')}
-            submitting={submitting}
-            error={error}
-          />
-        )}
+          {step === 'product' && (
+            <ProductFormStep
+              productName={productName}
+              setProductName={setProductName}
+              productUrl={productUrl}
+              setProductUrl={setProductUrl}
+              vertical={vertical}
+              setVertical={setVertical}
+              description={description}
+              setDescription={setDescription}
+              error={error}
+              submitting={submitting}
+              onBack={() => setStep('welcome')}
+              onSubmit={submitProduct}
+            />
+          )}
 
-        {/* Variant C: Hybrid (form + chat assist) */}
-        {step === 'hybrid' && (
-          <ProductHybridStep
-            productName={productName}
-            setProductName={setProductName}
-            productUrl={productUrl}
-            setProductUrl={setProductUrl}
-            vertical={vertical}
-            setVertical={setVertical}
-            description={description}
-            setDescription={setDescription}
-            error={error}
-            submitting={submitting}
-            onBack={() => setStep('welcome')}
-            onSubmit={submitProduct}
-          />
-        )}
+          {step === 'chat' && (
+            <ProductChatStep
+              onComplete={(url, name, vert, desc) => {
+                setProductUrl(url)
+                setProductName(name || '')
+                setVertical(vert || '')
+                setDescription(desc || '')
+                setTimeout(() => submitProduct(), 0)
+              }}
+              onBack={() => setStep('welcome')}
+              submitting={submitting}
+              error={error}
+            />
+          )}
 
-        {/* Report generation step (shared across all variants) */}
-        {step === 'report' && (
-          <ReportStep
-            phase={reportPhase}
-            reportId={reportId}
-            reportError={reportError}
-            onViewReport={goToReport}
-            onGoDashboard={goToDashboard}
-            onSkip={skipReport}
-            onRetry={() => productId && generateReport(productId)}
-          />
-        )}
+          {step === 'hybrid' && (
+            <ProductHybridStep
+              productName={productName}
+              setProductName={setProductName}
+              productUrl={productUrl}
+              setProductUrl={setProductUrl}
+              vertical={vertical}
+              setVertical={setVertical}
+              description={description}
+              setDescription={setDescription}
+              error={error}
+              submitting={submitting}
+              onBack={() => setStep('welcome')}
+              onSubmit={submitProduct}
+            />
+          )}
 
-        {step === 'done' && <DoneStep bonusAmount={bonusAmount} />}
+          {step === 'report' && (
+            <ReportStep
+              phase={reportPhase}
+              reportId={reportId}
+              reportError={reportError}
+              onViewReport={goToReport}
+              onGoDashboard={goToDashboard}
+              onSkip={skipReport}
+              onRetry={() => productId && generateReport(productId)}
+            />
+          )}
+
+          {step === 'done' && <DoneStep bonusAmount={bonusAmount} />}
+        </div>
+
+        {/* Subtle footer */}
+        <p
+          className="text-center mt-8 text-[12px]"
+          style={{ color: 'var(--text-3)' }}
+        >
+          Powered by Moboost AI
+        </p>
       </div>
     </div>
   )
@@ -339,13 +306,7 @@ export default function OnboardingFlow({
 
 function CardShell({ children }: { children: React.ReactNode }) {
   return (
-    <div
-      className="rounded-2xl p-8 border border-gray-200"
-      style={{
-        background: '#ffffff',
-        boxShadow: 'rgba(0, 0, 0, 0.22) 3px 5px 30px',
-      }}
-    >
+    <div className="ob-card p-8">
       {children}
     </div>
   )
@@ -362,12 +323,12 @@ function StepHeader({
     <div className="text-center mb-8">
       <h1
         className="text-[28px] font-bold tracking-tight mb-2"
-        style={{ color: '#000000' }}
+        style={{ color: 'var(--text-1)' }}
       >
         {title}
       </h1>
       {subtitle && (
-        <p className="text-[15px]" style={{ color: '#555555' }}>
+        <p className="text-[15px] leading-relaxed" style={{ color: 'var(--text-3)' }}>
           {subtitle}
         </p>
       )}
@@ -389,16 +350,7 @@ function PrimaryButton({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="w-full inline-flex items-center justify-center gap-2 rounded-lg py-3 text-[15px] font-semibold text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-      style={{ background: '#0071e3' }}
-      onMouseEnter={(e) => {
-        if (!disabled)
-          (e.currentTarget as HTMLButtonElement).style.background = '#0068d6'
-      }}
-      onMouseLeave={(e) => {
-        if (!disabled)
-          (e.currentTarget as HTMLButtonElement).style.background = '#0071e3'
-      }}
+      className="ob-btn-primary"
     >
       {children}
     </button>
@@ -419,33 +371,56 @@ function SecondaryButton({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="w-full inline-flex items-center justify-center gap-2 rounded-lg py-3 text-[15px] font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-      style={{ background: '#f5f5f7', color: '#000000', border: '1px solid #d2d2d7' }}
+      className="ob-btn-secondary"
     >
       {children}
     </button>
   )
 }
 
-function StepIndicator({ current, total }: { current: number; total: number }) {
+function StepIndicator({ current }: { current: number }) {
+  const labels = ['Welcome', 'Product', 'Report']
   return (
-    <div className="flex justify-center gap-2 mb-6">
-      {Array.from({ length: total }, (_, i) => (
-        <div
-          key={i}
-          className="h-1 rounded-full transition-all duration-300"
-          style={{
-            width: i + 1 === current ? '32px' : '16px',
-            background: i + 1 <= current ? '#0071e3' : '#d2d2d7',
-          }}
-        />
-      ))}
+    <div className="ob-steps mb-8">
+      {labels.map((label, i) => {
+        const num = i + 1
+        const isDone = num < current
+        const isActive = num === current
+        return (
+          <div key={label} className="flex items-center">
+            {i > 0 && (
+              <div
+                className={`ob-step-line ${isDone ? 'done' : 'pending'}`}
+              />
+            )}
+            <div className="flex flex-col items-center gap-1">
+              <div
+                className={`ob-step-dot ${isDone ? 'done' : isActive ? 'active' : 'pending'}`}
+              >
+                {isDone ? (
+                  <CheckCircle2 className="w-4 h-4" />
+                ) : (
+                  num
+                )}
+              </div>
+              <span
+                className="text-[11px] font-medium"
+                style={{
+                  color: isDone ? 'var(--brand)' : isActive ? 'var(--brand)' : 'var(--text-3)',
+                }}
+              >
+                {label}
+              </span>
+            </div>
+          </div>
+        )
+      })}
     </div>
   )
 }
 
 // ──────────────────────────────────────────────────────────────────
-// Step 1: Welcome (shared)
+// Step 1: Welcome
 // ──────────────────────────────────────────────────────────────────
 
 function WelcomeStep({
@@ -459,58 +434,46 @@ function WelcomeStep({
 }) {
   return (
     <>
-      <StepHeader
-        title="Welcome to Moboost AI"
-        subtitle={email ? `Signed in as ${email}` : "Let's get you set up"}
-      />
       <CardShell>
-        <div className="space-y-6" style={{ color: '#000000' }}>
-          <div className="flex items-start gap-4">
-            <div
-              className="mt-0.5 flex-shrink-0 w-10 h-10 rounded-lg inline-flex items-center justify-center"
-              style={{ background: '#f0f4ff' }}
-            >
-              <Sparkles className="w-5 h-5" style={{ color: '#0071e3' }} />
-            </div>
-            <div>
-              <div className="font-semibold text-[15px]">
-                {bonusAmount} free credits, on the house
-              </div>
-              <p
-                className="text-[13px] mt-1 leading-relaxed"
-                style={{ color: '#555555' }}
-              >
-                No card required. Use them to generate your first marketing
-                intelligence report.
-              </p>
+        <div className="space-y-7">
+          {/* Hero icon */}
+          <div className="flex justify-center">
+            <div className="ob-sparkle-hero">
+              <Sparkles className="w-8 h-8" style={{ color: 'var(--bg)' }} />
             </div>
           </div>
 
-          <div className="flex items-start gap-4">
-            <div
-              className="mt-0.5 flex-shrink-0 w-10 h-10 rounded-lg inline-flex items-center justify-center"
-              style={{ background: '#f0f4ff' }}
+          <div className="text-center">
+            <h1
+              className="text-[28px] font-bold tracking-tight mb-2"
+              style={{ color: 'var(--text-1)' }}
             >
-              <FileText className="w-5 h-5" style={{ color: '#0071e3' }} />
-            </div>
-            <div>
-              <div className="font-semibold text-[15px]">
-                Your first report, in 30 seconds
-              </div>
-              <p
-                className="text-[13px] mt-1 leading-relaxed"
-                style={{ color: '#555555' }}
-              >
-                Tell us your product URL and we'll generate a market intelligence
-                report with competitor analysis, audience insights, and creative
-                recommendations.
+              Welcome to Moboost AI
+            </h1>
+            {email && (
+              <p className="text-[14px]" style={{ color: 'var(--text-3)' }}>
+                {email}
               </p>
-            </div>
+            )}
           </div>
 
-          <div className="pt-4">
+          {/* Feature cards */}
+          <div className="space-y-4">
+            <FeatureRow
+              icon={<Zap className="w-5 h-5" style={{ color: 'var(--brand)' }} />}
+              title={`${bonusAmount} free credits, on the house`}
+              desc="No card required. Use them to generate your first marketing intelligence report."
+            />
+            <FeatureRow
+              icon={<FileText className="w-5 h-5" style={{ color: 'var(--brand)' }} />}
+              title="Your first report, in 30 seconds"
+              desc="Tell us your product URL and we'll generate a market intelligence report with competitor analysis, audience insights, and creative recommendations."
+            />
+          </div>
+
+          <div className="pt-2">
             <PrimaryButton onClick={onContinue}>
-              Let's go <ArrowRight className="w-4 h-4" />
+              Get started <ArrowRight className="w-4 h-4" />
             </PrimaryButton>
           </div>
         </div>
@@ -519,8 +482,38 @@ function WelcomeStep({
   )
 }
 
+function FeatureRow({
+  icon,
+  title,
+  desc,
+}: {
+  icon: React.ReactNode
+  title: string
+  desc: string
+}) {
+  return (
+    <div className="flex items-start gap-4">
+      <div className="ob-icon-box mt-0.5">{icon}</div>
+      <div>
+        <div
+          className="font-semibold text-[15px]"
+          style={{ color: 'var(--text-1)' }}
+        >
+          {title}
+        </div>
+        <p
+          className="text-[13px] mt-1 leading-relaxed"
+          style={{ color: 'var(--text-3)' }}
+        >
+          {desc}
+        </p>
+      </div>
+    </div>
+  )
+}
+
 // ──────────────────────────────────────────────────────────────────
-// Step 2A: Product Form (Variant A — original)
+// Step 2A: Product Form (Variant A)
 // ──────────────────────────────────────────────────────────────────
 
 function ProductFormStep({
@@ -564,77 +557,53 @@ function ProductFormStep({
           }}
           className="space-y-5"
         >
-          <div>
-            <label style={labelStyle}>
-              Website URL or App Store / Play Store link
-            </label>
+          <FormField label="Website URL or App Store / Play Store link">
             <input
               type="url"
               value={productUrl}
               onChange={(e) => setProductUrl(e.target.value)}
               placeholder="https://yourbrand.com"
-              style={inputStyle}
+              className="ob-input"
               autoFocus
               maxLength={500}
             />
-          </div>
+          </FormField>
 
-          <div>
-            <label style={labelStyle}>
-              Product name <span style={optionalStyle}>Optional</span>
-            </label>
+          <FormField label="Product name" optional>
             <input
               type="text"
               value={productName}
               onChange={(e) => setProductName(e.target.value)}
               placeholder="e.g. Lucky Spin Casino"
-              style={inputStyle}
+              className="ob-input"
               maxLength={120}
             />
-          </div>
+          </FormField>
 
-          <div>
-            <label style={labelStyle}>
-              Vertical <span style={optionalStyle}>Optional</span>
-            </label>
+          <FormField label="Vertical" optional>
             <select
               value={vertical}
               onChange={(e) => setVertical(e.target.value)}
-              style={{
-                ...inputStyle,
-                appearance: 'none',
-                paddingRight: '2rem',
-              }}
+              className="ob-input"
+              style={{ appearance: 'none', paddingRight: '2rem' }}
             >
               <option value="">Select a category</option>
               {VERTICALS.map((v) => (
-                <option
-                  key={v}
-                  value={v}
-                  style={{ background: '#ffffff', color: '#000000' }}
-                >
-                  {v}
-                </option>
+                <option key={v} value={v}>{v}</option>
               ))}
             </select>
-          </div>
+          </FormField>
 
-          <div>
-            <label style={labelStyle}>
-              One-line description <span style={optionalStyle}>Optional</span>
-            </label>
+          <FormField label="One-line description" optional>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="What makes it different?"
-              style={{
-                ...inputStyle,
-                minHeight: '70px',
-                resize: 'vertical',
-              }}
+              className="ob-input"
+              style={{ minHeight: '70px', resize: 'vertical' }}
               maxLength={1000}
             />
-          </div>
+          </FormField>
 
           {error && <ErrorBanner message={error} />}
 
@@ -659,8 +628,38 @@ function ProductFormStep({
   )
 }
 
+function FormField({
+  label,
+  optional,
+  children,
+}: {
+  label: string
+  optional?: boolean
+  children: React.ReactNode
+}) {
+  return (
+    <div>
+      <label
+        className="block mb-1.5 text-[13px] font-semibold"
+        style={{ color: 'var(--text-2)' }}
+      >
+        {label}
+        {optional && (
+          <span
+            className="font-normal ml-1.5"
+            style={{ color: 'var(--text-3)', fontSize: '12px' }}
+          >
+            Optional
+          </span>
+        )}
+      </label>
+      {children}
+    </div>
+  )
+}
+
 // ──────────────────────────────────────────────────────────────────
-// Step 2B: Product Chat (Variant B — conversational)
+// Step 2B: Product Chat (Variant B)
 // ──────────────────────────────────────────────────────────────────
 
 type ChatMessage = {
@@ -709,7 +708,6 @@ function ProductChatStep({
     setThinking(true)
 
     try {
-      // Call intent detector to analyze the message
       const res = await fetch('/api/intent', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -763,7 +761,6 @@ function ProductChatStep({
         ])
       }
     } catch {
-      // Fallback: try to extract URL with regex
       const urlMatch = userMsg.match(/https?:\/\/[^\s]+/i)
       if (urlMatch) {
         setExtractedUrl(urlMatch[0])
@@ -811,14 +808,16 @@ function ProductChatStep({
             {messages.map((msg, i) => (
               <div
                 key={i}
-                className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                className={`flex ob-bubble-in ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 <div
-                  className="rounded-xl px-4 py-2.5 max-w-[85%] text-[14px] leading-relaxed"
+                  className="rounded-2xl px-4 py-2.5 max-w-[85%] text-[14px] leading-relaxed"
                   style={{
                     background:
-                      msg.role === 'user' ? '#0071e3' : '#f0f0f3',
-                    color: msg.role === 'user' ? '#ffffff' : '#000000',
+                      msg.role === 'user'
+                        ? 'linear-gradient(135deg, var(--brand), #a8d44a)'
+                        : 'var(--surface-3)',
+                    color: msg.role === 'user' ? 'var(--bg)' : 'var(--text-1)',
                   }}
                 >
                   {msg.content}
@@ -826,14 +825,14 @@ function ProductChatStep({
               </div>
             ))}
             {thinking && (
-              <div className="flex justify-start">
+              <div className="flex justify-start ob-bubble-in">
                 <div
-                  className="rounded-xl px-4 py-2.5"
-                  style={{ background: '#f0f0f3' }}
+                  className="rounded-2xl px-4 py-2.5"
+                  style={{ background: 'var(--surface-3)' }}
                 >
                   <Loader2
                     className="w-4 h-4 animate-spin"
-                    style={{ color: '#555555' }}
+                    style={{ color: 'var(--text-3)' }}
                   />
                 </div>
               </div>
@@ -849,26 +848,30 @@ function ProductChatStep({
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSend()}
               placeholder="Type a URL or describe your product…"
-              style={inputStyle}
+              className="ob-input"
               disabled={thinking || submitting}
             />
             <button
               type="button"
               onClick={handleSend}
               disabled={!input.trim() || thinking || submitting}
-              className="flex-shrink-0 w-10 h-10 rounded-lg inline-flex items-center justify-center transition-all disabled:opacity-30"
-              style={{ background: '#0071e3' }}
+              className="flex-shrink-0 w-11 h-11 rounded-xl inline-flex items-center justify-center transition-all disabled:opacity-30"
+              style={{ background: 'linear-gradient(135deg, var(--brand), #a8d44a)' }}
             >
-              <Send className="w-4 h-4 text-white" />
+              <Send className="w-4 h-4" style={{ color: 'var(--bg)' }} />
             </button>
           </div>
 
           {/* Confirm button when URL is extracted */}
           {extractedUrl && (
-            <div className="pt-2 space-y-2">
+            <div className="pt-2 space-y-3">
               <div
-                className="flex items-center gap-2 px-3 py-2 rounded-lg text-[13px]"
-                style={{ background: '#e8f5e9', color: '#1b5e20' }}
+                className="flex items-center gap-2 px-4 py-3 rounded-xl text-[13px] font-medium"
+                style={{
+                  background: 'var(--brand-light)',
+                  color: 'var(--brand)',
+                  border: '1px solid var(--border-strong)',
+                }}
               >
                 <Globe className="w-4 h-4 flex-shrink-0" />
                 <span className="truncate">{extractedUrl}</span>
@@ -931,7 +934,6 @@ function ProductHybridStep({
   const [aiHint, setAiHint] = useState<string | null>(null)
   const [analyzing, setAnalyzing] = useState(false)
 
-  // When URL changes, auto-analyze
   const analyzeUrl = useCallback(async (url: string) => {
     if (!url || !/^https?:\/\//i.test(url)) return
     setAnalyzing(true)
@@ -970,94 +972,77 @@ function ProductHybridStep({
           }}
           className="space-y-5"
         >
-          <div>
-            <label style={labelStyle}>
-              Website URL or App Store / Play Store link
-            </label>
+          <FormField label="Website URL or App Store / Play Store link">
             <input
               type="url"
               value={productUrl}
               onChange={(e) => setProductUrl(e.target.value)}
               onBlur={(e) => analyzeUrl(e.target.value)}
               placeholder="https://yourbrand.com"
-              style={inputStyle}
+              className="ob-input"
               autoFocus
               maxLength={500}
             />
             {analyzing && (
-              <div className="flex items-center gap-2 mt-2 text-[12px]" style={{ color: '#0071e3' }}>
+              <div
+                className="flex items-center gap-2 mt-2 text-[12px]"
+                style={{ color: 'var(--brand)' }}
+              >
                 <Loader2 className="w-3 h-3 animate-spin" />
                 AI is analyzing the URL…
               </div>
             )}
-          </div>
+          </FormField>
 
           {aiHint && (
             <div
-              className="flex items-start gap-2 px-3 py-2 rounded-lg text-[13px]"
-              style={{ background: '#f0f4ff', color: '#0071e3' }}
+              className="flex items-start gap-2 px-4 py-3 rounded-xl text-[13px] font-medium"
+              style={{
+                background: 'linear-gradient(135deg, var(--brand-light), transparent)',
+                color: 'var(--brand)',
+                border: '1px solid var(--border-strong)',
+              }}
             >
               <Sparkles className="w-4 h-4 mt-0.5 flex-shrink-0" />
               <span>{aiHint}</span>
             </div>
           )}
 
-          <div>
-            <label style={labelStyle}>
-              Product name <span style={optionalStyle}>Optional</span>
-            </label>
+          <FormField label="Product name" optional>
             <input
               type="text"
               value={productName}
               onChange={(e) => setProductName(e.target.value)}
               placeholder="e.g. Lucky Spin Casino"
-              style={inputStyle}
+              className="ob-input"
               maxLength={120}
             />
-          </div>
+          </FormField>
 
-          <div>
-            <label style={labelStyle}>
-              Vertical <span style={optionalStyle}>Optional</span>
-            </label>
+          <FormField label="Vertical" optional>
             <select
               value={vertical}
               onChange={(e) => setVertical(e.target.value)}
-              style={{
-                ...inputStyle,
-                appearance: 'none',
-                paddingRight: '2rem',
-              }}
+              className="ob-input"
+              style={{ appearance: 'none', paddingRight: '2rem' }}
             >
               <option value="">Select a category</option>
               {VERTICALS.map((v) => (
-                <option
-                  key={v}
-                  value={v}
-                  style={{ background: '#ffffff', color: '#000000' }}
-                >
-                  {v}
-                </option>
+                <option key={v} value={v}>{v}</option>
               ))}
             </select>
-          </div>
+          </FormField>
 
-          <div>
-            <label style={labelStyle}>
-              One-line description <span style={optionalStyle}>Optional</span>
-            </label>
+          <FormField label="One-line description" optional>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="What makes it different?"
-              style={{
-                ...inputStyle,
-                minHeight: '70px',
-                resize: 'vertical',
-              }}
+              className="ob-input"
+              style={{ minHeight: '70px', resize: 'vertical' }}
               maxLength={1000}
             />
-          </div>
+          </FormField>
 
           {error && <ErrorBanner message={error} />}
 
@@ -1083,7 +1068,7 @@ function ProductHybridStep({
 }
 
 // ──────────────────────────────────────────────────────────────────
-// Step 3: Report Generation (shared across all variants)
+// Step 3: Report Generation
 // ──────────────────────────────────────────────────────────────────
 
 const PHASE_LABELS: Record<ReportPhase, { title: string; subtitle: string }> = {
@@ -1093,11 +1078,11 @@ const PHASE_LABELS: Record<ReportPhase, { title: string; subtitle: string }> = {
   },
   enriching: {
     title: 'Analyzing your product',
-    subtitle: 'Extracting value props, target audience, and competitive positioning…',
+    subtitle: 'Extracting value props, audience, and competitive positioning…',
   },
   generating: {
     title: 'Generating your report',
-    subtitle: 'Building market intelligence, competitor analysis, and creative recommendations…',
+    subtitle: 'Building market intelligence and creative recommendations…',
   },
   done: {
     title: 'Your report is ready!',
@@ -1129,37 +1114,24 @@ function ReportStep({
   const label = PHASE_LABELS[phase]
   const isLoading = phase === 'scraping' || phase === 'enriching' || phase === 'generating'
 
-  // Pre-compute booleans for progress lines to avoid TS narrowing issues
   const scrapingDone = phase !== 'scraping'
   const enrichDone = phase === 'generating' || phase === 'done'
   const reportDone = phase === 'done'
 
-  // Progress bar percentage
   const progressPct =
     phase === 'scraping' ? 15 :
     phase === 'enriching' ? 45 :
     phase === 'generating' ? 75 :
     phase === 'done' ? 100 : 0
 
-  // Sub-status text for each phase
-  const subStatus =
-    phase === 'scraping' ? 'Fetching and parsing your website content...' :
-    phase === 'enriching' ? 'Extracting product profile, value props, and audience signals...' :
-    phase === 'generating' ? 'Building competitor landscape, market position, and creative recommendations...' :
-    ''
-
   return (
     <>
-      <StepHeader
-        title={label.title}
-        subtitle={label.subtitle}
-      />
+      <StepHeader title={label.title} subtitle={label.subtitle} />
       <CardShell>
         <div className="space-y-6">
           {/* Progress indicator */}
           {isLoading && (
             <div className="space-y-5">
-              {/* Animated progress steps */}
               <div className="space-y-3">
                 <ProgressLine
                   label="Website data"
@@ -1181,83 +1153,65 @@ function ReportStep({
                 />
               </div>
 
-              {/* Progress bar */}
-              <div className="space-y-2">
+              {/* Animated progress bar */}
+              <div className="ob-progress-bar">
                 <div
-                  className="w-full h-1.5 rounded-full overflow-hidden"
-                  style={{ background: '#e5e5e7' }}
-                >
-                  <div
-                    className="h-full rounded-full"
-                    style={{
-                      width: `${progressPct}%`,
-                      background: 'linear-gradient(90deg, #0071e3, #34a853)',
-                      transition: 'width 1.2s ease-in-out',
-                    }}
-                  />
-                </div>
-                <p
-                  className="text-[12px] text-center"
-                  style={{ color: '#888888' }}
-                >
-                  {subStatus}
-                </p>
+                  className="ob-progress-fill"
+                  style={{ width: `${progressPct}%` }}
+                />
               </div>
 
-              {/* Skip button */}
+              {/* Skip */}
               <button
                 type="button"
                 onClick={onSkip}
-                className="w-full text-center text-[13px] py-2 transition-colors hover:text-black"
-                style={{ color: '#555555' }}
+                className="w-full text-center text-[13px] py-2 transition-colors"
+                style={{ color: 'var(--text-3)' }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLButtonElement).style.color = 'var(--text-2)'
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLButtonElement).style.color = 'var(--text-3)'
+                }}
               >
-                Skip for now — report will generate in the background
+                Skip — report will generate in the background
               </button>
             </div>
           )}
 
           {/* Success state */}
           {phase === 'done' && (
-            <div className="space-y-4">
-              {/* Completed progress bar */}
+            <div className="space-y-5">
               <div className="space-y-3">
                 <ProgressLine label="Website data" done active={false} />
                 <ProgressLine label="Product analysis" done active={false} />
                 <ProgressLine label="Market intelligence report" done active={false} />
               </div>
 
-              <div
-                className="w-full h-1.5 rounded-full overflow-hidden"
-                style={{ background: '#e5e5e7' }}
-              >
+              {/* Completed bar */}
+              <div className="ob-progress-bar">
                 <div
-                  className="h-full rounded-full"
+                  className="h-full rounded-[3px]"
                   style={{
                     width: '100%',
-                    background: '#34a853',
-                    transition: 'width 0.5s ease-in-out',
+                    background: 'var(--brand)',
+                    transition: 'width 0.5s ease',
                   }}
                 />
               </div>
 
+              {/* Success icon */}
               <div className="flex justify-center">
                 <div
-                  className="w-14 h-14 rounded-2xl inline-flex items-center justify-center"
-                  style={{ background: '#e8f5e9' }}
+                  className="ob-check-pop w-16 h-16 rounded-2xl inline-flex items-center justify-center"
+                  style={{ background: 'var(--brand-light)' }}
                 >
                   <CheckCircle2
-                    className="w-7 h-7"
-                    style={{ color: '#34a853' }}
+                    className="w-8 h-8"
+                    style={{ color: 'var(--brand)' }}
                   />
                 </div>
               </div>
-
-              <p
-                className="text-center text-[14px] font-medium"
-                style={{ color: '#1d1d1f' }}
-              >
-                Your report is ready!
-              </p>
 
               <div className="space-y-3 pt-1">
                 <PrimaryButton onClick={onViewReport}>
@@ -1308,24 +1262,24 @@ function ProgressLine({
     <div className="flex items-start gap-3">
       <div className="flex-shrink-0 w-5 h-5 mt-0.5">
         {done ? (
-          <CheckCircle2 className="w-5 h-5" style={{ color: '#34a853' }} />
+          <CheckCircle2 className="w-5 h-5" style={{ color: 'var(--brand)' }} />
         ) : active ? (
           <Loader2
             className="w-5 h-5 animate-spin"
-            style={{ color: '#0071e3' }}
+            style={{ color: 'var(--brand)' }}
           />
         ) : (
           <div
             className="w-5 h-5 rounded-full border-2"
-            style={{ borderColor: '#d2d2d7' }}
+            style={{ borderColor: 'var(--border-strong)' }}
           />
         )}
       </div>
       <div className="flex flex-col">
         <span
-          className="text-[14px]"
+          className="text-[14px] transition-all duration-300"
           style={{
-            color: done ? '#34a853' : active ? '#000000' : '#999999',
+            color: done ? 'var(--brand)' : active ? 'var(--text-1)' : 'var(--text-3)',
             fontWeight: active ? 600 : 400,
           }}
         >
@@ -1334,7 +1288,7 @@ function ProgressLine({
         {active && detail && (
           <span
             className="text-[12px] mt-0.5"
-            style={{ color: '#888888' }}
+            style={{ color: 'var(--text-3)' }}
           >
             {detail}
           </span>
@@ -1345,30 +1299,32 @@ function ProgressLine({
 }
 
 // ──────────────────────────────────────────────────────────────────
-// Step 4: Done (fallback — normally not reached)
+// Step 4: Done (fallback)
 // ──────────────────────────────────────────────────────────────────
 
 function DoneStep({ bonusAmount }: { bonusAmount: number }) {
   return (
     <CardShell>
-      <div className="text-center py-6" style={{ color: '#000000' }}>
-        <div
-          className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-6"
-          style={{ background: '#e8f5e9' }}
+      <div className="text-center py-6">
+        <div className="ob-check-pop inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-6"
+          style={{ background: 'var(--brand-light)' }}
         >
-          <CheckCircle2 className="w-8 h-8" style={{ color: '#34a853' }} />
+          <CheckCircle2 className="w-8 h-8" style={{ color: 'var(--brand)' }} />
         </div>
-        <h2 className="text-[22px] font-bold tracking-tight mb-2">
+        <h2
+          className="text-[22px] font-bold tracking-tight mb-2"
+          style={{ color: 'var(--text-1)' }}
+        >
           You're all set
         </h2>
-        <p className="text-[15px]" style={{ color: '#555555' }}>
+        <p className="text-[15px]" style={{ color: 'var(--text-3)' }}>
           {bonusAmount} credits added to your account. Taking you to your
           workspace…
         </p>
         <div className="mt-6 flex justify-center">
           <Loader2
             className="w-5 h-5 animate-spin"
-            style={{ color: '#0071e3' }}
+            style={{ color: 'var(--brand)' }}
           />
         </div>
       </div>
@@ -1383,11 +1339,11 @@ function DoneStep({ bonusAmount }: { bonusAmount: number }) {
 function ErrorBanner({ message }: { message: string }) {
   return (
     <div
-      className="text-[13px] rounded-lg px-3 py-2"
+      className="text-[13px] rounded-xl px-4 py-3 font-medium"
       style={{
-        background: '#ffe5e5',
-        border: '1px solid #ffc9c9',
-        color: '#d32f2f',
+        background: 'rgba(255, 82, 82, 0.08)',
+        border: '1px solid rgba(255, 82, 82, 0.15)',
+        color: '#ff6b6b',
       }}
     >
       {message}
@@ -1407,8 +1363,14 @@ function BackButton({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="w-full text-center text-[13px] py-2 transition-colors disabled:opacity-50 hover:text-black"
-      style={{ color: '#555555' }}
+      className="w-full text-center text-[13px] font-medium py-2 transition-colors disabled:opacity-50"
+      style={{ color: 'var(--text-3)' }}
+      onMouseEnter={(e) => {
+        if (!disabled) (e.currentTarget as HTMLButtonElement).style.color = 'var(--text-2)'
+      }}
+      onMouseLeave={(e) => {
+        if (!disabled) (e.currentTarget as HTMLButtonElement).style.color = 'var(--text-3)'
+      }}
     >
       ← Back
     </button>

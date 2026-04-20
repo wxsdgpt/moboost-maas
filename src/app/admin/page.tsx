@@ -57,8 +57,8 @@ export default function AdminDashboard() {
     <div className="p-8 max-w-[1200px] mx-auto">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-white tracking-tight">管理员控制台</h1>
-        <p className="text-sm mt-1" style={{ color: 'rgba(255,255,255,0.5)' }}>
+        <h1 className="text-2xl font-bold tracking-tight" style={{ color: 'var(--text-1)' }}>管理员控制台</h1>
+        <p className="text-sm mt-1" style={{ color: 'var(--text-2)' }}>
           Moboost AI MaaS · Agent生态系统管理
         </p>
       </div>
@@ -76,7 +76,7 @@ export default function AdminDashboard() {
           label="注册Agent"
           value={registry?.totalAgents?.toString() || '0'}
           icon={Brain}
-          color="#0071e3"
+          color="var(--brand)"
         />
         <AdminStatCard
           label="待处理决策"
@@ -106,7 +106,7 @@ export default function AdminDashboard() {
           icon={Brain}
           title="Meta-Agent 工厂"
           description="创建新Agent、设计数据/引擎/前端架构"
-          color="#0071e3"
+          color="var(--brand)"
         />
         <QuickActionCard
           href="/admin/agents"
@@ -129,11 +129,11 @@ export default function AdminDashboard() {
         <div
           className="rounded-xl p-6 mb-8"
           style={{
-            background: 'rgba(255, 255, 255, 0.03)',
-            border: '1px solid rgba(255, 255, 255, 0.08)',
+            background: 'var(--surface-3)',
+            border: '1px solid var(--border)',
           }}
         >
-          <h3 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
+          <h3 className="text-sm font-semibold text-[color:var(--text-1)] mb-4 flex items-center gap-2">
             <Brain className="w-4 h-4" style={{ color: '#e94560' }} />
             Agent分布
           </h3>
@@ -147,8 +147,8 @@ export default function AdminDashboard() {
               }
               return (
                 <div key={cat} className="text-center">
-                  <div className="text-2xl font-bold text-white">{count}</div>
-                  <div className="text-[10px] uppercase tracking-wider" style={{ color: 'rgba(255,255,255,0.4)' }}>
+                  <div className="text-2xl font-bold text-[color:var(--text-1)]">{count}</div>
+                  <div className="text-[10px] uppercase tracking-wider" style={{ color: 'var(--text-3)' }}>
                     {labels[cat] || cat}
                   </div>
                 </div>
@@ -163,18 +163,18 @@ export default function AdminDashboard() {
         <div
           className="rounded-xl p-6"
           style={{
-            background: 'rgba(255, 255, 255, 0.03)',
-            border: '1px solid rgba(255, 255, 255, 0.08)',
+            background: 'var(--surface-3)',
+            border: '1px solid var(--border)',
           }}
         >
-          <h3 className="text-sm font-semibold text-white mb-3 flex items-center gap-2">
+          <h3 className="text-sm font-semibold text-[color:var(--text-1)] mb-3 flex items-center gap-2">
             <TrendingUp className="w-4 h-4" style={{ color: '#e94560' }} />
             最近诊断报告
           </h3>
-          <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.7)' }}>
+          <p className="text-sm leading-relaxed" style={{ color: 'var(--text-2)' }}>
             {report.executiveSummary}
           </p>
-          <p className="text-[10px] mt-3" style={{ color: 'rgba(255,255,255,0.3)' }}>
+          <p className="text-[10px] mt-3" style={{ color: 'var(--text-3)' }}>
             生成于 {new Date(report.generatedAt).toLocaleString('zh-CN')}
           </p>
         </div>
@@ -190,19 +190,19 @@ function AdminStatCard({ label, value, unit, icon: Icon, color }: {
     <div
       className="rounded-xl p-4"
       style={{
-        background: 'rgba(255, 255, 255, 0.03)',
-        border: '1px solid rgba(255, 255, 255, 0.08)',
+        background: 'var(--surface-3)',
+        border: '1px solid var(--border)',
       }}
     >
       <div className="flex items-center gap-2 mb-2">
         <Icon className="w-3.5 h-3.5" style={{ color }} />
-        <span className="text-[10px] uppercase tracking-wider font-medium" style={{ color: 'rgba(255,255,255,0.4)' }}>
+        <span className="text-[10px] uppercase tracking-wider font-medium" style={{ color: 'var(--text-3)' }}>
           {label}
         </span>
       </div>
-      <div className="text-2xl font-bold text-white">
+      <div className="text-2xl font-bold text-[color:var(--text-1)]">
         {value}
-        {unit && <span className="text-sm font-normal" style={{ color: 'rgba(255,255,255,0.4)' }}>{unit}</span>}
+        {unit && <span className="text-sm font-normal" style={{ color: 'var(--text-3)' }}>{unit}</span>}
       </div>
     </div>
   )
@@ -216,8 +216,8 @@ function QuickActionCard({ href, icon: Icon, title, description, color }: {
       href={href}
       className="group rounded-xl p-5 transition-all"
       style={{
-        background: 'rgba(255, 255, 255, 0.03)',
-        border: '1px solid rgba(255, 255, 255, 0.08)',
+        background: 'var(--surface-3)',
+        border: '1px solid var(--border)',
       }}
     >
       <div className="flex items-start justify-between">
@@ -229,11 +229,11 @@ function QuickActionCard({ href, icon: Icon, title, description, color }: {
             <Icon className="w-5 h-5" style={{ color }} />
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-white">{title}</h3>
-            <p className="text-[11px] mt-0.5" style={{ color: 'rgba(255,255,255,0.4)' }}>{description}</p>
+            <h3 className="text-sm font-semibold text-[color:var(--text-1)]">{title}</h3>
+            <p className="text-[11px] mt-0.5" style={{ color: 'var(--text-3)' }}>{description}</p>
           </div>
         </div>
-        <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity mt-2" style={{ color: 'rgba(255,255,255,0.4)' }} />
+        <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity mt-2" style={{ color: 'var(--text-3)' }} />
       </div>
     </Link>
   )

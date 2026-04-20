@@ -184,7 +184,7 @@ export default function AdminEvolutionPage() {
             <Dna className="w-6 h-6" style={{ color: '#e94560' }} />
             进化中心
           </h1>
-          <p className="text-sm mt-1" style={{ color: 'rgba(255,255,255,0.5)' }}>
+          <p className="text-sm mt-1" style={{ color: 'var(--text-2)' }}>
             PCEC引擎 · WHY/HOW/WHAT目标 · VFM评分 · ADL校验 · 自动验证/回滚
           </p>
         </div>
@@ -235,19 +235,19 @@ export default function AdminEvolutionPage() {
           label="上次运行"
           value={pcecStatus?.lastCycleAt ? formatRelativeTime(pcecStatus.lastCycleAt) : '从未'}
           icon={Clock}
-          color="#0071e3"
+          color="var(--brand)"
         />
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 mb-6 p-1 rounded-lg w-fit" style={{ background: 'rgba(255,255,255,0.06)' }}>
+      <div className="flex gap-1 mb-6 p-1 rounded-lg w-fit" style={{ background: 'var(--surface-3)' }}>
         {tabs.map(({ key, icon: Icon, label, badge }) => (
           <button
             key={key}
             onClick={() => setActiveTab(key)}
             className="flex items-center gap-2 px-4 py-2 rounded-md text-xs font-medium transition-all"
             style={{
-              color: activeTab === key ? '#ffffff' : 'rgba(255,255,255,0.5)',
+              color: activeTab === key ? 'var(--text-1)' : 'var(--text-2)',
               background: activeTab === key ? 'rgba(233,69,96,0.2)' : 'transparent',
             }}
           >
@@ -298,7 +298,7 @@ function PCECTab({
           <div className="flex items-center gap-2 mb-4">
             <CheckCircle2 className="w-4 h-4" style={{ color: '#34c759' }} />
             <span className="text-sm font-semibold text-white">PCEC周期完成</span>
-            <span className="text-[10px] ml-auto" style={{ color: 'rgba(255,255,255,0.3)' }}>
+            <span className="text-[10px] ml-auto" style={{ color: 'var(--text-3)' }}>
               {result.cycleId} · {formatRelativeTime(result.completedAt)}
             </span>
           </div>
@@ -332,7 +332,7 @@ function PCECTab({
             </div>
           )}
           {!running && liveLog.length > 0 && (
-            <span className="text-[10px] ml-2" style={{ color: 'rgba(255,255,255,0.3)' }}>
+            <span className="text-[10px] ml-2" style={{ color: 'var(--text-3)' }}>
               {liveLog.length} 条日志
             </span>
           )}
@@ -340,14 +340,14 @@ function PCECTab({
         <div
           className="rounded-lg p-4 font-mono text-[12px] leading-5 overflow-y-auto"
           style={{
-            background: '#0a0a0f',
-            border: '1px solid rgba(255,255,255,0.06)',
+            background: 'var(--bg)',
+            border: '1px solid var(--surface-3)',
             maxHeight: '400px',
             minHeight: '200px',
           }}
         >
           {liveLog.length === 0 && !running && (
-            <div style={{ color: 'rgba(255,255,255,0.25)' }}>
+            <div style={{ color: 'var(--text-3)' }}>
               点击「运行PCEC周期」按钮启动进化流程。
               <br />
               <br />
@@ -364,7 +364,7 @@ function PCECTab({
             <LogLine key={i} line={line} />
           ))}
           {running && (
-            <div className="flex items-center gap-2 mt-1" style={{ color: 'rgba(255,255,255,0.4)' }}>
+            <div className="flex items-center gap-2 mt-1" style={{ color: 'var(--text-3)' }}>
               <Loader2 className="w-3 h-3 animate-spin" />
               <span>处理中...</span>
             </div>
@@ -382,15 +382,15 @@ function PCECTab({
           </div>
           <div className="grid grid-cols-3 gap-4 text-sm">
             <div>
-              <div className="text-[10px] mb-1" style={{ color: 'rgba(255,255,255,0.4)' }}>上次运行</div>
+              <div className="text-[10px] mb-1" style={{ color: 'var(--text-3)' }}>上次运行</div>
               <div className="text-white">{status.lastCycleAt ? formatRelativeTime(status.lastCycleAt) : '从未运行'}</div>
             </div>
             <div>
-              <div className="text-[10px] mb-1" style={{ color: 'rgba(255,255,255,0.4)' }}>连续空周期</div>
+              <div className="text-[10px] mb-1" style={{ color: 'var(--text-3)' }}>连续空周期</div>
               <div className="text-white">{status.consecutiveEmptyCycles}</div>
             </div>
             <div>
-              <div className="text-[10px] mb-1" style={{ color: 'rgba(255,255,255,0.4)' }}>下次模式</div>
+              <div className="text-[10px] mb-1" style={{ color: 'var(--text-3)' }}>下次模式</div>
               <div style={{ color: status.nextForceBreakthrough ? '#ff9500' : '#34c759' }}>
                 {status.nextForceBreakthrough ? '⚡ 强制突破' : '正常探索'}
               </div>
@@ -414,9 +414,9 @@ function GoalsTab({ goals }: { goals: EvolutionGoal[] }) {
   if (goals.length === 0) {
     return (
       <DarkCard className="text-center py-12">
-        <Target className="w-12 h-12 mx-auto mb-4" style={{ color: 'rgba(255,255,255,0.15)' }} />
+        <Target className="w-12 h-12 mx-auto mb-4" style={{ color: 'var(--text-3)' }} />
         <p className="text-sm text-white">尚未初始化进化目标</p>
-        <p className="text-[11px] mt-1" style={{ color: 'rgba(255,255,255,0.4)' }}>运行一次PCEC周期将自动初始化9个默认目标</p>
+        <p className="text-[11px] mt-1" style={{ color: 'var(--text-3)' }}>运行一次PCEC周期将自动初始化9个默认目标</p>
       </DarkCard>
     )
   }
@@ -432,7 +432,7 @@ function GoalsTab({ goals }: { goals: EvolutionGoal[] }) {
               <div className="w-3 h-3 rounded-full" style={{ background: color }} />
               <span className="text-sm font-semibold text-white">{label}</span>
             </div>
-            <p className="text-[11px] mb-4" style={{ color: 'rgba(255,255,255,0.4)' }}>{desc}</p>
+            <p className="text-[11px] mb-4" style={{ color: 'var(--text-3)' }}>{desc}</p>
             <div className="space-y-3">
               {layerGoals.map((goal) => (
                 <GoalRow key={goal.id} goal={goal} color={color} />
@@ -461,20 +461,20 @@ function GoalRow({ goal, color }: { goal: EvolutionGoal; color: string }) {
     <div className="flex items-center gap-4">
       <div className="w-[140px] shrink-0">
         <div className="text-xs font-medium text-white">{goal.name}</div>
-        <div className="text-[10px]" style={{ color: 'rgba(255,255,255,0.3)' }}>
+        <div className="text-[10px]" style={{ color: 'var(--text-3)' }}>
           权重 {goal.weight} · {goal.direction === 'higher_better' ? '越高越好' : '越低越好'}
         </div>
       </div>
       <div className="flex-1">
         <div className="flex items-center justify-between mb-1">
-          <span className="text-[10px]" style={{ color: 'rgba(255,255,255,0.4)' }}>
+          <span className="text-[10px]" style={{ color: 'var(--text-3)' }}>
             {hasValue ? `${goal.currentValue!.toFixed(2)} / ${goal.targetValue} ${goal.unit}` : '暂无数据'}
           </span>
-          <span className="text-[10px] font-bold" style={{ color: hasValue ? barColor : 'rgba(255,255,255,0.2)' }}>
+          <span className="text-[10px] font-bold" style={{ color: hasValue ? barColor : 'var(--text-3)' }}>
             {hasValue ? `${Math.round(achievement)}%` : '--'}
           </span>
         </div>
-        <div className="h-2 rounded-full" style={{ background: 'rgba(255,255,255,0.06)' }}>
+        <div className="h-2 rounded-full" style={{ background: 'var(--surface-3)' }}>
           <div className="h-full rounded-full transition-all duration-500" style={{
             width: hasValue ? `${Math.min(achievement, 100)}%` : '0%',
             background: barColor,
@@ -498,9 +498,9 @@ function VerificationsTab({ verifications }: { verifications: Verification[] }) 
   if (verifications.length === 0) {
     return (
       <DarkCard className="text-center py-12">
-        <Shield className="w-12 h-12 mx-auto mb-4" style={{ color: 'rgba(255,255,255,0.15)' }} />
+        <Shield className="w-12 h-12 mx-auto mb-4" style={{ color: 'var(--text-3)' }} />
         <p className="text-sm text-white">暂无验证记录</p>
-        <p className="text-[11px] mt-1" style={{ color: 'rgba(255,255,255,0.4)' }}>PCEC周期会自动对mutation进行前后对比验证</p>
+        <p className="text-[11px] mt-1" style={{ color: 'var(--text-3)' }}>PCEC周期会自动对mutation进行前后对比验证</p>
       </DarkCard>
     )
   }
@@ -534,12 +534,12 @@ function VerificationsTab({ verifications }: { verifications: Verification[] }) 
                       </span>
                     )}
                   </div>
-                  <div className="text-[11px] mt-0.5" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                  <div className="text-[11px] mt-0.5" style={{ color: 'var(--text-2)' }}>
                     {v.verdictReason}
                   </div>
                 </div>
               </div>
-              <div className="text-[10px]" style={{ color: 'rgba(255,255,255,0.3)' }}>
+              <div className="text-[10px]" style={{ color: 'var(--text-3)' }}>
                 {v.verifiedAt ? formatRelativeTime(v.verifiedAt) : formatRelativeTime(v.createdAt)}
               </div>
             </div>
@@ -554,13 +554,13 @@ function VerificationsTab({ verifications }: { verifications: Verification[] }) 
 
 function ChangelogTab({ entries }: { entries: ChangelogEntry[] }) {
   const levelColors: Record<string, string> = {
-    info: '#0071e3', warn: '#ff9500', error: '#ff3b30', evolution: '#5e5ce6', rollback: '#ff9500',
+    info: 'var(--brand)', warn: '#ff9500', error: '#ff3b30', evolution: '#5e5ce6', rollback: '#ff9500',
   }
 
   if (entries.length === 0) {
     return (
       <DarkCard className="text-center py-12">
-        <FileText className="w-12 h-12 mx-auto mb-4" style={{ color: 'rgba(255,255,255,0.15)' }} />
+        <FileText className="w-12 h-12 mx-auto mb-4" style={{ color: 'var(--text-3)' }} />
         <p className="text-sm text-white">暂无进化日志</p>
       </DarkCard>
     )
@@ -573,12 +573,12 @@ function ChangelogTab({ entries }: { entries: ChangelogEntry[] }) {
           <div
             key={e.id}
             className="flex items-start gap-3 py-3"
-            style={{ borderBottom: i < entries.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none' }}
+            style={{ borderBottom: i < entries.length - 1 ? '1px solid var(--surface-3)' : 'none' }}
           >
             <div className="w-2 h-2 rounded-full mt-1.5 shrink-0" style={{ backgroundColor: levelColors[e.level] || '#8e8e93' }} />
             <div className="flex-1 min-w-0">
               <div className="text-xs text-white">{e.message}</div>
-              <div className="text-[10px] mt-0.5 flex items-center gap-2" style={{ color: 'rgba(255,255,255,0.3)' }}>
+              <div className="text-[10px] mt-0.5 flex items-center gap-2" style={{ color: 'var(--text-3)' }}>
                 <span>{e.category}</span>
                 <span>·</span>
                 <span>{e.level}</span>
@@ -597,7 +597,7 @@ function ChangelogTab({ entries }: { entries: ChangelogEntry[] }) {
 // ─── Log Line ──────────────────────────────────────────────────────────
 
 function LogLine({ line }: { line: string }) {
-  let color = 'rgba(255,255,255,0.6)'
+  let color = 'var(--text-2)'
   if (line.includes('✅')) color = '#34c759'
   else if (line.includes('❌')) color = '#ff3b30'
   else if (line.includes('⚠️')) color = '#ff9500'
@@ -619,14 +619,14 @@ function StatCard({ label, value, unit, icon: Icon, color }: {
   label: string; value: string; unit?: string; icon: React.ElementType; color: string
 }) {
   return (
-    <div className="rounded-xl p-4" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}>
+    <div className="rounded-xl p-4" style={{ background: 'var(--surface-3)', border: '1px solid var(--border)' }}>
       <div className="flex items-center gap-2 mb-2">
         <Icon className="w-3.5 h-3.5" style={{ color }} />
-        <span className="text-[10px] uppercase tracking-wider font-medium" style={{ color: 'rgba(255,255,255,0.4)' }}>{label}</span>
+        <span className="text-[10px] uppercase tracking-wider font-medium" style={{ color: 'var(--text-3)' }}>{label}</span>
       </div>
       <div className="text-2xl font-bold text-white">
         {value}
-        {unit && <span className="text-sm font-normal" style={{ color: 'rgba(255,255,255,0.4)' }}>{unit}</span>}
+        {unit && <span className="text-sm font-normal" style={{ color: 'var(--text-3)' }}>{unit}</span>}
       </div>
     </div>
   )
@@ -634,7 +634,7 @@ function StatCard({ label, value, unit, icon: Icon, color }: {
 
 function DarkCard({ children, className = '' }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={`rounded-xl p-5 ${className}`} style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}>
+    <div className={`rounded-xl p-5 ${className}`} style={{ background: 'var(--surface-3)', border: '1px solid var(--border)' }}>
       {children}
     </div>
   )
@@ -643,8 +643,8 @@ function DarkCard({ children, className = '' }: { children: React.ReactNode; cla
 function MiniStat({ label, value, color }: { label: string; value: number; color?: string }) {
   return (
     <div>
-      <div className="text-[10px]" style={{ color: 'rgba(255,255,255,0.4)' }}>{label}</div>
-      <div className="text-lg font-bold" style={{ color: color || '#ffffff' }}>{value}</div>
+      <div className="text-[10px]" style={{ color: 'var(--text-3)' }}>{label}</div>
+      <div className="text-lg font-bold" style={{ color: color || 'var(--text-1)' }}>{value}</div>
     </div>
   )
 }

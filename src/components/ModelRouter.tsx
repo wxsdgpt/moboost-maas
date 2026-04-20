@@ -46,22 +46,22 @@ export default function ModelRouter({ taskType, onComplete }: Props) {
   }, [])
 
   return (
-    <div className="bg-white rounded-lg p-5 animate-fade-in" style={{ boxShadow: 'rgba(0,0,0,0.22) 0 3px 5px 30px', fontFamily: '-apple-system, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif' }}>
+    <div className="rounded-lg p-5 animate-fade-in" style={{ background: 'var(--surface-3)', boxShadow: 'var(--shadow-md)', fontFamily: '-apple-system, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif' }}>
       <div className="flex items-center gap-2 mb-4">
-        <Cpu className="w-4 h-4 text-[#0071e3]" />
-        <span className="text-xs font-semibold text-[#0071e3] uppercase tracking-wider">Model Router</span>
+        <Cpu className="w-4 h-4 text-[var(--brand)]" />
+        <span className="text-xs font-semibold text-[var(--brand)] uppercase tracking-wider">Model Router</span>
         {phase === 'analyzing' && (
-          <span className="ml-auto text-xs text-[#6f6f77] flex items-center gap-1.5">
+          <span className="ml-auto text-xs text-[var(--text-3)] flex items-center gap-1.5">
             Analyzing task requirements
             <span className="flex gap-0.5">
-              <span className="w-1 h-1 rounded-full bg-[#0071e3] thinking-dot" />
-              <span className="w-1 h-1 rounded-full bg-[#0071e3] thinking-dot" />
-              <span className="w-1 h-1 rounded-full bg-[#0071e3] thinking-dot" />
+              <span className="w-1 h-1 rounded-full bg-[var(--brand)] thinking-dot" />
+              <span className="w-1 h-1 rounded-full bg-[var(--brand)] thinking-dot" />
+              <span className="w-1 h-1 rounded-full bg-[var(--brand)] thinking-dot" />
             </span>
           </span>
         )}
         {phase === 'selected' && (
-          <span className="ml-auto text-xs text-[#0071e3] flex items-center gap-1">
+          <span className="ml-auto text-xs text-[var(--brand)] flex items-center gap-1">
             <CheckCircle2 className="w-3 h-3" /> Best model selected
           </span>
         )}
@@ -74,33 +74,30 @@ export default function ModelRouter({ taskType, onComplete }: Props) {
             className={`
               flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-500
               ${i >= visibleCount ? 'opacity-0 translate-y-2' : 'opacity-100 translate-y-0'}
-              ${selectedIdx === i
-                ? 'bg-blue-50'
-                : 'bg-[#f5f5f7]'
-              }
             `}
+            style={{ background: selectedIdx === i ? 'var(--brand-light)' : 'var(--surface-3)' }}
           >
             <div className="flex-1 flex items-center gap-3">
-              <span className="text-[13px] font-semibold text-black">{c.name}</span>
-              <span className="text-[11px] text-[#6f6f77]">{c.speed}</span>
-              <span className="text-[11px] text-[#6f6f77]">{c.quality}</span>
+              <span className="text-[13px] font-semibold" style={{ color: 'var(--text-1)' }}>{c.name}</span>
+              <span className="text-[11px] text-[var(--text-3)]">{c.speed}</span>
+              <span className="text-[11px] text-[var(--text-3)]">{c.quality}</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-20 h-1.5 rounded-full bg-[#d5d5d7] overflow-hidden">
+              <div className="w-20 h-1.5 rounded-full overflow-hidden" style={{ background: 'var(--border)' }}>
                 <div
                   className="h-full rounded-full score-fill"
                   style={{
                     width: i < visibleCount ? `${c.matchScore}%` : '0%',
-                    background: c.matchScore >= 90 ? '#0071e3' : c.matchScore >= 80 ? '#F59E0B' : '#d5d5d7',
+                    background: c.matchScore >= 90 ? 'var(--brand)' : c.matchScore >= 80 ? '#F59E0B' : 'var(--border)',
                   }}
                 />
               </div>
               <span className={`text-xs font-bold min-w-[32px] text-right ${
-                selectedIdx === i ? 'text-[#0071e3]' : 'text-[#6f6f77]'
+                selectedIdx === i ? 'text-[var(--brand)]' : 'text-[var(--text-3)]'
               }`}>
                 {c.matchScore}%
               </span>
-              {selectedIdx === i && <Sparkles className="w-3.5 h-3.5 text-[#0071e3]" />}
+              {selectedIdx === i && <Sparkles className="w-3.5 h-3.5 text-[var(--brand)]" />}
             </div>
           </div>
         ))}

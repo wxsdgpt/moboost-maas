@@ -9,6 +9,8 @@ import ThemeProvider from '@/components/ThemeProvider'
 import UserScopeGuard from '@/components/UserScopeGuard'
 import LastPathTracker from '@/components/LastPathTracker'
 import SettingsButton from '@/components/SettingsButton'
+import AuthBypassBanner from '@/components/AuthBypassBanner'
+import { AUTH_BYPASS } from '@/lib/authBypass'
 import { LocaleProvider } from '@/lib/i18n/LocaleProvider'
 
 export const metadata: Metadata = {
@@ -33,7 +35,11 @@ export default async function RootLayout({
   const isAdminRoute = pathname.startsWith('/admin') || pathname.startsWith('/reset')
 
   return (
-    <html lang="en" className="scroll-smooth">
+    <html
+      lang="en"
+      data-theme="dark"
+      className={`scroll-smooth${AUTH_BYPASS ? ' auth-bypass-on' : ''}`}
+    >
       <head>
         <style dangerouslySetInnerHTML={{ __html: `
           @supports (font-variation-settings: normal) {
@@ -42,6 +48,7 @@ export default async function RootLayout({
         ` }} />
       </head>
       <body className="antialiased bg-white text-apple-near-black dark:bg-black dark:text-white">
+        <AuthBypassBanner />
         {isAdminRoute ? (
           /* Admin: bare layout — no Clerk/Sidebar/UserScopeGuard
              so data reset won't trigger auto user re-creation */

@@ -18,6 +18,7 @@ import {
   Sparkles,
   Settings,
   MessageSquare,
+  Key,
 } from 'lucide-react'
 import { useState } from 'react'
 
@@ -57,6 +58,7 @@ const navSections = [
     label: '运维',
     items: [
       { href: '/admin/data', label: '数据管理', icon: Users },
+      { href: '/admin/collab', label: 'Collab API Tokens', icon: Key },
       { href: '/reset', label: '数据重置', icon: Trash2 },
     ],
   },
@@ -83,7 +85,7 @@ export default function AdminSidebar() {
       {/* Logo */}
       <div
         className="px-5 py-5 flex items-center gap-2.5"
-        style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.08)' }}
+        style={{ borderBottom: '1px solid var(--border)' }}
       >
         <div
           className="w-8 h-8 rounded-lg flex items-center justify-center"
@@ -102,7 +104,7 @@ export default function AdminSidebar() {
         {navSections.map((section) => (
           <div key={section.label} className="mb-4">
             <div className="px-5 mb-1.5">
-              <span className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: 'rgba(255,255,255,0.35)' }}>
+              <span className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: 'var(--text-3)' }}>
                 {section.label}
               </span>
             </div>
@@ -114,13 +116,13 @@ export default function AdminSidebar() {
                   href={href}
                   className="flex items-center gap-3 mx-3 px-3 py-2 rounded-lg text-[13px] transition-all duration-150"
                   style={{
-                    color: isActive ? '#ffffff' : 'rgba(255, 255, 255, 0.6)',
+                    color: isActive ? 'var(--text-1)' : 'var(--text-2)',
                     background: isActive ? 'rgba(233, 69, 96, 0.15)' : 'transparent',
                   }}
                 >
                   <Icon
                     className="w-[16px] h-[16px] flex-shrink-0"
-                    style={{ color: isActive ? '#e94560' : 'rgba(255, 255, 255, 0.4)' }}
+                    style={{ color: isActive ? '#e94560' : 'var(--text-3)' }}
                   />
                   <span className="flex-1">{label}</span>
                   {isActive && <ChevronRight className="w-3 h-3" style={{ color: '#e94560' }} />}
@@ -134,7 +136,7 @@ export default function AdminSidebar() {
       {/* Bottom — Admin info + Logout */}
       <div
         className="p-3"
-        style={{ borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}
+        style={{ borderTop: '1px solid var(--border)' }}
       >
         <div className="flex items-center gap-3 px-3 py-2.5">
           <div
@@ -145,13 +147,13 @@ export default function AdminSidebar() {
           </div>
           <div className="flex-1 min-w-0">
             <div className="text-[13px] font-medium text-white">Admin</div>
-            <div className="text-[11px]" style={{ color: 'rgba(255,255,255,0.4)' }}>管理员</div>
+            <div className="text-[11px]" style={{ color: 'var(--text-3)' }}>管理员</div>
           </div>
           <button
             onClick={handleLogout}
             disabled={loggingOut}
             className="p-1.5 rounded-lg transition-colors"
-            style={{ color: 'rgba(255,255,255,0.4)' }}
+            style={{ color: 'var(--text-3)' }}
             title="退出登录"
           >
             <LogOut className="w-4 h-4" />

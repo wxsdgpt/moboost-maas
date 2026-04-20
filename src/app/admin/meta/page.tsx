@@ -48,7 +48,7 @@ export default function AdminMetaPage() {
 
   const tabs: Array<{ key: TabKey; icon: React.ElementType; label: string; description: string; color: string }> = [
     { key: 'agent', icon: PenTool, label: 'Agent定义', description: '从自然语言创建新Agent', color: '#e94560' },
-    { key: 'data', icon: Database, label: '数据架构师', description: '设计数据库schema和迁移', color: '#0071e3' },
+    { key: 'data', icon: Database, label: '数据架构师', description: '设计数据库schema和迁移', color: 'var(--brand)' },
     { key: 'engine', icon: Cpu, label: '引擎架构师', description: '模型路由和管道设计', color: '#5e5ce6' },
     { key: 'frontend', icon: Layout, label: '前端架构师', description: '生成UI组件和页面', color: '#ff9500' },
   ]
@@ -100,7 +100,7 @@ export default function AdminMetaPage() {
           <Brain className="w-6 h-6" style={{ color: '#e94560' }} />
           Meta-Agent 工厂
         </h1>
-        <p className="text-sm mt-1" style={{ color: 'rgba(255,255,255,0.5)' }}>
+        <p className="text-sm mt-1" style={{ color: 'var(--text-2)' }}>
           用自然语言驱动平台建设 · Agent定义Agent → 数据 → 引擎 → 前端
         </p>
       </div>
@@ -113,17 +113,17 @@ export default function AdminMetaPage() {
             onClick={() => { setActiveTab(key); setResult(null) }}
             className="rounded-xl p-4 text-left transition-all"
             style={{
-              background: activeTab === key ? `${color}15` : 'rgba(255,255,255,0.03)',
-              border: `1px solid ${activeTab === key ? `${color}40` : 'rgba(255,255,255,0.08)'}`,
+              background: activeTab === key ? `${color}15` : 'var(--surface-3)',
+              border: `1px solid ${activeTab === key ? `${color}40` : 'var(--border)'}`,
             }}
           >
             <div className="flex items-center gap-2 mb-1.5">
-              <Icon className="w-4 h-4" style={{ color: activeTab === key ? color : 'rgba(255,255,255,0.4)' }} />
-              <span className="text-sm font-semibold" style={{ color: activeTab === key ? '#ffffff' : 'rgba(255,255,255,0.6)' }}>
+              <Icon className="w-4 h-4" style={{ color: activeTab === key ? color : 'var(--text-3)' }} />
+              <span className="text-sm font-semibold" style={{ color: activeTab === key ? 'var(--text-1)' : 'var(--text-2)' }}>
                 {label}
               </span>
             </div>
-            <p className="text-[11px]" style={{ color: 'rgba(255,255,255,0.4)' }}>{description}</p>
+            <p className="text-[11px]" style={{ color: 'var(--text-3)' }}>{description}</p>
           </button>
         ))}
       </div>
@@ -132,8 +132,8 @@ export default function AdminMetaPage() {
       <div
         className="rounded-xl p-6 mb-6"
         style={{
-          background: 'rgba(255, 255, 255, 0.03)',
-          border: '1px solid rgba(255, 255, 255, 0.08)',
+          background: 'var(--surface-3)',
+          border: '1px solid var(--border)',
         }}
       >
         <div className="flex items-center gap-2 mb-3">
@@ -147,14 +147,14 @@ export default function AdminMetaPage() {
           rows={4}
           className="w-full rounded-xl px-4 py-3 text-sm text-white resize-none outline-none transition-all"
           style={{
-            background: 'rgba(255, 255, 255, 0.05)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
+            background: 'var(--surface-3)',
+            border: '1px solid var(--border-strong)',
           }}
           onFocus={(e) => { e.currentTarget.style.borderColor = activeTabInfo.color }}
-          onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)' }}
+          onBlur={(e) => { e.currentTarget.style.borderColor = 'var(--border-strong)' }}
         />
         <div className="flex items-center justify-between mt-3">
-          <div className="text-[11px]" style={{ color: 'rgba(255,255,255,0.3)' }}>
+          <div className="text-[11px]" style={{ color: 'var(--text-3)' }}>
             {activeTab === 'agent'
               ? 'Agent定义 → 自动分析基础设施需求 → 编排Data/Engine/Frontend Architect'
               : `将调用 ${activeTabInfo.label} 进行分析和代码生成`
@@ -202,14 +202,14 @@ export default function AdminMetaPage() {
               <div
                 className="rounded-xl p-6"
                 style={{
-                  background: 'rgba(255, 255, 255, 0.03)',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  background: 'var(--surface-3)',
+                  border: '1px solid var(--border)',
                 }}
               >
                 <h3 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
                   <Layers className="w-4 h-4" style={{ color: '#e94560' }} />
                   实施计划
-                  <span className="text-[10px] font-normal" style={{ color: 'rgba(255,255,255,0.3)' }}>
+                  <span className="text-[10px] font-normal" style={{ color: 'var(--text-3)' }}>
                     预估工作量: {result.plan.estimatedEffort}
                   </span>
                 </h3>
@@ -219,7 +219,7 @@ export default function AdminMetaPage() {
                       key={i}
                       onClick={() => setExpandedStep(expandedStep === i ? null : i)}
                       className="w-full text-left rounded-lg p-3 transition-all"
-                      style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}
+                      style={{ background: 'var(--surface-3)', border: '1px solid var(--surface-3)' }}
                     >
                       <div className="flex items-center gap-3">
                         <div
@@ -230,15 +230,15 @@ export default function AdminMetaPage() {
                         </div>
                         <div className="flex-1">
                           <span className="text-xs font-medium text-white">{step.agent}</span>
-                          <span className="text-[10px] ml-2" style={{ color: 'rgba(255,255,255,0.4)' }}>{step.status}</span>
+                          <span className="text-[10px] ml-2" style={{ color: 'var(--text-3)' }}>{step.status}</span>
                         </div>
                         {expandedStep === i
-                          ? <ChevronDown className="w-3.5 h-3.5" style={{ color: 'rgba(255,255,255,0.3)' }} />
-                          : <ChevronRight className="w-3.5 h-3.5" style={{ color: 'rgba(255,255,255,0.3)' }} />
+                          ? <ChevronDown className="w-3.5 h-3.5" style={{ color: 'var(--text-3)' }} />
+                          : <ChevronRight className="w-3.5 h-3.5" style={{ color: 'var(--text-3)' }} />
                         }
                       </div>
                       {expandedStep === i && (
-                        <p className="text-xs mt-2 ml-9 leading-relaxed" style={{ color: 'rgba(255,255,255,0.6)' }}>
+                        <p className="text-xs mt-2 ml-9 leading-relaxed" style={{ color: 'var(--text-2)' }}>
                           {step.description}
                         </p>
                       )}
@@ -252,7 +252,7 @@ export default function AdminMetaPage() {
                 {result.plan.newFiles.length > 0 && (
                   <div
                     className="rounded-xl p-5"
-                    style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}
+                    style={{ background: 'var(--surface-3)', border: '1px solid var(--border)' }}
                   >
                     <h4 className="text-xs font-semibold text-white mb-3 flex items-center gap-2">
                       <FileText className="w-3.5 h-3.5" style={{ color: '#34c759' }} />
@@ -260,7 +260,7 @@ export default function AdminMetaPage() {
                     </h4>
                     <div className="space-y-1">
                       {result.plan.newFiles.map((f: string, i: number) => (
-                        <div key={i} className="text-[11px] font-mono" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                        <div key={i} className="text-[11px] font-mono" style={{ color: 'var(--text-2)' }}>
                           {f}
                         </div>
                       ))}
@@ -270,7 +270,7 @@ export default function AdminMetaPage() {
                 {result.plan.modifiedFiles.length > 0 && (
                   <div
                     className="rounded-xl p-5"
-                    style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}
+                    style={{ background: 'var(--surface-3)', border: '1px solid var(--border)' }}
                   >
                     <h4 className="text-xs font-semibold text-white mb-3 flex items-center gap-2">
                       <Code2 className="w-3.5 h-3.5" style={{ color: '#ff9500' }} />
@@ -278,7 +278,7 @@ export default function AdminMetaPage() {
                     </h4>
                     <div className="space-y-1">
                       {result.plan.modifiedFiles.map((f: string, i: number) => (
-                        <div key={i} className="text-[11px] font-mono" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                        <div key={i} className="text-[11px] font-mono" style={{ color: 'var(--text-2)' }}>
                           {f}
                         </div>
                       ))}
@@ -293,7 +293,7 @@ export default function AdminMetaPage() {
                   {result.plan.migrations.length > 0 && (
                     <div
                       className="rounded-xl p-5"
-                      style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}
+                      style={{ background: 'var(--surface-3)', border: '1px solid var(--border)' }}
                     >
                       <h4 className="text-xs font-semibold text-white mb-3 flex items-center gap-2">
                         <Database className="w-3.5 h-3.5" style={{ color: '#5e5ce6' }} />
@@ -301,7 +301,7 @@ export default function AdminMetaPage() {
                       </h4>
                       <div className="space-y-1">
                         {result.plan.migrations.map((m: string, i: number) => (
-                          <div key={i} className="text-[11px] font-mono" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                          <div key={i} className="text-[11px] font-mono" style={{ color: 'var(--text-2)' }}>
                             {m}
                           </div>
                         ))}
@@ -311,7 +311,7 @@ export default function AdminMetaPage() {
                   {result.plan.envVars.length > 0 && (
                     <div
                       className="rounded-xl p-5"
-                      style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}
+                      style={{ background: 'var(--surface-3)', border: '1px solid var(--border)' }}
                     >
                       <h4 className="text-xs font-semibold text-white mb-3 flex items-center gap-2">
                         <Cpu className="w-3.5 h-3.5" style={{ color: '#ff9500' }} />
@@ -319,7 +319,7 @@ export default function AdminMetaPage() {
                       </h4>
                       <div className="space-y-1">
                         {result.plan.envVars.map((v: string, i: number) => (
-                          <div key={i} className="text-[11px] font-mono" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                          <div key={i} className="text-[11px] font-mono" style={{ color: 'var(--text-2)' }}>
                             {v}
                           </div>
                         ))}

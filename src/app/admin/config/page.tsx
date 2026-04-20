@@ -82,20 +82,20 @@ export default function AdminConfigPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="w-6 h-6 animate-spin" style={{ color: '#0071e3' }} />
+        <Loader2 className="w-6 h-6 animate-spin" style={{ color: 'var(--brand)' }} />
       </div>
     )
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" style={{ background: 'var(--bg)', minHeight: '100vh', padding: '32px' }}>
       <div className="flex items-center gap-3 mb-6">
-        <Settings className="w-6 h-6" style={{ color: '#0071e3' }} />
+        <Settings className="w-6 h-6" style={{ color: 'var(--brand)' }} />
         <div>
-          <h1 className="text-[24px] font-bold tracking-tight" style={{ color: '#000' }}>
+          <h1 className="text-[24px] font-bold tracking-tight" style={{ color: 'var(--text-1)' }}>
             System Configuration
           </h1>
-          <p className="text-[14px]" style={{ color: '#555' }}>
+          <p className="text-[14px]" style={{ color: 'var(--text-3)' }}>
             Configure LLM prompts, models, and A/B test variants
           </p>
         </div>
@@ -107,16 +107,16 @@ export default function AdminConfigPage() {
           return (
             <div
               key={config.key}
-              className="rounded-xl border border-gray-200 p-6"
-              style={{ background: '#ffffff' }}
+              className="rounded-xl p-6"
+              style={{ background: 'var(--surface-3)', border: '1px solid var(--border)' }}
             >
               <div className="flex items-start justify-between mb-3">
                 <div>
-                  <h3 className="text-[15px] font-semibold" style={{ color: '#000' }}>
+                  <h3 className="text-[15px] font-semibold" style={{ color: 'var(--text-1)' }}>
                     {config.key}
                   </h3>
                   {config.description && (
-                    <p className="text-[13px] mt-1" style={{ color: '#555' }}>
+                    <p className="text-[13px] mt-1" style={{ color: 'var(--text-3)' }}>
                       {config.description}
                     </p>
                   )}
@@ -124,8 +124,8 @@ export default function AdminConfigPage() {
                 <button
                   onClick={() => saveConfig(config.key)}
                   disabled={saving[config.key]}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[13px] font-medium text-white transition-all disabled:opacity-50"
-                  style={{ background: saved[config.key] ? '#34a853' : '#0071e3' }}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[13px] font-medium transition-all disabled:opacity-50"
+                  style={{ background: saved[config.key] ? '#34a853' : 'var(--brand)', color: 'var(--bg)' }}
                 >
                   {saving[config.key] ? (
                     <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -142,15 +142,15 @@ export default function AdminConfigPage() {
                 <textarea
                   value={editValues[config.key] || ''}
                   onChange={(e) => setEditValues(prev => ({ ...prev, [config.key]: e.target.value }))}
-                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-[14px] font-mono focus:outline-none focus:border-blue-400"
-                  style={{ background: '#fafafa', color: '#000', minHeight: '120px', resize: 'vertical' }}
+                  className="w-full rounded-lg px-3 py-2 text-[14px] font-mono focus:outline-none"
+                  style={{ background: 'var(--surface-3)', color: 'var(--text-1)', minHeight: '120px', resize: 'vertical', border: '1px solid var(--border)' }}
                 />
               ) : inputType === 'select' ? (
                 <select
                   value={editValues[config.key] || ''}
                   onChange={(e) => setEditValues(prev => ({ ...prev, [config.key]: e.target.value }))}
-                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-[14px] focus:outline-none focus:border-blue-400"
-                  style={{ background: '#fafafa', color: '#000' }}
+                  className="w-full rounded-lg px-3 py-2 text-[14px] focus:outline-none"
+                  style={{ background: 'var(--surface-3)', color: 'var(--text-1)', border: '1px solid var(--border)' }}
                 >
                   <option value="form">form</option>
                   <option value="chat">chat</option>
@@ -161,8 +161,8 @@ export default function AdminConfigPage() {
                   type="text"
                   value={editValues[config.key] || ''}
                   onChange={(e) => setEditValues(prev => ({ ...prev, [config.key]: e.target.value }))}
-                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-[14px] focus:outline-none focus:border-blue-400"
-                  style={{ background: '#fafafa', color: '#000' }}
+                  className="w-full rounded-lg px-3 py-2 text-[14px] focus:outline-none"
+                  style={{ background: 'var(--surface-3)', color: 'var(--text-1)', border: '1px solid var(--border)' }}
                 />
               )}
 
@@ -174,7 +174,7 @@ export default function AdminConfigPage() {
               )}
 
               {config.updated_at && (
-                <p className="text-[11px] mt-2" style={{ color: '#999' }}>
+                <p className="text-[11px] mt-2" style={{ color: 'var(--text-3)' }}>
                   Last updated: {new Date(config.updated_at).toLocaleString()}
                   {config.updated_by ? ` by ${config.updated_by}` : ''}
                 </p>

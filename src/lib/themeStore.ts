@@ -20,7 +20,7 @@ export type Theme = 'light' | 'dark'
 
 const STORAGE_KEY = 'moboost-theme'
 
-let _theme: Theme = 'light'
+let _theme: Theme = 'dark'
 let _hydrated = false
 const _listeners = new Set<() => void>()
 
@@ -40,7 +40,7 @@ function _readFromStorage(): Theme {
   } catch {
     // localStorage blocked (private mode) — silently fall back
   }
-  return 'light'
+  return 'dark'
 }
 
 function _writeToStorage(t: Theme) {

@@ -108,16 +108,16 @@ export default function RemoteProjectView({ projectId }: { projectId: string }) 
 
   if (networkError) {
     return (
-      <div className="min-h-screen bg-white" style={baseStyle}>
+      <div className="min-h-screen" style={{ ...baseStyle, background: 'var(--bg)' }}>
         <div className="mx-auto max-w-3xl px-6 py-12">
           <div
-            style={{ backgroundColor: '#fff5f5', borderColor: '#fca5a5' }}
+            style={{ backgroundColor: 'rgba(239,68,68,0.1)', borderColor: 'rgba(239,68,68,0.3)' }}
             className="rounded-lg p-4 border text-sm flex items-start gap-3"
           >
             <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0 text-red-500" />
             <div>
-              <div className="font-medium text-red-700 mb-1">Failed to load project</div>
-              <div className="text-red-600 text-xs">{networkError}</div>
+              <div className="font-medium text-red-400 mb-1">Failed to load project</div>
+              <div className="text-red-300 text-xs">{networkError}</div>
             </div>
           </div>
         </div>
@@ -127,7 +127,7 @@ export default function RemoteProjectView({ projectId }: { projectId: string }) 
 
   if (data === null) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center" style={baseStyle}>
+      <div className="min-h-screen flex items-center justify-center" style={{ ...baseStyle, background: 'var(--bg)' }}>
         <div className="flex items-center gap-2 text-gray-400 text-sm">
           <Loader2 className="w-4 h-4 animate-spin" />
           Loading project…
@@ -138,14 +138,14 @@ export default function RemoteProjectView({ projectId }: { projectId: string }) 
 
   if (!data.ok) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center" style={baseStyle}>
+      <div className="min-h-screen flex items-center justify-center" style={{ ...baseStyle, background: 'var(--bg)' }}>
         <div className="text-center">
-          <p style={{ color: 'rgba(0,0,0,0.48)' }} className="mb-4 text-sm">
+          <p style={{ color: 'var(--text-3)' }} className="mb-4 text-sm">
             Project not found — it may have been deleted, or you don&apos;t have access.
           </p>
           <button
             onClick={() => router.push('/project')}
-            style={{ color: '#0071e3' }}
+            style={{ color: 'var(--brand)' }}
             className="text-sm hover:opacity-75"
           >
             Back to Projects
@@ -159,13 +159,13 @@ export default function RemoteProjectView({ projectId }: { projectId: string }) 
   const totalArtifacts = reports.length + landingPages.length + assets.length
 
   return (
-    <div className="min-h-screen bg-white" style={baseStyle}>
+    <div className="min-h-screen" style={{ ...baseStyle, background: 'var(--bg)' }}>
       <div className="mx-auto max-w-5xl px-6 py-12">
         {/* Header */}
         <button
           onClick={() => router.push('/project')}
           className="flex items-center gap-1.5 text-sm mb-6"
-          style={{ color: 'rgba(0,0,0,0.48)' }}
+          style={{ color: 'var(--text-3)' }}
         >
           <ArrowLeft className="w-4 h-4" />
           All projects
@@ -174,21 +174,21 @@ export default function RemoteProjectView({ projectId }: { projectId: string }) 
         <div className="mb-10">
           <h1
             style={{ lineHeight: '1.07' }}
-            className="text-4xl font-semibold tracking-tight text-black mb-2"
+            className="text-4xl font-semibold tracking-tight text-white mb-2"
           >
             {project.name}
           </h1>
-          <div className="flex items-center gap-2 text-sm" style={{ color: 'rgba(0,0,0,0.48)' }}>
+          <div className="flex items-center gap-2 text-sm" style={{ color: 'var(--text-3)' }}>
             <Clock className="w-3.5 h-3.5" />
             {timeAgo(project.created_at)}
             {project.products?.name && (
               <>
-                <span style={{ color: 'rgba(0,0,0,0.2)' }}>·</span>
+                <span style={{ color: 'var(--border-strong)' }}>·</span>
                 <span>{project.products.name}</span>
               </>
             )}
             {project.source === 'auto' && (
-              <span className="text-[10px] uppercase tracking-wide ml-2" style={{ color: 'rgba(0,0,0,0.32)' }}>
+              <span className="text-[10px] uppercase tracking-wide ml-2" style={{ color: 'var(--text-3)' }}>
                 auto
               </span>
             )}
@@ -197,7 +197,7 @@ export default function RemoteProjectView({ projectId }: { projectId: string }) 
 
         {totalArtifacts === 0 && (
           <div className="text-center py-16">
-            <p style={{ color: 'rgba(0,0,0,0.48)' }} className="text-sm">
+            <p style={{ color: 'var(--text-3)' }} className="text-sm">
               This project is empty. Generate a report or landing page from Home to fill it.
             </p>
           </div>
@@ -210,47 +210,47 @@ export default function RemoteProjectView({ projectId }: { projectId: string }) 
               <button
                 key={r.id}
                 onClick={() => router.push(`/report/${r.id}`)}
-                style={{ backgroundColor: '#f5f5f7' }}
-                className="w-full text-left rounded-lg overflow-hidden hover:bg-gray-100 transition-colors"
+                style={{ backgroundColor: 'var(--surface-3)' }}
+                className="w-full text-left rounded-lg overflow-hidden hover:bg-[var(--surface-3)] transition-colors"
               >
                 <div className="flex items-center gap-4 p-4">
                   <div
-                    style={{ backgroundColor: '#e8f4ff' }}
+                    style={{ backgroundColor: 'var(--brand-light)' }}
                     className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
                   >
-                    <FileText className="w-5 h-5" style={{ color: '#0071e3' }} />
+                    <FileText className="w-5 h-5" style={{ color: 'var(--brand)' }} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <h3 className="text-[15px] font-semibold text-black truncate">
+                      <h3 className="text-[15px] font-semibold text-white truncate">
                         {reportTitle(r.kind)}
                       </h3>
                       <span
                         className="text-[10px] uppercase tracking-wide font-semibold px-2 py-0.5 rounded-full"
                         style={{
                           color:
-                            r.status === 'done' ? '#0071e3'
+                            r.status === 'done' ? 'var(--brand)'
                             : r.status === 'failed' ? '#ef4444'
                             : r.status === 'running' ? '#f59e0b'
-                            : 'rgba(0,0,0,0.4)',
-                          backgroundColor: 'white',
+                            : 'var(--text-3)',
+                          backgroundColor: 'var(--surface-3)',
                         }}
                       >
                         {r.status}
                       </span>
                     </div>
-                    <div className="flex items-center gap-2 mt-1 text-xs" style={{ color: 'rgba(0,0,0,0.48)' }}>
+                    <div className="flex items-center gap-2 mt-1 text-xs" style={{ color: 'var(--text-3)' }}>
                       <Clock className="w-3 h-3" />
                       <span>{timeAgo(r.created_at)}</span>
                       {r.credits_charged !== null && (
                         <>
-                          <span style={{ color: 'rgba(0,0,0,0.2)' }}>·</span>
+                          <span style={{ color: 'var(--border-strong)' }}>·</span>
                           <span>{r.credits_charged} credit{r.credits_charged !== 1 ? 's' : ''}</span>
                         </>
                       )}
                     </div>
                   </div>
-                  <ChevronRight className="w-5 h-5 flex-shrink-0" style={{ color: 'rgba(0,0,0,0.32)' }} />
+                  <ChevronRight className="w-5 h-5 flex-shrink-0" style={{ color: 'var(--text-3)' }} />
                 </div>
               </button>
             ))}
@@ -263,32 +263,32 @@ export default function RemoteProjectView({ projectId }: { projectId: string }) 
             {landingPages.map((lp) => (
               <div
                 key={lp.id}
-                style={{ backgroundColor: '#f5f5f7' }}
+                style={{ backgroundColor: 'var(--surface-3)' }}
                 className="w-full rounded-lg overflow-hidden"
               >
                 <div className="flex items-center gap-4 p-4">
                   <div
-                    style={{ backgroundColor: '#e8f4ff' }}
+                    style={{ backgroundColor: 'var(--brand-light)' }}
                     className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
                   >
-                    <Layout className="w-5 h-5" style={{ color: '#0071e3' }} />
+                    <Layout className="w-5 h-5" style={{ color: 'var(--brand)' }} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <h3 className="text-[15px] font-semibold text-black truncate">
+                      <h3 className="text-[15px] font-semibold text-white truncate">
                         {lp.template_id || 'Landing Page'}
                       </h3>
                       <span
                         className="text-[10px] uppercase tracking-wide font-semibold px-2 py-0.5 rounded-full"
                         style={{
-                          color: lp.status === 'done' ? '#0071e3' : 'rgba(0,0,0,0.4)',
-                          backgroundColor: 'white',
+                          color: lp.status === 'done' ? 'var(--brand)' : 'var(--text-3)',
+                          backgroundColor: 'var(--surface-3)',
                         }}
                       >
                         {lp.status}
                       </span>
                     </div>
-                    <div className="flex items-center gap-2 mt-1 text-xs" style={{ color: 'rgba(0,0,0,0.48)' }}>
+                    <div className="flex items-center gap-2 mt-1 text-xs" style={{ color: 'var(--text-3)' }}>
                       <Clock className="w-3 h-3" />
                       <span>{timeAgo(lp.created_at)}</span>
                     </div>
@@ -297,7 +297,7 @@ export default function RemoteProjectView({ projectId }: { projectId: string }) 
                     <button
                       onClick={() => setPreviewHtml({ id: lp.id, html: lp.html as string })}
                       className="flex items-center gap-1.5 text-sm font-medium px-3 py-1.5 rounded-full"
-                      style={{ backgroundColor: '#0071e3', color: 'white' }}
+                      style={{ backgroundColor: 'var(--brand)', color: 'var(--bg)' }}
                     >
                       <Eye className="w-3.5 h-3.5" />
                       Preview
@@ -315,7 +315,7 @@ export default function RemoteProjectView({ projectId }: { projectId: string }) 
             {assets.map((a) => (
               <div
                 key={a.id}
-                style={{ backgroundColor: '#f5f5f7' }}
+                style={{ backgroundColor: 'var(--surface-3)' }}
                 className="w-full rounded-lg overflow-hidden"
               >
                 <div className="flex items-center gap-4 p-4">
@@ -328,17 +328,17 @@ export default function RemoteProjectView({ projectId }: { projectId: string }) 
                     />
                   ) : (
                     <div
-                      style={{ backgroundColor: '#e8f4ff' }}
+                      style={{ backgroundColor: 'var(--brand-light)' }}
                       className="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0"
                     >
-                      <ImageIcon className="w-5 h-5" style={{ color: '#0071e3' }} />
+                      <ImageIcon className="w-5 h-5" style={{ color: 'var(--brand)' }} />
                     </div>
                   )}
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-[15px] font-semibold text-black truncate">
+                    <h3 className="text-[15px] font-semibold text-white truncate">
                       {a.type || 'Asset'}
                     </h3>
-                    <div className="text-xs mt-1 truncate" style={{ color: 'rgba(0,0,0,0.48)' }}>
+                    <div className="text-xs mt-1 truncate" style={{ color: 'var(--text-3)' }}>
                       {a.prompt || timeAgo(a.created_at)}
                     </div>
                   </div>
@@ -348,7 +348,7 @@ export default function RemoteProjectView({ projectId }: { projectId: string }) 
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-1.5 text-sm font-medium px-3 py-1.5 rounded-full"
-                      style={{ backgroundColor: 'white', color: '#0071e3', border: '1px solid #e2e8f0' }}
+                      style={{ backgroundColor: 'var(--surface-3)', color: 'var(--brand)', border: '1px solid var(--border)' }}
                     >
                       <ExternalLink className="w-3.5 h-3.5" />
                       Open
@@ -370,14 +370,14 @@ export default function RemoteProjectView({ projectId }: { projectId: string }) 
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="bg-white rounded-2xl overflow-hidden flex flex-col"
-            style={{ width: '90vw', maxWidth: 1100, height: '85vh' }}
+            className="rounded-2xl overflow-hidden flex flex-col"
+            style={{ width: '90vw', maxWidth: 1100, height: '85vh', background: 'var(--surface-2)', backdropFilter: 'blur(40px)', border: '1px solid var(--border)' }}
           >
-            <div className="flex items-center justify-between px-5 py-3 border-b border-gray-200">
-              <div className="text-sm font-medium text-black">Landing Page Preview</div>
+            <div className="flex items-center justify-between px-5 py-3 border-b border-[var(--border)]">
+              <div className="text-sm font-medium text-white">Landing Page Preview</div>
               <button
                 onClick={() => setPreviewHtml(null)}
-                className="text-sm text-gray-500 hover:text-black"
+                className="text-sm text-gray-400 hover:text-white"
               >
                 Close
               </button>
@@ -406,11 +406,11 @@ function Section({
   return (
     <div className="mb-10">
       <div className="flex items-center gap-2 mb-4">
-        <div style={{ color: 'rgba(0,0,0,0.6)' }}>{icon}</div>
-        <h2 className="text-sm font-semibold uppercase tracking-wide" style={{ color: 'rgba(0,0,0,0.6)' }}>
+        <div style={{ color: 'var(--text-2)' }}>{icon}</div>
+        <h2 className="text-sm font-semibold uppercase tracking-wide" style={{ color: 'var(--text-2)' }}>
           {title}
         </h2>
-        <span className="text-xs" style={{ color: 'rgba(0,0,0,0.32)' }}>{count}</span>
+        <span className="text-xs" style={{ color: 'var(--text-3)' }}>{count}</span>
       </div>
       <div className="space-y-2">{children}</div>
     </div>

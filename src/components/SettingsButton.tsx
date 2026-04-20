@@ -11,17 +11,33 @@
  */
 
 import { useEffect, useRef, useState } from 'react'
-import { usePathname } from 'next/navigation'
-import { Settings, Check, X } from 'lucide-react'
+import { usePathname, useRouter } from 'next/navigation'
+import { Settings, Check, X, LogOut } from 'lucide-react'
+import { SignedIn, useClerk, useUser } from '@clerk/nextjs'
 import { useLocale } from '@/lib/i18n/LocaleProvider'
 import { LOCALES, LOCALE_LABELS, type Locale } from '@/lib/i18n/dict'
 
 export default function SettingsButton() {
   const pathname = usePathname() || ''
+  const router = useRouter()
   const { locale, setLocale, t } = useLocale()
+  const { signOut } = useClerk()
+  const { user, isSignedIn } = useUser()
   const [open, setOpen] = useState(false)
+  const [signingOut, setSigningOut] = useState(false)
   const popoverRef = useRef<HTMLDivElement>(null)
   const buttonRef = useRef<HTMLButtonElement>(null)
+
+  async function handleSignOut() {
+    setSigningOut(true)
+    try {
+      await signOut()
+      setOpen(false)
+      router.push('/sign-in')
+    } finally {
+      setSigningOut(false)
+    }
+  }
 
   // Click-outside to close.
   useEffect(() => {
@@ -46,8 +62,15 @@ export default function SettingsButton() {
     }
   }, [open])
 
-  // Hide on admin / system pages — they have their own chrome.
-  if (pathname.startsWith('/admin') || pathname.startsWith('/reset')) return null
+  // Hide on admin / system pages and pre-login flows —
+  // settings (language, sign-out) only make sense inside the main app.
+  if (
+    pathname.startsWith('/admin') ||
+    pathname.startsWith('/reset') ||
+    pathname.startsWith('/sign-in') ||
+    pathname.startsWith('/sign-up') ||
+    pathname.startsWith('/onboarding')
+  ) return null
 
   return (
     <>
@@ -65,15 +88,15 @@ export default function SettingsButton() {
           height: 40,
           borderRadius: 999,
           background: 'rgba(0,0,0,0.78)',
-          color: '#fff',
-          border: '1px solid rgba(255,255,255,0.12)',
+          color: 'var(--text-1)',
+          border: '1px solid var(--border-strong)',
           backdropFilter: 'saturate(180%) blur(20px)',
           WebkitBackdropFilter: 'saturate(180%) blur(20px)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           cursor: 'pointer',
-          boxShadow: '0 6px 20px rgba(0,0,0,0.25)',
+          boxShadow: 'var(--shadow-md)',
           transition: 'transform 0.15s ease',
         }}
         onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.05)' }}
@@ -94,12 +117,12 @@ export default function SettingsButton() {
             zIndex: 1001,
             width: 240,
             background: 'rgba(28,28,30,0.96)',
-            color: '#fff',
-            border: '1px solid rgba(255,255,255,0.12)',
+            color: 'var(--text-1)',
+            border: '1px solid var(--border-strong)',
             borderRadius: 12,
             backdropFilter: 'saturate(180%) blur(20px)',
             WebkitBackdropFilter: 'saturate(180%) blur(20px)',
-            boxShadow: '0 12px 40px rgba(0,0,0,0.4)',
+            boxShadow: 'var(--shadow-md)',
             padding: 12,
             fontFamily: '-apple-system, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
           }}
@@ -107,7 +130,7 @@ export default function SettingsButton() {
           <div style={{
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             padding: '4px 4px 8px',
-            borderBottom: '1px solid rgba(255,255,255,0.08)',
+            borderBottom: '1px solid var(--border)',
             marginBottom: 8,
           }}>
             <span style={{ fontSize: 13, fontWeight: 600 }}>{t('settings.title')}</span>
@@ -115,7 +138,7 @@ export default function SettingsButton() {
               onClick={() => setOpen(false)}
               aria-label={t('settings.close')}
               style={{
-                background: 'none', border: 'none', color: 'rgba(255,255,255,0.6)',
+                background: 'none', border: 'none', color: 'var(--text-2)',
                 cursor: 'pointer', padding: 2, display: 'flex',
               }}
             >
@@ -126,7 +149,7 @@ export default function SettingsButton() {
           <div style={{
             fontSize: 11, fontWeight: 600, letterSpacing: 0.5,
             textTransform: 'uppercase' as const,
-            color: 'rgba(255,255,255,0.5)',
+            color: 'var(--text-3)',
             padding: '4px 6px 6px',
           }}>
             {t('settings.language')}
@@ -142,6 +165,58 @@ export default function SettingsButton() {
               />
             ))}
           </div>
+
+          <SignedIn>
+            <div style={{
+              marginTop: 10,
+              paddingTop: 10,
+              borderTop: '1px solid var(--border)',
+            }}>
+              <div style={{
+                fontSize: 11, fontWeight: 600, letterSpacing: 0.5,
+                textTransform: 'uppercase' as const,
+                color: 'var(--text-3)',
+                padding: '0 6px 6px',
+              }}>
+                {t('settings.account')}
+              </div>
+              {isSignedIn && user && (
+                <div style={{
+                  fontSize: 12,
+                  color: 'var(--text-2)',
+                  padding: '0 10px 8px',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                }}>
+                  {user.primaryEmailAddress?.emailAddress || user.username || user.id}
+                </div>
+              )}
+              <button
+                onClick={handleSignOut}
+                disabled={signingOut}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 8,
+                  width: '100%',
+                  padding: '8px 10px',
+                  background: 'transparent',
+                  border: 'none',
+                  borderRadius: 8,
+                  color: '#ff6b6b',
+                  fontSize: 14,
+                  cursor: signingOut ? 'wait' : 'pointer',
+                  textAlign: 'left' as const,
+                  transition: 'background 0.12s',
+                  opacity: signingOut ? 0.6 : 1,
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,107,107,0.1)' }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent' }}
+              >
+                <LogOut size={14} />
+                <span>{signingOut ? '...' : t('settings.signOut')}</span>
+              </button>
+            </div>
+          </SignedIn>
         </div>
       )}
     </>
@@ -161,14 +236,14 @@ function LocaleOption({ value, active, onSelect }: {
         background: active ? 'rgba(0,113,227,0.18)' : 'transparent',
         border: 'none',
         borderRadius: 8,
-        color: '#fff',
+        color: 'var(--text-1)',
         fontSize: 14,
         cursor: 'pointer',
         textAlign: 'left' as const,
         transition: 'background 0.12s',
       }}
       onMouseEnter={(e) => {
-        if (!active) e.currentTarget.style.background = 'rgba(255,255,255,0.06)'
+        if (!active) e.currentTarget.style.background = 'var(--surface-3)'
       }}
       onMouseLeave={(e) => {
         if (!active) e.currentTarget.style.background = 'transparent'

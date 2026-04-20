@@ -21,6 +21,7 @@ import { supabaseService } from '@/lib/db'
 import { generateLanding } from '@/lib/landingGenerator'
 import type { TemplateId } from '@/lib/landingTemplates'
 import type { EnrichmentRecord } from '@/lib/productEnrichment'
+import { notifyCollab } from '@/lib/collabWebhook'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -140,6 +141,15 @@ export async function POST(req: NextRequest) {
       { status: 500 },
     )
   }
+
+  notifyCollab('landing.regenerated', {
+    landingId: row.id,
+    reportId,
+    projectId: report.project_id,
+    productId: report.product_id,
+    templateId: row.template_id,
+    createdAt: row.created_at,
+  }).catch(() => {})
 
   return NextResponse.json({ ok: true, landingPage: row })
 }

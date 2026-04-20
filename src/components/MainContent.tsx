@@ -12,11 +12,16 @@ export default function MainContent({ children }: { children: React.ReactNode })
   const collapsed = useStoreValue(store.isSidebarCollapsed)
   const pathname = usePathname()
 
-  // Workspace pages (/project/[id]) and login page use their own full-width layout
+  // Full-width pages: workspace, login, sign-in, sign-up, onboarding
   const isWorkspace = /^\/project\/[^/]+$/.test(pathname)
-  const isLogin = pathname === '/login'
+  const isFullWidth =
+    pathname === '/login' ||
+    pathname.startsWith('/sign-in') ||
+    pathname.startsWith('/sign-up') ||
+    pathname.startsWith('/onboarding') ||
+    pathname.startsWith('/post-signin')
 
-  if (isWorkspace || isLogin) {
+  if (isWorkspace || isFullWidth) {
     return <main className="min-h-screen">{children}</main>
   }
 

@@ -144,7 +144,7 @@ export default function AdminAgentsPage() {
           <Brain className="w-6 h-6" style={{ color: '#e94560' }} />
           Agent 注册表
         </h1>
-        <p className="text-sm mt-1" style={{ color: 'rgba(255,255,255,0.5)' }}>
+        <p className="text-sm mt-1" style={{ color: 'var(--text-2)' }}>
           共 {agents.length} 个Agent · {agents.filter((a: AgentStat) => a.status === 'active').length} 活跃
         </p>
       </div>
@@ -152,7 +152,7 @@ export default function AdminAgentsPage() {
       {/* Filters */}
       <div className="flex items-center gap-3 mb-6">
         <div className="relative flex-1 max-w-[300px]">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: 'rgba(255,255,255,0.3)' }} />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: 'var(--text-3)' }} />
           <input
             type="text"
             value={search}
@@ -160,8 +160,8 @@ export default function AdminAgentsPage() {
             placeholder="搜索Agent..."
             className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm text-white outline-none"
             style={{
-              background: 'rgba(255,255,255,0.05)',
-              border: '1px solid rgba(255,255,255,0.1)',
+              background: 'var(--surface-3)',
+              border: '1px solid var(--border-strong)',
             }}
           />
         </div>
@@ -170,8 +170,8 @@ export default function AdminAgentsPage() {
           onChange={(e) => setFilterCategory(e.target.value)}
           className="px-3 py-2.5 rounded-xl text-sm text-white outline-none appearance-none cursor-pointer"
           style={{
-            background: 'rgba(255,255,255,0.05)',
-            border: '1px solid rgba(255,255,255,0.1)',
+            background: 'var(--surface-3)',
+            border: '1px solid var(--border-strong)',
           }}
         >
           <option value="all">全部分类</option>
@@ -184,8 +184,8 @@ export default function AdminAgentsPage() {
           onChange={(e) => setFilterStatus(e.target.value)}
           className="px-3 py-2.5 rounded-xl text-sm text-white outline-none appearance-none cursor-pointer"
           style={{
-            background: 'rgba(255,255,255,0.05)',
-            border: '1px solid rgba(255,255,255,0.1)',
+            background: 'var(--surface-3)',
+            border: '1px solid var(--border-strong)',
           }}
         >
           <option value="all">全部状态</option>
@@ -204,8 +204,8 @@ export default function AdminAgentsPage() {
               onClick={() => handleSelect(agent.id)}
               className="w-full text-left rounded-xl p-5 transition-all"
               style={{
-                background: selectedAgent === agent.id ? 'rgba(233,69,96,0.08)' : 'rgba(255,255,255,0.03)',
-                border: `1px solid ${selectedAgent === agent.id ? 'rgba(233,69,96,0.3)' : 'rgba(255,255,255,0.08)'}`,
+                background: selectedAgent === agent.id ? 'rgba(233,69,96,0.08)' : 'var(--surface-3)',
+                border: `1px solid ${selectedAgent === agent.id ? 'rgba(233,69,96,0.3)' : 'var(--border)'}`,
               }}
             >
               <div className="flex items-center justify-between mb-3">
@@ -213,7 +213,7 @@ export default function AdminAgentsPage() {
                   <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: statusColors[agent.status] || '#8e8e93' }} />
                   <div>
                     <span className="text-sm font-semibold text-white">{agent.nameZh}</span>
-                    <span className="text-[10px] ml-2" style={{ color: 'rgba(255,255,255,0.4)' }}>
+                    <span className="text-[10px] ml-2" style={{ color: 'var(--text-3)' }}>
                       {agent.nameEn} · v{agent.version}
                     </span>
                   </div>
@@ -226,20 +226,20 @@ export default function AdminAgentsPage() {
                     {agent.status}
                   </span>
                   <span className="text-[10px] px-2 py-0.5 rounded-full" style={{
-                    background: 'rgba(255,255,255,0.06)',
-                    color: 'rgba(255,255,255,0.4)',
+                    background: 'var(--surface-3)',
+                    color: 'var(--text-3)',
                   }}>
                     {categoryLabels[agent.category] || agent.category}
                   </span>
                   <span className="text-[10px] px-2 py-0.5 rounded-full" style={{
-                    background: 'rgba(255,255,255,0.06)',
-                    color: 'rgba(255,255,255,0.4)',
+                    background: 'var(--surface-3)',
+                    color: 'var(--text-3)',
                   }}>
                     {agent.origin}
                   </span>
                   {selectedAgent === agent.id
-                    ? <ChevronDown className="w-4 h-4" style={{ color: 'rgba(255,255,255,0.3)' }} />
-                    : <ChevronRight className="w-4 h-4" style={{ color: 'rgba(255,255,255,0.3)' }} />
+                    ? <ChevronDown className="w-4 h-4" style={{ color: 'var(--text-3)' }} />
+                    : <ChevronRight className="w-4 h-4" style={{ color: 'var(--text-3)' }} />
                   }
                 </div>
               </div>
@@ -260,7 +260,7 @@ export default function AdminAgentsPage() {
               <div
                 className="rounded-b-xl p-5 -mt-1 space-y-4"
                 style={{
-                  background: 'rgba(255,255,255,0.02)',
+                  background: 'var(--surface-3)',
                   borderLeft: '1px solid rgba(233,69,96,0.3)',
                   borderRight: '1px solid rgba(233,69,96,0.3)',
                   borderBottom: '1px solid rgba(233,69,96,0.3)',
@@ -275,20 +275,20 @@ export default function AdminAgentsPage() {
                     {/* Capabilities & Dependencies */}
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <span className="text-[10px] uppercase tracking-wider font-medium" style={{ color: 'rgba(255,255,255,0.4)' }}>
+                        <span className="text-[10px] uppercase tracking-wider font-medium" style={{ color: 'var(--text-3)' }}>
                           能力标签
                         </span>
                         <div className="flex flex-wrap gap-1 mt-2">
                           {detail.capabilities.map((c: string) => (
                             <span key={c} className="px-2 py-0.5 rounded text-[10px]" style={{
-                              background: 'rgba(255,255,255,0.06)',
-                              color: 'rgba(255,255,255,0.5)',
+                              background: 'var(--surface-3)',
+                              color: 'var(--text-2)',
                             }}>{c}</span>
                           ))}
                         </div>
                       </div>
                       <div>
-                        <span className="text-[10px] uppercase tracking-wider font-medium" style={{ color: 'rgba(255,255,255,0.4)' }}>
+                        <span className="text-[10px] uppercase tracking-wider font-medium" style={{ color: 'var(--text-3)' }}>
                           依赖
                         </span>
                         <div className="flex flex-wrap gap-1 mt-2">
@@ -296,10 +296,10 @@ export default function AdminAgentsPage() {
                             ? detail.dependencies.map((d: string) => (
                                 <span key={d} className="px-2 py-0.5 rounded text-[10px]" style={{
                                   background: 'rgba(0,113,227,0.15)',
-                                  color: '#0071e3',
+                                  color: 'var(--brand)',
                                 }}>{d}</span>
                               ))
-                            : <span className="text-[10px]" style={{ color: 'rgba(255,255,255,0.3)' }}>无依赖</span>
+                            : <span className="text-[10px]" style={{ color: 'var(--text-3)' }}>无依赖</span>
                           }
                         </div>
                       </div>
@@ -308,7 +308,7 @@ export default function AdminAgentsPage() {
                     {/* Tools */}
                     {detail.tools && detail.tools.length > 0 && (
                       <div>
-                        <span className="text-[10px] uppercase tracking-wider font-medium" style={{ color: 'rgba(255,255,255,0.4)' }}>
+                        <span className="text-[10px] uppercase tracking-wider font-medium" style={{ color: 'var(--text-3)' }}>
                           工具
                         </span>
                         <div className="flex flex-wrap gap-1 mt-2">
@@ -325,7 +325,7 @@ export default function AdminAgentsPage() {
                     {/* Recent Logs */}
                     {detail.recentLogs && detail.recentLogs.length > 0 && (
                       <div>
-                        <span className="text-[10px] uppercase tracking-wider font-medium" style={{ color: 'rgba(255,255,255,0.4)' }}>
+                        <span className="text-[10px] uppercase tracking-wider font-medium" style={{ color: 'var(--text-3)' }}>
                           最近执行记录
                         </span>
                         <div className="mt-2 space-y-1.5">
@@ -333,16 +333,16 @@ export default function AdminAgentsPage() {
                             <div
                               key={log.id}
                               className="flex items-center gap-3 py-2 px-3 rounded-lg text-xs"
-                              style={{ background: 'rgba(255,255,255,0.03)' }}
+                              style={{ background: 'var(--surface-3)' }}
                             >
                               <div className={`w-1.5 h-1.5 rounded-full ${log.metrics.success ? 'bg-[#34c759]' : 'bg-[#ff3b30]'}`} />
-                              <span className="font-mono text-[10px]" style={{ color: 'rgba(255,255,255,0.3)' }}>
+                              <span className="font-mono text-[10px]" style={{ color: 'var(--text-3)' }}>
                                 {log.run_id.substring(0, 8)}
                               </span>
-                              <span style={{ color: 'rgba(255,255,255,0.6)' }}>
+                              <span style={{ color: 'var(--text-2)' }}>
                                 {(log.metrics.durationMs / 1000).toFixed(1)}s
                               </span>
-                              <span style={{ color: 'rgba(255,255,255,0.6)' }}>
+                              <span style={{ color: 'var(--text-2)' }}>
                                 Q:{log.metrics.qualityScore.toFixed(0)}
                               </span>
                               {log.user_action && (
@@ -353,7 +353,7 @@ export default function AdminAgentsPage() {
                                   {log.user_action}
                                 </span>
                               )}
-                              <span className="ml-auto text-[10px]" style={{ color: 'rgba(255,255,255,0.25)' }}>
+                              <span className="ml-auto text-[10px]" style={{ color: 'var(--text-3)' }}>
                                 {new Date(log.created_at).toLocaleString('zh-CN')}
                               </span>
                             </div>
@@ -363,7 +363,7 @@ export default function AdminAgentsPage() {
                     )}
                   </>
                 ) : (
-                  <p className="text-xs" style={{ color: 'rgba(255,255,255,0.4)' }}>无法加载详情</p>
+                  <p className="text-xs" style={{ color: 'var(--text-3)' }}>无法加载详情</p>
                 )}
               </div>
             )}
@@ -373,9 +373,9 @@ export default function AdminAgentsPage() {
         {filtered.length === 0 && (
           <div
             className="rounded-xl p-12 text-center"
-            style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}
+            style={{ background: 'var(--surface-3)', border: '1px solid var(--border)' }}
           >
-            <Brain className="w-12 h-12 mx-auto mb-4" style={{ color: 'rgba(255,255,255,0.15)' }} />
+            <Brain className="w-12 h-12 mx-auto mb-4" style={{ color: 'var(--text-3)' }} />
             <p className="text-sm text-white">没有找到匹配的Agent</p>
           </div>
         )}
@@ -389,8 +389,8 @@ export default function AdminAgentsPage() {
 function MiniMetric({ label, value, color }: { label: string; value: string; color?: string }) {
   return (
     <div>
-      <div className="text-[10px] mb-0.5" style={{ color: 'rgba(255,255,255,0.3)' }}>{label}</div>
-      <div className="text-sm font-semibold" style={{ color: color || '#ffffff' }}>{value}</div>
+      <div className="text-[10px] mb-0.5" style={{ color: 'var(--text-3)' }}>{label}</div>
+      <div className="text-sm font-semibold" style={{ color: color || 'var(--text-1)' }}>{value}</div>
     </div>
   )
 }

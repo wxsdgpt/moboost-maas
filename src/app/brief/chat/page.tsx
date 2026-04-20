@@ -48,7 +48,7 @@ export default function BriefChatPage() {
     {
       role: 'assistant',
       content:
-        '你好 xu，告诉我你想做什么样的素材就行 — 比如「给 iGaming 新用户做一组 IG Reel，30 秒，调性激进」。\n\n你也可以直接贴竞品链接或参考页面，我会自动抓取分析。',
+        'Hi — just tell me what kind of creative you want, e.g. "Make an IG Reel for new iGaming users, 30s, aggressive tone."\n\nYou can also paste a competitor link or reference page, and I\'ll fetch and analyze it automatically.',
     },
   ])
   const [input, setInput] = useState('')
@@ -99,7 +99,7 @@ export default function BriefChatPage() {
       setError(msg)
       setMessages((m) => [
         ...m,
-        { role: 'assistant', content: `(出错了：${msg})` },
+        { role: 'assistant', content: `(Error: ${msg})` },
       ])
     } finally {
       setLoading(false)
@@ -133,12 +133,12 @@ export default function BriefChatPage() {
         {
           role: 'assistant',
           content:
-            `已完成 enrich：抓取了 ${data.sources?.length || 0} 个可信源。\n\n` +
-            `受众假设：${(data.enrichment?.audienceHypotheses || []).slice(0, 3).join(' · ') || '无'}\n` +
-            `调性建议：${(data.enrichment?.toneSuggestions || []).slice(0, 3).join(' · ') || '无'}\n` +
-            `文案钩子：${(data.enrichment?.copyHooks || []).slice(0, 3).join(' · ') || '无'}\n` +
-            `视觉关键词：${(data.enrichment?.visualKeywords || []).slice(0, 3).join(' · ') || '无'}\n\n` +
-            `（完整 enrich 结果已保存。下一步进入 Stage 4 生成。）`,
+            `Enrich complete: fetched ${data.sources?.length || 0} trusted sources.\n\n` +
+            `Audience hypotheses: ${(data.enrichment?.audienceHypotheses || []).slice(0, 3).join(' · ') || 'none'}\n` +
+            `Tone suggestions: ${(data.enrichment?.toneSuggestions || []).slice(0, 3).join(' · ') || 'none'}\n` +
+            `Copy hooks: ${(data.enrichment?.copyHooks || []).slice(0, 3).join(' · ') || 'none'}\n` +
+            `Visual keywords: ${(data.enrichment?.visualKeywords || []).slice(0, 3).join(' · ') || 'none'}\n\n` +
+            `(Full enrich results saved. Next: Stage 4 generation.)`,
         },
       ])
       setBrief(data.brief)
@@ -154,18 +154,18 @@ export default function BriefChatPage() {
   const readyToGenerate = lastAssistant?.nextActions?.includes('ready-to-generate')
 
   return (
-    <main className="min-h-screen bg-white text-black flex flex-col" style={{ fontFamily: '-apple-system, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif' }}>
-      <header className="border-b border-gray-200 px-6 py-4 flex items-center justify-between bg-white">
+    <main className="min-h-screen flex flex-col" style={{ background: 'var(--bg)', fontFamily: '-apple-system, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif' }}>
+      <header className="px-6 py-4 flex items-center justify-between" style={{ background: 'var(--nav-bg)', backdropFilter: 'saturate(120%) blur(24px)', borderBottom: '1px solid var(--border)' }}>
         <div>
-          <h1 className="text-lg font-semibold" style={{ color: '#000' }}>Brief · Chat Mode</h1>
-          <p className="text-xs mt-0.5" style={{ color: 'rgba(0,0,0,0.48)' }}>
+          <h1 className="text-lg font-semibold" style={{ color: 'var(--text-1)' }}>Brief · Chat Mode</h1>
+          <p className="text-xs mt-0.5" style={{ color: 'var(--text-4)' }}>
             Describe what you need in natural language — AI extracts links, infers specs, and asks key questions
           </p>
         </div>
         <Link
           href="/brief/new"
           className="text-xs hover:opacity-80 transition"
-          style={{ color: '#0066cc' }}
+          style={{ color: 'var(--brand)' }}
         >
           Switch to advanced picker →
         </Link>
@@ -180,19 +180,20 @@ export default function BriefChatPage() {
             <div
               className="max-w-2xl rounded-2xl px-4 py-3 whitespace-pre-wrap text-sm leading-relaxed"
               style={{
-                backgroundColor: m.role === 'user' ? '#f5f5f7' : '#f5f5f7',
-                color: '#000',
+                ...(m.role === 'user'
+                  ? { background: 'linear-gradient(135deg, #c0e463, #a8d44a)', color: 'var(--brand-contrast)' }
+                  : { backgroundColor: 'var(--surface-2)', color: 'var(--text-1)' }),
               }}
             >
               {m.content}
 
               {m.pendingQuestions && m.pendingQuestions.length > 0 && (
-                <div className="mt-3 space-y-3 border-t pt-3" style={{ borderColor: 'rgba(0,0,0,0.1)' }}>
+                <div className="mt-3 space-y-3 border-t pt-3" style={{ borderColor: 'var(--surface-3)' }}>
                   {m.pendingQuestions.map((q) => (
                     <div key={q.id}>
-                      <div className="text-xs mb-1" style={{ color: 'rgba(0,0,0,0.6)' }}>
+                      <div className="text-xs mb-1" style={{ color: 'var(--text-3)' }}>
                         {q.question}
-                        {q.required && <span className="ml-1" style={{ color: '#d70015' }}>*</span>}
+                        {q.required && <span className="ml-1" style={{ color: 'var(--danger)' }}>*</span>}
                       </div>
                       <div className="flex flex-wrap gap-2">
                         {(q.choices || []).map((c) => {
@@ -204,9 +205,9 @@ export default function BriefChatPage() {
                               disabled={loading}
                               className="text-xs rounded-full px-3 py-1 border transition"
                               style={{
-                                backgroundColor: answered ? '#0071e3' : 'white',
-                                color: answered ? 'white' : '#000',
-                                borderColor: answered ? '#0071e3' : 'rgba(0,0,0,0.1)',
+                                backgroundColor: answered ? 'var(--brand)' : 'var(--surface-2)',
+                                color: answered ? 'var(--brand-contrast)' : 'var(--text-1)',
+                                borderColor: answered ? 'var(--brand)' : 'var(--surface-3)',
                               }}
                             >
                               {c}
@@ -224,7 +225,7 @@ export default function BriefChatPage() {
 
         {loading && (
           <div className="flex justify-start">
-            <div className="rounded-2xl px-4 py-3 text-sm" style={{ backgroundColor: '#f5f5f7', color: 'rgba(0,0,0,0.48)' }}>
+            <div className="rounded-2xl px-4 py-3 text-sm" style={{ backgroundColor: 'var(--surface-2)', color: 'var(--text-4)' }}>
               Thinking…
             </div>
           </div>
@@ -232,14 +233,14 @@ export default function BriefChatPage() {
       </div>
 
       {error && (
-        <div className="px-6 py-2 text-xs border-t" style={{ color: '#d70015', borderColor: 'rgba(215,0,21,0.2)', backgroundColor: 'rgba(215,0,21,0.06)' }}>
+        <div className="px-6 py-2 text-xs border-t" style={{ color: 'var(--danger)', borderColor: 'rgba(255,82,82,0.2)', backgroundColor: 'var(--danger-bg)' }}>
           {error}
         </div>
       )}
 
       {readyToGenerate && (
-        <div className="px-6 py-3 border-t bg-white flex items-center justify-between" style={{ borderColor: 'rgba(0,0,0,0.1)' }}>
-          <div className="text-xs" style={{ color: 'rgba(0,0,0,0.6)' }}>
+        <div className="px-6 py-3 flex items-center justify-between" style={{ background: 'var(--nav-bg)', backdropFilter: 'saturate(120%) blur(24px)', borderTop: '1px solid var(--border)' }}>
+          <div className="text-xs" style={{ color: 'var(--text-3)' }}>
             ✓ Brief information complete. Ready for enrich phase.
           </div>
           <button
@@ -247,8 +248,8 @@ export default function BriefChatPage() {
             disabled={enriching}
             className="text-sm rounded-full px-4 py-2 font-medium transition"
             style={{
-              backgroundColor: '#0071e3',
-              color: 'white',
+              backgroundColor: 'var(--brand)',
+              color: 'var(--brand-contrast)',
               opacity: enriching ? 0.5 : 1,
             }}
           >
@@ -262,8 +263,8 @@ export default function BriefChatPage() {
           e.preventDefault()
           send(input)
         }}
-        className="border-t px-6 py-4 flex gap-3 bg-white"
-        style={{ borderColor: 'rgba(0,0,0,0.1)' }}
+        className="border-t px-6 py-4 flex gap-3"
+        style={{ background: 'var(--nav-bg)', backdropFilter: 'saturate(120%) blur(24px)', borderColor: 'var(--border)' }}
       >
         <textarea
           value={input}
@@ -278,16 +279,16 @@ export default function BriefChatPage() {
           placeholder="Describe your content needs or paste a reference link…"
           className="flex-1 resize-none rounded-lg border outline-none px-3 py-2 text-sm"
           style={{
-            backgroundColor: '#f5f5f7',
-            borderColor: 'rgba(0,0,0,0.1)',
-            color: '#000',
+            backgroundColor: 'var(--surface-2)',
+            borderColor: 'var(--surface-3)',
+            color: 'var(--text-1)',
           }}
           onFocus={(e) => {
-            e.currentTarget.style.borderColor = '#0071e3'
-            e.currentTarget.style.boxShadow = '0 0 0 2px rgba(0,113,227,0.1)'
+            e.currentTarget.style.borderColor = 'var(--brand)'
+            e.currentTarget.style.boxShadow = '0 0 0 2px rgba(192,228,99,0.1)'
           }}
           onBlur={(e) => {
-            e.currentTarget.style.borderColor = 'rgba(0,0,0,0.1)'
+            e.currentTarget.style.borderColor = 'var(--surface-3)'
             e.currentTarget.style.boxShadow = 'none'
           }}
           disabled={loading}
@@ -297,8 +298,8 @@ export default function BriefChatPage() {
           disabled={loading || !input.trim()}
           className="self-end rounded-full px-4 py-2 text-sm font-medium transition"
           style={{
-            backgroundColor: loading || !input.trim() ? '#f5f5f7' : '#0071e3',
-            color: loading || !input.trim() ? 'rgba(0,0,0,0.3)' : 'white',
+            backgroundColor: loading || !input.trim() ? 'var(--surface-1)' : 'var(--brand)',
+            color: loading || !input.trim() ? 'var(--text-5)' : 'var(--brand-contrast)',
           }}
         >
           Send

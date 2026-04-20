@@ -54,11 +54,11 @@ const PLATFORM_LABELS: Record<Platform, string> = {
   'google-display': 'Google Display',
   programmatic: 'Programmatic',
   ctv: 'CTV / OTT',
-  web: 'Web 落地页',
+  web: 'Web Landing',
   email: 'EDM',
   'app-store-ios': 'App Store (iOS)',
   'app-store-android': 'Play Store',
-  universal: '通用',
+  universal: 'Universal',
 }
 
 // ────────────────────────────────────────────────────────────────────────────
@@ -157,7 +157,7 @@ export default function NewBriefPage() {
     const u = urlDraft.trim()
     if (!u) return
     if (!/^https?:\/\//i.test(u)) {
-      setError('网址需要以 http:// 或 https:// 开头')
+      setError('URL must start with http:// or https://')
       return
     }
     setUrls(curr => [...curr, u])
@@ -192,7 +192,7 @@ export default function NewBriefPage() {
         const res = await fetch('/api/upload', { method: 'POST', body: fd })
         const data = await res.json()
         if (!res.ok) {
-          throw new Error(data.error || `上传失败 (${res.status})`)
+          throw new Error(data.error || `Upload failed (${res.status})`)
         }
         const asset = data.asset as UploadedAsset
         if (kind === 'image') setUploadedImages(curr => [...curr, asset])
@@ -238,7 +238,7 @@ export default function NewBriefPage() {
       })
       const parseData = await parseRes.json()
       if (!parseRes.ok || !parseData.ok) {
-        throw new Error(parseData.error || `parse 失败 (${parseRes.status})`)
+        throw new Error(parseData.error || `parse failed (${parseRes.status})`)
       }
       setSimpleMeta(parseData.meta)
 
@@ -249,7 +249,7 @@ export default function NewBriefPage() {
       })
       const clarifyData = await clarifyRes.json()
       if (!clarifyRes.ok || !clarifyData.ok) {
-        throw new Error(clarifyData.error || `clarify 失败 (${clarifyRes.status})`)
+        throw new Error(clarifyData.error || `clarify failed (${clarifyRes.status})`)
       }
       setClarified(clarifyData.brief as ClarifiedBrief)
     } catch (err) {
@@ -286,7 +286,7 @@ export default function NewBriefPage() {
       })
       const data = await res.json()
       if (!res.ok || !data.ok) {
-        throw new Error(data.error || `服务异常 (${res.status})`)
+        throw new Error(data.error || `Service error (${res.status})`)
       }
       setClarified(data.brief as ClarifiedBrief)
     } catch (err) {
@@ -302,23 +302,23 @@ export default function NewBriefPage() {
 
   // ── Render ──────────────────────────────────────────────────────────────
   return (
-    <div className="min-h-screen bg-white" style={{ fontFamily: '-apple-system, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif' }}>
+    <div className="min-h-screen" style={{ background: 'var(--bg)', fontFamily: '-apple-system, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif' }}>
       {/* Header */}
-      <header className="border-b bg-white" style={{ borderColor: 'rgba(0,0,0,0.1)' }}>
+      <header style={{ background: 'var(--nav-bg)', backdropFilter: 'saturate(120%) blur(24px)', borderBottom: '1px solid var(--border)' }}>
         <div className="max-w-[1400px] mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#0071e3' }}>
-              <Sparkles className="w-5 h-5 text-white" />
+            <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ backgroundColor: 'var(--brand)' }}>
+              <Sparkles className="w-5 h-5" style={{ color: 'var(--brand-contrast)' }} />
             </div>
             <div>
-              <h1 className="text-lg font-semibold" style={{ color: '#000' }}>Create Brief</h1>
-              <p className="text-xs mt-0.5" style={{ color: 'rgba(0,0,0,0.48)' }}>Stage 1 · Information Collection</p>
+              <h1 className="text-lg font-semibold" style={{ color: 'var(--text-1)' }}>Create Brief</h1>
+              <p className="text-xs mt-0.5" style={{ color: 'var(--text-4)' }}>Stage 1 · Information Collection</p>
             </div>
           </div>
-          <div className="flex items-center gap-2 text-xs" style={{ color: 'rgba(0,0,0,0.48)' }}>
+          <div className="flex items-center gap-2 text-xs" style={{ color: 'var(--text-4)' }}>
             <div className="flex items-center gap-1.5">
-              <span className="w-6 h-6 rounded-full text-white flex items-center justify-center text-[11px] font-bold" style={{ backgroundColor: '#0071e3' }}>1</span>
-              <span className="font-medium" style={{ color: '#000' }}>Collect</span>
+              <span className="w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold" style={{ backgroundColor: 'var(--brand)', color: 'var(--brand-contrast)' }}>1</span>
+              <span className="font-medium" style={{ color: 'var(--text-1)' }}>Collect</span>
             </div>
             <ChevronRight className="w-3 h-3" />
             <span>2 Clarify</span>
@@ -332,13 +332,13 @@ export default function NewBriefPage() {
 
       {/* Mode switcher */}
       <div className="max-w-[1400px] mx-auto px-6 pt-6 pb-2">
-        <div className="inline-flex items-center bg-white border rounded-full p-1 text-xs font-medium" style={{ borderColor: 'rgba(0,0,0,0.1)' }}>
+        <div className="inline-flex items-center border rounded-full p-1 text-xs font-medium" style={{ background: 'var(--surface-1)', borderColor: 'var(--surface-3)' }}>
           <button
             onClick={() => setMode('simple')}
             className="flex items-center gap-1.5 px-4 py-1.5 rounded-full transition"
             style={{
-              color: mode === 'simple' ? 'white' : '#000',
-              backgroundColor: mode === 'simple' ? '#0071e3' : 'transparent',
+              color: mode === 'simple' ? 'var(--brand-contrast)' : 'var(--text-2)',
+              backgroundColor: mode === 'simple' ? 'var(--brand)' : 'transparent',
             }}
           >
             <MessageSquare className="w-3.5 h-3.5" /> Simple Mode
@@ -347,13 +347,13 @@ export default function NewBriefPage() {
             onClick={() => setMode('advanced')}
             className="flex items-center gap-1.5 px-4 py-1.5 rounded-full transition"
             style={{
-              color: mode === 'advanced' ? 'white' : '#000',
-              backgroundColor: mode === 'advanced' ? '#0071e3' : 'transparent',
+              color: mode === 'advanced' ? 'var(--brand-contrast)' : 'var(--text-2)',
+              backgroundColor: mode === 'advanced' ? 'var(--brand)' : 'transparent',
             }}
           >
             <SlidersHorizontal className="w-3.5 h-3.5" /> Expert Mode
           </button>
-          <span className="text-[11px] pl-3 pr-3" style={{ color: 'rgba(0,0,0,0.48)' }}>
+          <span className="text-[11px] pl-3 pr-3" style={{ color: 'var(--text-4)' }}>
             {mode === 'simple'
               ? 'One sentence to create a brief — AI picks specs and references'
               : 'Manual spec selection · File uploads · Full control'}
@@ -364,12 +364,12 @@ export default function NewBriefPage() {
       {/* Simple mode */}
       {mode === 'simple' && (
         <div className="max-w-[1400px] mx-auto px-6 py-4">
-          <section className="bg-white rounded-lg border p-6" style={{ borderColor: 'rgba(0,0,0,0.1)', boxShadow: '0 3px 5px 30px rgba(0,0,0,0.08)' }}>
-            <label className="block text-sm font-semibold mb-2" style={{ color: '#000' }}>
+          <section className="rounded-lg border p-6" style={{ background: 'var(--surface-1)', borderColor: 'var(--surface-3)', boxShadow: 'var(--shadow-lg)' }}>
+            <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--text-1)' }}>
               What do you want to create?
             </label>
-            <p className="text-xs mb-4" style={{ color: 'rgba(0,0,0,0.48)' }}>
-              Example: <span className="italic" style={{ color: 'rgba(0,0,0,0.6)' }}>15-second TikTok video for new users with bonus offer, reference https://example.com</span>
+            <p className="text-xs mb-4" style={{ color: 'var(--text-4)' }}>
+              Example: <span className="italic" style={{ color: 'var(--text-3)' }}>15-second TikTok video for new users with bonus offer, reference https://example.com</span>
             </p>
             <div className="relative">
               <textarea
@@ -385,21 +385,21 @@ export default function NewBriefPage() {
                 rows={4}
                 className="w-full resize-none rounded-lg border px-4 py-3 text-sm outline-none"
                 style={{
-                  borderColor: 'rgba(0,0,0,0.1)',
-                  backgroundColor: '#f5f5f7',
-                  color: '#000',
+                  borderColor: 'var(--surface-3)',
+                  backgroundColor: 'var(--surface-1)',
+                  color: 'var(--text-1)',
                 }}
                 onFocus={(e) => {
-                  e.currentTarget.style.borderColor = '#0071e3'
-                  e.currentTarget.style.backgroundColor = 'white'
+                  e.currentTarget.style.borderColor = 'var(--brand)'
+                  e.currentTarget.style.backgroundColor = 'var(--surface-2)'
                 }}
                 onBlur={(e) => {
-                  e.currentTarget.style.borderColor = 'rgba(0,0,0,0.1)'
-                  e.currentTarget.style.backgroundColor = '#f5f5f7'
+                  e.currentTarget.style.borderColor = 'var(--surface-3)'
+                  e.currentTarget.style.backgroundColor = 'var(--surface-1)'
                 }}
               />
               <div className="mt-3 flex items-center justify-between">
-                <span className="text-[11px]" style={{ color: 'rgba(0,0,0,0.48)' }}>
+                <span className="text-[11px]" style={{ color: 'var(--text-4)' }}>
                   {simpleInput.length} / 4000 · Cmd+Enter to send
                 </span>
                 <button
@@ -407,8 +407,8 @@ export default function NewBriefPage() {
                   disabled={!simpleInput.trim() || submitting}
                   className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold text-white transition"
                   style={{
-                    backgroundColor: !simpleInput.trim() || submitting ? '#f5f5f7' : '#0071e3',
-                    color: !simpleInput.trim() || submitting ? 'rgba(0,0,0,0.3)' : 'white',
+                    backgroundColor: !simpleInput.trim() || submitting ? 'var(--surface-1)' : 'var(--brand)',
+                    color: !simpleInput.trim() || submitting ? 'var(--text-5)' : 'var(--brand-contrast)',
                     opacity: submitting ? 0.7 : 1,
                   }}
                 >
@@ -425,18 +425,18 @@ export default function NewBriefPage() {
               </div>
             </div>
             {simpleMeta && (
-              <div className="mt-4 p-3 rounded-lg border text-xs" style={{ backgroundColor: '#f5f5f7', borderColor: 'rgba(0,0,0,0.1)', color: 'rgba(0,0,0,0.6)' }}>
+              <div className="mt-4 p-3 rounded-lg border text-xs" style={{ backgroundColor: 'var(--surface-1)', borderColor: 'var(--surface-3)', color: 'var(--text-3)' }}>
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="px-1.5 py-0.5 rounded bg-white border text-[10px] font-mono" style={{ borderColor: 'rgba(0,0,0,0.1)', color: '#000' }}>
+                  <span className="px-1.5 py-0.5 rounded border text-[10px] font-mono" style={{ background: 'var(--surface-1)', borderColor: 'var(--surface-3)', color: 'var(--text-1)' }}>
                     {simpleMeta.engine}
                   </span>
                   <span>Confidence {(simpleMeta.confidence * 100).toFixed(0)}%</span>
                 </div>
-                <div style={{ color: 'rgba(0,0,0,0.6)' }}>{simpleMeta.reasoning}</div>
+                <div style={{ color: 'var(--text-3)' }}>{simpleMeta.reasoning}</div>
               </div>
             )}
             {error && (
-              <div className="mt-4 p-3 rounded-lg border text-sm" style={{ color: '#d70015', borderColor: 'rgba(215,0,21,0.2)', backgroundColor: 'rgba(215,0,21,0.06)' }}>
+              <div className="mt-4 p-3 rounded-lg border text-sm" style={{ color: 'var(--danger)', borderColor: 'rgba(255,82,82,0.2)', backgroundColor: 'var(--danger-bg)' }}>
                 {error}
               </div>
             )}
@@ -448,32 +448,32 @@ export default function NewBriefPage() {
       <div className="max-w-[1400px] mx-auto px-6 py-6 grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-6">
 
         {/* ── LEFT: Spec Picker ──────────────────────────────────────────── */}
-        <section className="bg-white rounded-lg border p-5" style={{ borderColor: 'rgba(0,0,0,0.1)', boxShadow: '0 3px 5px 30px rgba(0,0,0,0.08)' }}>
+        <section className="rounded-lg border p-5" style={{ background: 'var(--surface-1)', borderColor: 'var(--surface-3)', boxShadow: 'var(--shadow-lg)' }}>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-base font-semibold" style={{ color: '#000' }}>What do you want to create?</h2>
-            <span className="text-xs" style={{ color: 'rgba(0,0,0,0.48)' }}>{selectedSpecIds.length} selected · {visibleSpecs.length} / {ASSET_SPECS.length} shown</span>
+            <h2 className="text-base font-semibold" style={{ color: 'var(--text-1)' }}>What do you want to create?</h2>
+            <span className="text-xs" style={{ color: 'var(--text-4)' }}>{selectedSpecIds.length} selected · {visibleSpecs.length} / {ASSET_SPECS.length} shown</span>
           </div>
 
           {/* Search */}
           <div className="relative mb-3">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: 'rgba(0,0,0,0.48)' }} />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: 'var(--text-4)' }} />
             <input
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder="Search spec name, platform, or aspect ratio (e.g. 9:16)"
               className="w-full pl-10 pr-3 py-2 text-sm rounded-lg border outline-none"
               style={{
-                borderColor: 'rgba(0,0,0,0.1)',
-                backgroundColor: '#f5f5f7',
-                color: '#000',
+                borderColor: 'var(--surface-3)',
+                backgroundColor: 'var(--surface-1)',
+                color: 'var(--text-1)',
               }}
               onFocus={(e) => {
-                e.currentTarget.style.borderColor = '#0071e3'
-                e.currentTarget.style.backgroundColor = 'white'
+                e.currentTarget.style.borderColor = 'var(--brand)'
+                e.currentTarget.style.backgroundColor = 'var(--surface-2)'
               }}
               onBlur={(e) => {
-                e.currentTarget.style.borderColor = 'rgba(0,0,0,0.1)'
-                e.currentTarget.style.backgroundColor = '#f5f5f7'
+                e.currentTarget.style.borderColor = 'var(--surface-3)'
+                e.currentTarget.style.backgroundColor = 'var(--surface-1)'
               }}
             />
           </div>
@@ -484,15 +484,16 @@ export default function NewBriefPage() {
             <FilterChip active={mediaFilter === 'image'} onClick={() => setMediaFilter('image')} icon={<ImageIcon className="w-3 h-3" />}>Image</FilterChip>
             <FilterChip active={mediaFilter === 'video'} onClick={() => setMediaFilter('video')} icon={<Video className="w-3 h-3" />}>Video</FilterChip>
 
-            <span className="w-px h-4 mx-1" style={{ backgroundColor: 'rgba(0,0,0,0.1)' }} />
+            <span className="w-px h-4 mx-1" style={{ backgroundColor: 'var(--surface-3)' }} />
 
             <select
               value={platformFilter}
               onChange={e => setPlatformFilter(e.target.value as Platform | 'all')}
-              className="text-xs px-2.5 py-1.5 rounded-full border outline-none cursor-pointer bg-white"
+              className="text-xs px-2.5 py-1.5 rounded-full border outline-none cursor-pointer"
               style={{
-                borderColor: 'rgba(0,0,0,0.1)',
-                color: '#000',
+                background: 'var(--surface-1)',
+                borderColor: 'var(--surface-3)',
+                color: 'var(--text-2)',
               }}
             >
               <option value="all">All Platforms</option>
@@ -503,13 +504,14 @@ export default function NewBriefPage() {
 
             <button
               onClick={() => setShowAll(s => !s)}
-              className="text-xs px-2.5 py-1.5 rounded-full border outline-none bg-white transition"
+              className="text-xs px-2.5 py-1.5 rounded-full border outline-none transition"
               style={{
-                borderColor: 'rgba(0,0,0,0.1)',
-                color: '#000',
+                background: 'var(--surface-1)',
+                borderColor: 'var(--surface-3)',
+                color: 'var(--text-2)',
               }}
-              onMouseEnter={(e) => e.currentTarget.style.borderColor = '#0071e3'}
-              onMouseLeave={(e) => e.currentTarget.style.borderColor = 'rgba(0,0,0,0.1)'}
+              onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--brand)'}
+              onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--surface-3)'}
             >
               {showAll ? 'Show Core Only' : `Show All (${ASSET_SPECS.length})`}
             </button>
@@ -520,9 +522,9 @@ export default function NewBriefPage() {
             onClick={() => setAutoDetect(a => !a)}
             className="w-full mb-4 px-4 py-3 rounded-lg border-2 border-dashed transition-all flex items-center gap-3"
             style={{
-              borderColor: autoDetect ? '#0071e3' : 'rgba(0,0,0,0.1)',
-              backgroundColor: autoDetect ? 'rgba(0,113,227,0.05)' : '#f5f5f7',
-              color: autoDetect ? '#0071e3' : 'rgba(0,0,0,0.6)',
+              borderColor: autoDetect ? 'var(--brand)' : 'var(--surface-3)',
+              backgroundColor: autoDetect ? 'var(--brand-light)' : 'var(--surface-1)',
+              color: autoDetect ? 'var(--brand)' : 'var(--text-3)',
             }}
           >
             <Wand2 className="w-4 h-4" />
@@ -535,13 +537,13 @@ export default function NewBriefPage() {
           {/* Spec grid grouped by platform */}
           <div className="space-y-5 max-h-[480px] overflow-y-auto pr-2">
             {grouped.size === 0 && (
-              <div className="text-center text-sm py-8" style={{ color: 'rgba(0,0,0,0.48)' }}>
+              <div className="text-center text-sm py-8" style={{ color: 'var(--text-4)' }}>
                 No matching specs. Try toggling &quot;Show All&quot;.
               </div>
             )}
             {Array.from(grouped.entries()).map(([platform, specs]) => (
               <div key={platform}>
-                <div className="text-[11px] font-bold uppercase tracking-wider mb-2" style={{ color: 'rgba(0,0,0,0.48)' }}>
+                <div className="text-[11px] font-bold uppercase tracking-wider mb-2" style={{ color: 'var(--text-4)' }}>
                   {PLATFORM_LABELS[platform]}
                 </div>
                 <div className="grid grid-cols-2 gap-2">
@@ -553,9 +555,9 @@ export default function NewBriefPage() {
                         onClick={() => toggleSpec(spec.id)}
                         className="group text-left p-2.5 rounded-lg border transition-all flex items-center gap-2.5"
                         style={{
-                          borderColor: selected ? '#0071e3' : 'rgba(0,0,0,0.1)',
-                          backgroundColor: selected ? 'rgba(0,113,227,0.05)' : 'white',
-                          boxShadow: selected ? '0 0 0 2px rgba(0,113,227,0.1)' : 'none',
+                          borderColor: selected ? 'var(--brand)' : 'var(--surface-3)',
+                          backgroundColor: selected ? 'var(--brand-light)' : 'var(--surface-1)',
+                          boxShadow: selected ? '0 0 0 2px rgba(192,228,99,0.15)' : 'none',
                         }}
                       >
                         {/* Aspect ratio preview box */}
@@ -563,14 +565,14 @@ export default function NewBriefPage() {
                           <div
                             style={{
                               ...ratioBoxStyle(spec.width, spec.height),
-                              backgroundColor: selected ? '#0071e3' : '#d1d5db',
+                              backgroundColor: selected ? 'var(--brand)' : 'var(--border-strong)',
                               borderRadius: '4px',
                             }}
                           />
                         </div>
                         <div className="min-w-0 flex-1">
-                          <div className="text-xs font-semibold truncate" style={{ color: '#000' }}>{spec.nameZh}</div>
-                          <div className="text-[10px] truncate" style={{ color: 'rgba(0,0,0,0.48)' }}>
+                          <div className="text-xs font-semibold truncate" style={{ color: 'var(--text-1)' }}>{spec.nameZh}</div>
+                          <div className="text-[10px] truncate" style={{ color: 'var(--text-4)' }}>
                             {spec.width}×{spec.height} · {spec.aspectRatio}
                             {spec.maxDurationSec && ` · ≤${spec.maxDurationSec}s`}
                           </div>
@@ -585,11 +587,11 @@ export default function NewBriefPage() {
         </section>
 
         {/* ── RIGHT: Multimodal Intake ───────────────────────────────────── */}
-        <section className="bg-white rounded-lg border p-5" style={{ borderColor: 'rgba(0,0,0,0.1)', boxShadow: '0 3px 5px 30px rgba(0,0,0,0.08)' }}>
-          <h2 className="text-base font-semibold mb-4" style={{ color: '#000' }}>References & Description</h2>
+        <section className="rounded-lg border p-5" style={{ background: 'var(--surface-1)', borderColor: 'var(--surface-3)', boxShadow: 'var(--shadow-lg)' }}>
+          <h2 className="text-base font-semibold mb-4" style={{ color: 'var(--text-1)' }}>References & Description</h2>
 
           {/* Text description */}
-          <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: 'rgba(0,0,0,0.6)' }}>Description</label>
+          <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: 'var(--text-3)' }}>Description</label>
           <textarea
             value={text}
             onChange={e => setText(e.target.value)}
@@ -597,25 +599,25 @@ export default function NewBriefPage() {
             rows={5}
             className="w-full px-4 py-3 rounded-lg border text-sm outline-none resize-none"
             style={{
-              borderColor: 'rgba(0,0,0,0.1)',
-              backgroundColor: '#f5f5f7',
-              color: '#000',
+              borderColor: 'var(--surface-3)',
+              backgroundColor: 'var(--surface-1)',
+              color: 'var(--text-1)',
             }}
             onFocus={(e) => {
-              e.currentTarget.style.borderColor = '#0071e3'
-              e.currentTarget.style.backgroundColor = 'white'
+              e.currentTarget.style.borderColor = 'var(--brand)'
+              e.currentTarget.style.backgroundColor = 'var(--surface-2)'
             }}
             onBlur={(e) => {
-              e.currentTarget.style.borderColor = 'rgba(0,0,0,0.1)'
-              e.currentTarget.style.backgroundColor = '#f5f5f7'
+              e.currentTarget.style.borderColor = 'var(--surface-3)'
+              e.currentTarget.style.backgroundColor = 'var(--surface-1)'
             }}
           />
 
           {/* URLs */}
-          <label className="block text-xs font-semibold uppercase tracking-wider mt-5 mb-1.5" style={{ color: 'rgba(0,0,0,0.6)' }}>Reference URLs</label>
+          <label className="block text-xs font-semibold uppercase tracking-wider mt-5 mb-1.5" style={{ color: 'var(--text-3)' }}>Reference URLs</label>
           <div className="flex gap-2">
             <div className="flex-1 relative">
-              <Link2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: 'rgba(0,0,0,0.48)' }} />
+              <Link2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: 'var(--text-4)' }} />
               <input
                 value={urlDraft}
                 onChange={e => setUrlDraft(e.target.value)}
@@ -623,17 +625,17 @@ export default function NewBriefPage() {
                 placeholder="https://example.com/campaign"
                 className="w-full pl-10 pr-3 py-2 text-sm rounded-lg border outline-none"
                 style={{
-                  borderColor: 'rgba(0,0,0,0.1)',
-                  backgroundColor: '#f5f5f7',
-                  color: '#000',
+                  borderColor: 'var(--surface-3)',
+                  backgroundColor: 'var(--surface-1)',
+                  color: 'var(--text-1)',
                 }}
                 onFocus={(e) => {
-                  e.currentTarget.style.borderColor = '#0071e3'
-                  e.currentTarget.style.backgroundColor = 'white'
+                  e.currentTarget.style.borderColor = 'var(--brand)'
+                  e.currentTarget.style.backgroundColor = 'var(--surface-2)'
                 }}
                 onBlur={(e) => {
-                  e.currentTarget.style.borderColor = 'rgba(0,0,0,0.1)'
-                  e.currentTarget.style.backgroundColor = '#f5f5f7'
+                  e.currentTarget.style.borderColor = 'var(--surface-3)'
+                  e.currentTarget.style.backgroundColor = 'var(--surface-1)'
                 }}
               />
             </div>
@@ -641,11 +643,11 @@ export default function NewBriefPage() {
               onClick={addUrl}
               className="px-4 py-2 text-sm font-medium rounded-lg transition"
               style={{
-                backgroundColor: '#f5f5f7',
-                color: '#000',
+                backgroundColor: 'var(--surface-1)',
+                color: 'var(--text-2)',
               }}
-              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e5e5e7'}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#f5f5f7'}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--surface-3)'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--surface-1)'}
             >
               Add
             </button>
@@ -653,10 +655,10 @@ export default function NewBriefPage() {
           {urls.length > 0 && (
             <ul className="mt-2 space-y-1">
               {urls.map((u, i) => (
-                <li key={i} className="flex items-center gap-2 text-xs px-3 py-1.5 rounded-lg" style={{ backgroundColor: '#f5f5f7', color: '#000' }}>
-                  <Link2 className="w-3 h-3 flex-shrink-0" style={{ color: 'rgba(0,0,0,0.48)' }} />
+                <li key={i} className="flex items-center gap-2 text-xs px-3 py-1.5 rounded-lg" style={{ backgroundColor: 'var(--surface-1)', color: 'var(--text-2)' }}>
+                  <Link2 className="w-3 h-3 flex-shrink-0" style={{ color: 'var(--text-4)' }} />
                   <span className="truncate flex-1">{u}</span>
-                  <button onClick={() => removeUrl(i)} className="transition" style={{ color: 'rgba(0,0,0,0.48)' }} onMouseEnter={(e) => e.currentTarget.style.color = '#d70015'} onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(0,0,0,0.48)'}>
+                  <button onClick={() => removeUrl(i)} className="transition" style={{ color: 'var(--text-4)' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--danger)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-4)'}>
                     <X className="w-3 h-3" />
                   </button>
                 </li>
@@ -665,28 +667,28 @@ export default function NewBriefPage() {
           )}
 
           {/* File uploads */}
-          <label className="block text-xs font-semibold uppercase tracking-wider mt-5 mb-1.5" style={{ color: 'rgba(0,0,0,0.6)' }}>Reference Files</label>
+          <label className="block text-xs font-semibold uppercase tracking-wider mt-5 mb-1.5" style={{ color: 'var(--text-3)' }}>Reference Files</label>
           <div className="grid grid-cols-2 gap-2">
             <UploadButton icon={<ImageIcon className="w-4 h-4" />} label="Upload Image" accept="image/*" onChange={e => onFileSelect(e, 'image')} />
             <UploadButton icon={<Video className="w-4 h-4" />} label="Upload Video" accept="video/*" onChange={e => onFileSelect(e, 'video')} />
           </div>
           {uploadingCount > 0 && (
-            <p className="mt-2 text-xs animate-pulse" style={{ color: '#0071e3' }}>
+            <p className="mt-2 text-xs animate-pulse" style={{ color: 'var(--brand)' }}>
               Uploading {uploadingCount} file{uploadingCount !== 1 ? 's' : ''}…
             </p>
           )}
           {(uploadedImages.length > 0 || uploadedVideos.length > 0) && (
             <ul className="mt-2 space-y-2">
               {uploadedImages.map((a, i) => (
-                <li key={`i-${a.id}`} className="text-xs px-3 py-2 rounded-lg" style={{ backgroundColor: '#f5f5f7', color: '#000' }}>
+                <li key={`i-${a.id}`} className="text-xs px-3 py-2 rounded-lg" style={{ backgroundColor: 'var(--surface-1)', color: 'var(--text-2)' }}>
                   <div className="flex items-center gap-2">
-                    <ImageIcon className="w-3 h-3 flex-shrink-0" style={{ color: 'rgba(0,0,0,0.48)' }} />
-                    <a href={a.url} target="_blank" rel="noreferrer" className="truncate flex-1 transition" style={{ color: '#0071e3' }} onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'} onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}>
+                    <ImageIcon className="w-3 h-3 flex-shrink-0" style={{ color: 'var(--text-4)' }} />
+                    <a href={a.url} target="_blank" rel="noreferrer" className="truncate flex-1 transition" style={{ color: 'var(--brand)' }} onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'} onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}>
                       {a.filename || a.id}
-                      {a.width && a.height ? <span className="ml-1" style={{ color: 'rgba(0,0,0,0.48)' }}>{a.width}×{a.height}</span> : null}
+                      {a.width && a.height ? <span className="ml-1" style={{ color: 'var(--text-4)' }}>{a.width}×{a.height}</span> : null}
                     </a>
-                    <span style={{ color: 'rgba(0,0,0,0.48)' }}>{((a.size || 0) / 1024).toFixed(0)} KB</span>
-                    <button onClick={() => removeFile(i, 'image')} className="transition" style={{ color: 'rgba(0,0,0,0.48)' }} onMouseEnter={(e) => e.currentTarget.style.color = '#d70015'} onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(0,0,0,0.48)'}>
+                    <span style={{ color: 'var(--text-4)' }}>{((a.size || 0) / 1024).toFixed(0)} KB</span>
+                    <button onClick={() => removeFile(i, 'image')} className="transition" style={{ color: 'var(--text-4)' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--danger)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-4)'}>
                       <X className="w-3 h-3" />
                     </button>
                   </div>
@@ -696,14 +698,14 @@ export default function NewBriefPage() {
                 </li>
               ))}
               {uploadedVideos.map((a, i) => (
-                <li key={`v-${a.id}`} className="text-xs px-3 py-2 rounded-lg" style={{ backgroundColor: '#f5f5f7', color: '#000' }}>
+                <li key={`v-${a.id}`} className="text-xs px-3 py-2 rounded-lg" style={{ backgroundColor: 'var(--surface-1)', color: 'var(--text-2)' }}>
                   <div className="flex items-center gap-2">
-                    <Video className="w-3 h-3 flex-shrink-0" style={{ color: 'rgba(0,0,0,0.48)' }} />
-                    <a href={a.url} target="_blank" rel="noreferrer" className="truncate flex-1 transition" style={{ color: '#0071e3' }} onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'} onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}>
+                    <Video className="w-3 h-3 flex-shrink-0" style={{ color: 'var(--text-4)' }} />
+                    <a href={a.url} target="_blank" rel="noreferrer" className="truncate flex-1 transition" style={{ color: 'var(--brand)' }} onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'} onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}>
                       {a.filename || a.id}
                     </a>
-                    <span style={{ color: 'rgba(0,0,0,0.48)' }}>{((a.size || 0) / 1024 / 1024).toFixed(1)} MB</span>
-                    <button onClick={() => removeFile(i, 'video')} className="transition" style={{ color: 'rgba(0,0,0,0.48)' }} onMouseEnter={(e) => e.currentTarget.style.color = '#d70015'} onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(0,0,0,0.48)'}>
+                    <span style={{ color: 'var(--text-4)' }}>{((a.size || 0) / 1024 / 1024).toFixed(1)} MB</span>
+                    <button onClick={() => removeFile(i, 'video')} className="transition" style={{ color: 'var(--text-4)' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--danger)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-4)'}>
                       <X className="w-3 h-3" />
                     </button>
                   </div>
@@ -716,9 +718,9 @@ export default function NewBriefPage() {
           )}
 
           {/* Submit */}
-          <div className="mt-6 pt-5 border-t" style={{ borderColor: 'rgba(0,0,0,0.1)' }}>
+          <div className="mt-6 pt-5 border-t" style={{ borderColor: 'var(--surface-3)' }}>
             {error && (
-              <div className="mb-3 px-3 py-2 text-xs rounded-lg border" style={{ color: '#d70015', borderColor: 'rgba(215,0,21,0.2)', backgroundColor: 'rgba(215,0,21,0.06)' }}>
+              <div className="mb-3 px-3 py-2 text-xs rounded-lg border" style={{ color: 'var(--danger)', borderColor: 'rgba(255,82,82,0.2)', backgroundColor: 'var(--danger-bg)' }}>
                 {error}
               </div>
             )}
@@ -727,10 +729,10 @@ export default function NewBriefPage() {
               disabled={!canSubmit}
               className="w-full py-3 rounded-full text-sm font-semibold text-white transition-all flex items-center justify-center gap-2"
               style={{
-                backgroundColor: canSubmit ? '#0071e3' : '#f5f5f7',
-                color: canSubmit ? 'white' : 'rgba(0,0,0,0.3)',
+                backgroundColor: canSubmit ? 'var(--brand)' : 'var(--surface-1)',
+                color: canSubmit ? 'var(--brand-contrast)' : 'var(--text-5)',
                 cursor: canSubmit ? 'pointer' : 'not-allowed',
-                boxShadow: canSubmit ? '0 3px 5px 30px rgba(0,113,227,0.3)' : 'none',
+                boxShadow: canSubmit ? '0 8px 32px rgba(192,228,99,0.25)' : 'none',
               }}
             >
               {submitting ? (
@@ -739,7 +741,7 @@ export default function NewBriefPage() {
                 <>Next: AI Clarification <ChevronRight className="w-4 h-4" /></>
               )}
             </button>
-            <p className="text-[11px] mt-2 text-center" style={{ color: 'rgba(0,0,0,0.48)' }}>
+            <p className="text-[11px] mt-2 text-center" style={{ color: 'var(--text-4)' }}>
               We'll analyze your input and ask for essential details before merging
             </p>
           </div>
@@ -750,35 +752,35 @@ export default function NewBriefPage() {
       {/* ── Stage 2 inline result ──────────────────────────────────────── */}
       {clarified && (
         <div className="max-w-[1400px] mx-auto px-6 pb-12">
-          <div className="bg-white rounded-lg border p-6" style={{ borderColor: 'rgba(0,0,0,0.1)', boxShadow: '0 3px 5px 30px rgba(0,0,0,0.08)' }}>
+          <div className="rounded-lg border p-6" style={{ background: 'var(--surface-1)', borderColor: 'var(--surface-3)', boxShadow: 'var(--shadow-lg)' }}>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-base font-semibold" style={{ color: '#000' }}>Stage 2 · AI Clarification</h2>
-              <span className="text-xs" style={{ color: 'rgba(0,0,0,0.48)' }}>Brief ID: <code className="font-mono">{clarified.id}</code></span>
+              <h2 className="text-base font-semibold" style={{ color: 'var(--text-1)' }}>Stage 2 · AI Clarification</h2>
+              <span className="text-xs" style={{ color: 'var(--text-4)' }}>Brief ID: <code className="font-mono">{clarified.id}</code></span>
             </div>
 
             {/* Resolved targetSpecs */}
             {clarified.parsedRefs && clarified.parsedRefs.length > 0 && (
               <div className="mb-5">
-                <div className="text-[11px] font-bold uppercase tracking-wider mb-2" style={{ color: 'rgba(0,0,0,0.48)' }}>
+                <div className="text-[11px] font-bold uppercase tracking-wider mb-2" style={{ color: 'var(--text-4)' }}>
                   Extracted References ({clarified.parsedRefs.length})
                 </div>
                 <ul className="space-y-2">
                   {clarified.parsedRefs.map((ref, i) => (
-                    <li key={i} className="flex gap-3 p-2.5 rounded-lg border bg-white" style={{ borderColor: 'rgba(0,0,0,0.1)' }}>
+                    <li key={i} className="flex gap-3 p-2.5 rounded-lg border" style={{ background: 'var(--surface-1)', borderColor: 'var(--surface-3)' }}>
                       {ref.extractedAssets.heroImage ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img
                           src={ref.extractedAssets.heroImage}
                           alt=""
                           className="w-16 h-16 object-cover rounded-md flex-shrink-0"
-                          style={{ backgroundColor: '#f5f5f7' }}
+                          style={{ backgroundColor: 'var(--surface-1)' }}
                         />
                       ) : (
-                        <div className="w-16 h-16 rounded-md flex-shrink-0" style={{ backgroundColor: '#f5f5f7' }} />
+                        <div className="w-16 h-16 rounded-md flex-shrink-0" style={{ backgroundColor: 'var(--surface-1)' }} />
                       )}
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2 text-[10px]">
-                          <span className="px-1.5 py-0.5 rounded font-medium uppercase" style={{ backgroundColor: '#f5f5f7', color: '#000' }}>
+                          <span className="px-1.5 py-0.5 rounded font-medium uppercase" style={{ backgroundColor: 'var(--surface-1)', color: 'var(--text-1)' }}>
                             {ref.pageType}
                           </span>
                           <a
@@ -786,7 +788,7 @@ export default function NewBriefPage() {
                             target="_blank"
                             rel="noreferrer"
                             className="truncate transition"
-                            style={{ color: '#0071e3' }}
+                            style={{ color: 'var(--brand)' }}
                             onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'}
                             onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
                           >
@@ -794,12 +796,12 @@ export default function NewBriefPage() {
                           </a>
                         </div>
                         {ref.extractedAssets.copy?.title && (
-                          <div className="text-sm font-medium line-clamp-1 mt-0.5" style={{ color: '#000' }}>
+                          <div className="text-sm font-medium line-clamp-1 mt-0.5" style={{ color: 'var(--text-1)' }}>
                             {ref.extractedAssets.copy.title}
                           </div>
                         )}
                         {ref.extractedAssets.copy?.body && (
-                          <div className="text-xs line-clamp-2 mt-0.5" style={{ color: 'rgba(0,0,0,0.48)' }}>
+                          <div className="text-xs line-clamp-2 mt-0.5" style={{ color: 'var(--text-4)' }}>
                             {ref.extractedAssets.copy.body}
                           </div>
                         )}
@@ -812,12 +814,12 @@ export default function NewBriefPage() {
 
             {clarified.targetSpecs.length > 0 && (
               <div className="mb-5">
-                <div className="text-[11px] font-bold uppercase tracking-wider mb-2" style={{ color: 'rgba(0,0,0,0.48)' }}>Locked Specs</div>
+                <div className="text-[11px] font-bold uppercase tracking-wider mb-2" style={{ color: 'var(--text-4)' }}>Locked Specs</div>
                 <div className="flex flex-wrap gap-1.5">
                   {clarified.targetSpecs.map(id => {
                     const s = ASSET_SPECS.find(x => x.id === id)
                     return (
-                      <span key={id} className="text-xs px-2.5 py-1 rounded-full border" style={{ backgroundColor: 'rgba(0,113,227,0.05)', borderColor: '#0071e3', color: '#0071e3' }}>
+                      <span key={id} className="text-xs px-2.5 py-1 rounded-full border" style={{ backgroundColor: 'var(--brand-light)', borderColor: 'var(--brand)', color: 'var(--brand)' }}>
                         {s?.nameZh ?? id}
                       </span>
                     )
@@ -828,17 +830,17 @@ export default function NewBriefPage() {
 
             {/* Pending questions */}
             {clarified.pendingQuestions.length === 0 ? (
-              <div className="text-sm rounded-lg px-4 py-3 border" style={{ color: '#107C10', borderColor: 'rgba(16,124,16,0.2)', backgroundColor: 'rgba(16,124,16,0.06)' }}>
+              <div className="text-sm rounded-lg px-4 py-3 border" style={{ color: 'var(--brand)', borderColor: 'rgba(192,228,99,0.2)', backgroundColor: 'var(--brand-light)' }}>
                 ✓ No clarification needed. Ready to move to Stage 3.
               </div>
             ) : (
               <div className="space-y-4">
-                <div className="text-[11px] font-bold uppercase tracking-wider" style={{ color: 'rgba(0,0,0,0.48)' }}>We need your input ({clarified.pendingQuestions.length})</div>
+                <div className="text-[11px] font-bold uppercase tracking-wider" style={{ color: 'var(--text-4)' }}>We need your input ({clarified.pendingQuestions.length})</div>
                 {clarified.pendingQuestions.map(q => (
-                  <div key={q.id} className="border rounded-lg p-4" style={{ borderColor: 'rgba(0,0,0,0.1)' }}>
-                    <div className="text-sm font-medium mb-2" style={{ color: '#000' }}>
+                  <div key={q.id} className="border rounded-lg p-4" style={{ borderColor: 'var(--surface-3)' }}>
+                    <div className="text-sm font-medium mb-2" style={{ color: 'var(--text-1)' }}>
                       {q.question}
-                      {q.required && <span className="ml-1" style={{ color: '#d70015' }}>*</span>}
+                      {q.required && <span className="ml-1" style={{ color: 'var(--danger)' }}>*</span>}
                     </div>
                     {q.choices && q.choices.length > 0 ? (
                       <div className="flex flex-wrap gap-1.5">
@@ -850,9 +852,9 @@ export default function NewBriefPage() {
                               onClick={() => setAnswer(q.id, choice)}
                               className="text-xs px-3 py-1.5 rounded-full border transition-colors"
                               style={{
-                                backgroundColor: active ? '#0071e3' : 'white',
-                                color: active ? 'white' : '#000',
-                                borderColor: active ? '#0071e3' : 'rgba(0,0,0,0.1)',
+                                backgroundColor: active ? 'var(--brand)' : 'var(--surface-1)',
+                                color: active ? 'var(--brand-contrast)' : 'var(--text-2)',
+                                borderColor: active ? 'var(--brand)' : 'var(--surface-3)',
                               }}
                             >
                               {choice}
@@ -867,23 +869,23 @@ export default function NewBriefPage() {
                         placeholder="Enter…"
                         className="w-full px-3 py-2 text-sm rounded-lg border outline-none"
                         style={{
-                          borderColor: 'rgba(0,0,0,0.1)',
-                          backgroundColor: '#f5f5f7',
-                          color: '#000',
+                          borderColor: 'var(--surface-3)',
+                          backgroundColor: 'var(--surface-1)',
+                          color: 'var(--text-1)',
                         }}
                         onFocus={(e) => {
-                          e.currentTarget.style.borderColor = '#0071e3'
-                          e.currentTarget.style.backgroundColor = 'white'
+                          e.currentTarget.style.borderColor = 'var(--brand)'
+                          e.currentTarget.style.backgroundColor = 'var(--surface-2)'
                         }}
                         onBlur={(e) => {
-                          e.currentTarget.style.borderColor = 'rgba(0,0,0,0.1)'
-                          e.currentTarget.style.backgroundColor = '#f5f5f7'
+                          e.currentTarget.style.borderColor = 'var(--surface-3)'
+                          e.currentTarget.style.backgroundColor = 'var(--surface-1)'
                         }}
                       />
                     )}
                   </div>
                 ))}
-                <p className="text-[11px]" style={{ color: 'rgba(0,0,0,0.48)' }}>
+                <p className="text-[11px]" style={{ color: 'var(--text-4)' }}>
                   Your answers will be merged into the brief for Stage 3 enrichment.
                 </p>
               </div>
@@ -915,9 +917,9 @@ function FilterChip({
       onClick={onClick}
       className="text-xs px-3 py-1.5 rounded-full border transition-colors flex items-center gap-1.5"
       style={{
-        backgroundColor: active ? 'rgba(0,113,227,0.05)' : 'white',
-        borderColor: active ? '#0071e3' : 'rgba(0,0,0,0.1)',
-        color: active ? '#0071e3' : '#000',
+        backgroundColor: active ? 'var(--brand-light)' : 'var(--surface-1)',
+        borderColor: active ? 'var(--brand)' : 'var(--surface-3)',
+        color: active ? 'var(--brand)' : 'var(--text-2)',
       }}
     >
       {icon}
@@ -938,8 +940,8 @@ function UploadButton({
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }) {
   return (
-    <label className="cursor-pointer flex items-center justify-center gap-2 px-4 py-3 rounded-lg border border-dashed text-sm font-medium transition-colors" style={{ borderColor: 'rgba(0,0,0,0.2)', backgroundColor: '#f5f5f7', color: '#000' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#e5e5e7'; e.currentTarget.style.borderColor = 'rgba(0,0,0,0.3)'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#f5f5f7'; e.currentTarget.style.borderColor = 'rgba(0,0,0,0.2)'; }}>
-      <Upload className="w-4 h-4" style={{ color: 'rgba(0,0,0,0.48)' }} />
+    <label className="cursor-pointer flex items-center justify-center gap-2 px-4 py-3 rounded-lg border border-dashed text-sm font-medium transition-colors" style={{ borderColor: 'var(--border-strong)', backgroundColor: 'var(--surface-1)', color: 'var(--text-2)' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'var(--surface-3)'; e.currentTarget.style.borderColor = 'var(--border-strong)'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'var(--surface-1)'; e.currentTarget.style.borderColor = 'var(--border-strong)'; }}>
+      <Upload className="w-4 h-4" style={{ color: 'var(--text-4)' }} />
       {icon}
       {label}
       <input type="file" accept={accept} multiple className="hidden" onChange={onChange} />

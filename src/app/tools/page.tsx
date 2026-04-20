@@ -120,32 +120,31 @@ export default function ToolsPage() {
   const filteredTools = activeCategory === 'all' ? TOOLS : TOOLS.filter(t => t.category === activeCategory)
 
   return (
-    <div className="p-8" style={{ fontFamily: '-apple-system, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif' }}>
+    <div className="p-8" style={{ fontFamily: '-apple-system, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif', background: 'var(--bg)', minHeight: '100vh' }}>
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-1">
-          <h1 className="text-2xl font-bold tracking-tight text-black">MarTech Tools</h1>
-          <span className="text-xs px-2 py-0.5 rounded-full bg-blue-50 text-[#0071e3] font-semibold">
+          <h1 className="text-2xl font-bold tracking-tight" style={{ color: 'var(--text-1)' }}>MarTech Tools</h1>
+          <span className="text-xs px-2 py-0.5 rounded-full font-semibold" style={{ backgroundColor: 'var(--brand-light)', color: 'var(--brand)' }}>
             {TOOLS.filter(t => t.status === 'available').length} active
           </span>
         </div>
-        <p className="text-sm text-[#6f6f77]">
+        <p className="text-sm" style={{ color: 'var(--text-3)' }}>
           Professional marketing technology toolkit built for iGaming
         </p>
       </div>
 
       {/* Category tabs */}
-      <div className="flex gap-1 mb-6 bg-[#f5f5f7] p-1 rounded-lg w-fit">
+      <div className="flex gap-1 mb-6 p-1 rounded-lg w-fit" style={{ backgroundColor: 'var(--surface-1)' }}>
         {CATEGORIES.map(({ key, label }) => (
           <button
             key={key}
             onClick={() => setActiveCategory(key)}
-            className={`px-4 py-2 rounded-md text-xs font-medium transition-all ${
-              activeCategory === key
-                ? 'bg-white text-black'
-                : 'text-[#6f6f77] hover:text-black'
-            }`}
-            style={activeCategory === key ? { boxShadow: 'rgba(0,0,0,0.1) 0 1px 3px' } : {}}
+            className="px-4 py-2 rounded-md text-xs font-medium transition-all"
+            style={activeCategory === key
+              ? { backgroundColor: 'var(--surface-3)', color: 'var(--text-1)', boxShadow: 'var(--shadow-sm)' }
+              : { color: 'var(--text-3)' }
+            }
           >
             {label}
           </button>
@@ -157,41 +156,44 @@ export default function ToolsPage() {
         {filteredTools.map(tool => (
           <div
             key={tool.id}
-            className={`bg-white rounded-lg p-6 ${tool.status === 'coming_soon' ? 'opacity-70' : ''}`}
-            style={{ boxShadow: 'rgba(0,0,0,0.22) 0 3px 5px 30px' }}
+            className={`rounded-lg p-6 ${tool.status === 'coming_soon' ? 'opacity-70' : ''}`}
+            style={{
+              backgroundColor: 'var(--surface-1)',
+              border: '1px solid var(--border)',
+            }}
           >
             <div className="flex items-start justify-between mb-4">
-              <div className="w-11 h-11 rounded-lg bg-[#f5f5f7] flex items-center justify-center">
-                <tool.icon className="w-5 h-5 text-[#0071e3]" />
+              <div className="w-11 h-11 rounded-lg flex items-center justify-center" style={{ backgroundColor: 'var(--brand-light)' }}>
+                <tool.icon className="w-5 h-5" style={{ color: 'var(--brand)' }} />
               </div>
               {tool.status === 'available' ? (
                 <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-[#0071e3]" />
-                  <span className="text-[11px] text-[#0071e3] font-medium">Available</span>
+                  <CheckCircle2 className="w-3.5 h-3.5" style={{ color: 'var(--brand)' }} />
+                  <span className="text-[11px] font-medium" style={{ color: 'var(--brand)' }}>Available</span>
                 </div>
               ) : (
                 <div className="flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5 text-[#d5d5d7]" />
-                  <span className="text-[11px] text-[#6f6f77] font-medium">Coming Soon</span>
+                  <Clock className="w-3.5 h-3.5" style={{ color: 'var(--text-5)' }} />
+                  <span className="text-[11px] font-medium" style={{ color: 'var(--text-4)' }}>Coming Soon</span>
                 </div>
               )}
             </div>
 
-            <h3 className="text-[15px] font-semibold text-black mb-1.5">{tool.name}</h3>
-            <p className="text-xs text-[#6f6f77] leading-relaxed mb-4">{tool.desc}</p>
+            <h3 className="text-[15px] font-semibold mb-1.5" style={{ color: 'var(--text-1)' }}>{tool.name}</h3>
+            <p className="text-xs leading-relaxed mb-4" style={{ color: 'var(--text-3)' }}>{tool.desc}</p>
 
             {/* Features */}
             <div className="space-y-1.5">
               {tool.features.map((f, i) => (
-                <div key={i} className="flex items-center gap-2 text-[11px] text-[#6f6f77]">
-                  <div className="w-1 h-1 rounded-full bg-[#0071e3] flex-shrink-0" />
+                <div key={i} className="flex items-center gap-2 text-[11px]" style={{ color: 'var(--text-3)' }}>
+                  <div className="w-1 h-1 rounded-full flex-shrink-0" style={{ backgroundColor: 'var(--brand)' }} />
                   {f}
                 </div>
               ))}
             </div>
 
             {tool.status === 'available' && (
-              <button className="mt-5 w-full flex items-center justify-center gap-2 py-2.5 rounded-lg bg-[#0071e3] text-sm font-medium text-white hover:bg-[#0066cc] transition-all">
+              <button className="mt-5 w-full flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-all hover:opacity-90" style={{ backgroundColor: 'var(--brand)', color: 'var(--brand-contrast)' }}>
                 Open Tool
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>

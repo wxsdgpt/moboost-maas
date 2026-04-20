@@ -27,9 +27,9 @@ interface Props {
 }
 
 function chipColor(v: UploadedAssetValidation): string {
-  if (!v.ok) return 'bg-rose-50 border-rose-200 text-rose-600'
-  if (v.warnings > 0) return 'bg-amber-50 border-amber-200 text-amber-600'
-  return 'bg-blue-50 border-blue-200 text-[#0071e3]'
+  if (!v.ok) return 'bg-rose-900/30 border-rose-700 text-rose-400'
+  if (v.warnings > 0) return 'bg-amber-900/30 border-amber-700 text-amber-400'
+  return 'bg-[rgba(192,228,99,0.08)] border-[rgba(192,228,99,0.2)] text-[var(--brand)]'
 }
 
 function chipIcon(v: UploadedAssetValidation): string {
@@ -71,15 +71,15 @@ export default function SpecValidationBadge({ validations, compact = false }: Pr
         {validations.length > 4 && (
           <button
             type="button"
-            className="text-[11px] text-[#0071e3] hover:text-[#0066cc] underline"
+            className="text-[11px] text-[var(--brand)] hover:text-[#a8d44a] underline"
             onClick={() => setExpanded((e) => !e)}
           >
-            {expanded ? '收起' : `+${validations.length - 4} 更多`}
+            {expanded ? 'Collapse' : `+${validations.length - 4} more`}
           </button>
         )}
       </div>
       {/* Show the top hint sentence below the chips for the most useful spec */}
-      <div className="text-[11px] text-[#6f6f77] leading-snug">
+      <div className="text-[11px] text-[var(--text-3)] leading-snug">
         {validations[0].summary}
       </div>
     </div>

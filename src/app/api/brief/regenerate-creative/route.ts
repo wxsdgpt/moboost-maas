@@ -22,6 +22,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getOrCreateCurrentUser } from '@/lib/auth'
 import { supabaseService } from '@/lib/db'
+import { ensureStableUrl } from '@/lib/supabaseStorage'
+import { notifyCollab } from '@/lib/collabWebhook'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -121,6 +123,20 @@ export async function POST(req: NextRequest) {
       { status: 500 },
     )
   }
+
+  const stableUrl = await ensureStableUrl(asset.id)
+  if (stableUrl) asset.url = stableUrl
+
+  notifyCollab('asset.regenerated', {
+    assetId: asset.id,
+    reportId: report.id,
+    projectId: report.project_id,
+    type: asset.type,
+    url: asset.url,
+    audienceTag: asset.audience_tag,
+    region: asset.region,
+    createdAt: asset.created_at,
+  }).catch(() => {})
 
   return NextResponse.json({ ok: true, asset })
 }

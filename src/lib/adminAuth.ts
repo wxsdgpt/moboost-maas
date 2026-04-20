@@ -13,6 +13,7 @@
 
 import { cookies } from 'next/headers'
 import { createHash, randomBytes } from 'crypto'
+import { AUTH_BYPASS } from './authBypass'
 
 // ─── Credentials ──────────────────────────────────────────────────────
 
@@ -72,6 +73,8 @@ export function adminLogin(username: string, password: string): string | null {
  * Use in Server Components and API routes.
  */
 export async function isAdminAuthenticated(): Promise<boolean> {
+  // v1.0.2 — global bypass for QA
+  if (AUTH_BYPASS) return true
   try {
     const cookieStore = await cookies()
     const token = cookieStore.get(COOKIE_NAME)?.value
@@ -86,6 +89,7 @@ export async function isAdminAuthenticated(): Promise<boolean> {
  * Check admin auth from a raw cookie header string (for middleware).
  */
 export function isAdminTokenValid(cookieHeader: string): boolean {
+  if (AUTH_BYPASS) return true
   const match = cookieHeader.match(new RegExp(`${COOKIE_NAME}=([^;]+)`))
   if (!match) return false
   return validateToken(match[1])
