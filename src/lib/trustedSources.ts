@@ -461,7 +461,7 @@ export function lookupTrustedSourceByUrl(url: string): TrustedSource | undefined
     const host = new URL(url).hostname.toLowerCase().replace(/^www\./, '')
     // Direct host match or suffix match (e.g. ads.tiktok.com → tiktok.com)
     if (TRUSTED_HOSTS.has(host)) return TRUSTED_HOSTS.get(host)
-    for (const [h, src] of TRUSTED_HOSTS.entries()) {
+    for (const [h, src] of Array.from(TRUSTED_HOSTS.entries())) {
       if (host.endsWith('.' + h) || host === h) return src
     }
   } catch {

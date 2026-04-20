@@ -49,7 +49,7 @@ export const runtime = 'nodejs'
 function tokenize(s: string): string[] {
   return s
     .toLowerCase()
-    .replace(/[\p{P}\p{S}]/gu, ' ')
+    .replace(/[^\w\s]/g, ' ')
     .split(/\s+/)
     .filter((t) => t.length >= 2)
     .slice(0, 20)
