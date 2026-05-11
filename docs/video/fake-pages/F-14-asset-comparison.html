@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920">
+<title>Moboost - Asset Comparison</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  /* SF Pro Display - system font, no import needed */
+  :root {
+    --bg-dark: #0a0a0a; --bg-card: rgba(255,255,255,0.04);
+    --brand-purple: #c0e463; --brand-glow: rgba(192,228,99,0.25);
+    --text-white: #fff; --text-gray: #8a8a9a; --text-dim: #555566;
+    --green: #28c840; --paws-orange: #FF6B35;
+  }
+  body {
+    font-family: 'SF Pro Display', -apple-system, 'Helvetica Neue', Arial, sans-serif;
+    background: var(--bg-dark); color: var(--text-white);
+    width: 1920px; height: 1080px;
+    overflow: hidden; display: flex; flex-direction: column;
+  }
+  .navbar {
+    height: 56px; background: rgba(10,10,10,0.85); backdrop-filter: saturate(120%) blur(24px);
+    border-bottom: 1px solid rgba(192,228,99,0.15);
+    display: flex; align-items: center; padding: 0 32px;
+  }
+  .logo { font-size: 20px; font-weight: 700; }
+  .logo span { color: var(--brand-purple); }
+
+  /* Market tabs */
+  .market-tabs {
+    display: flex; gap: 2px; padding: 12px 48px;
+    background: rgba(10,10,10,0.4);
+    border-bottom: 1px solid rgba(192,228,99,0.08);
+  }
+  .market-tab {
+    padding: 8px 18px; border-radius: 8px;
+    font-size: 13px; cursor: pointer;
+    display: flex; align-items: center; gap: 6px;
+    color: var(--text-dim); transition: all 0.3s;
+  }
+  .market-tab.active { background: rgba(192,228,99,0.15); color: var(--brand-purple); }
+  .market-tab:hover { color: var(--text-gray); }
+
+  .content { flex: 1; padding: 32px 48px; display: flex; gap: 32px; }
+
+  /* Side by side comparison */
+  .compare-panel {
+    flex: 1; display: flex; flex-direction: column;
+    opacity: 0; transform: translateY(16px);
+  }
+  .panel-header {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 16px;
+  }
+  .panel-badge {
+    padding: 4px 12px; border-radius: 6px;
+    font-size: 11px; font-weight: 600;
+  }
+  .panel-badge.original { background: rgba(138,138,154,0.15); color: var(--text-gray); }
+  .panel-badge.localized { background: rgba(192,228,99,0.15); color: var(--brand-purple); }
+  .panel-lang { font-size: 13px; font-weight: 500; }
+
+  .compare-card {
+    flex: 1;
+    background: var(--bg-card);
+    border: 1px solid rgba(192,228,99,0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex; flex-direction: column;
+  }
+  .compare-visual {
+    flex: 1;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    padding: 24px;
+  }
+
+  /* Ad mockup inside comparison */
+  .ad-mockup {
+    width: 340px; background: white; border-radius: 12px;
+    overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+  .ad-hero {
+    height: 200px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 64px; position: relative;
+  }
+  .ad-body { padding: 16px 20px; }
+  .ad-title { font-size: 18px; font-weight: 700; color: #333; margin-bottom: 6px; }
+  .ad-desc { font-size: 12px; color: #888; line-height: 1.5; margin-bottom: 14px; }
+  .ad-price { font-size: 14px; font-weight: 700; color: var(--paws-orange); margin-bottom: 12px; }
+  .ad-cta {
+    width: 100%; padding: 12px;
+    border: none; border-radius: 10px;
+    font-size: 14px; font-weight: 700;
+    color: white; text-align: center;
+  }
+
+  /* Difference annotations */
+  .diff-annotations {
+    padding: 16px 20px;
+    border-top: 1px solid rgba(192,228,99,0.08);
+  }
+  .diff-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 6px 0; font-size: 12px;
+  }
+  .diff-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+  }
+  .diff-dot.changed { background: var(--brand-purple); }
+  .diff-dot.adapted { background: var(--paws-orange); }
+  .diff-label { color: var(--text-gray); }
+  .diff-detail { margin-left: auto; color: var(--brand-purple); font-weight: 500; font-size: 11px; }
+
+  /* VS divider */
+  .vs-divider {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 8px; padding: 0 8px;
+  }
+  .vs-line { width: 2px; flex: 1; background: rgba(192,228,99,0.15); }
+  .vs-badge {
+    background: var(--bg-card);
+    border: 1px solid rgba(192,228,99,0.3);
+    border-radius: 8px; padding: 6px 12px;
+    font-size: 11px; color: var(--brand-purple); font-weight: 700;
+  }
+
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+<nav class="navbar"><div class="logo"><span>Mo</span>boost</div></nav>
+
+<div class="market-tabs">
+  <div class="market-tab">🇺🇸 US</div>
+  <div class="market-tab active">🇯🇵 Japan</div>
+  <div class="market-tab">🇧🇷 Brazil</div>
+  <div class="market-tab">🇳🇬 Nigeria</div>
+  <div class="market-tab">🇰🇷 Korea</div>
+  <div class="market-tab">🇩🇪 Germany</div>
+  <div class="market-tab">🇮🇳 India</div>
+  <div class="market-tab">🇫🇷 France</div>
+</div>
+
+<div class="content">
+  <!-- Original -->
+  <div class="compare-panel" id="origPanel">
+    <div class="panel-header">
+      <div class="panel-badge original">Original</div>
+      <div class="panel-lang">🇺🇸 English</div>
+    </div>
+    <div class="compare-card">
+      <div class="compare-visual">
+        <div class="ad-mockup">
+          <div class="ad-hero" style="background:linear-gradient(135deg,#F48FB1,#F8BBD0);">🌸</div>
+          <div class="ad-body">
+            <div class="ad-title">Tokyo: Beyond the Guidebook</div>
+            <div class="ad-desc">Discover hidden temples, local ramen shops, and cherry blossom secrets that only locals know.</div>
+            <div class="ad-price">From $899 / 5 nights</div>
+            <div class="ad-cta" style="background:#E91E63;">Book Now</div>
+          </div>
+        </div>
+      </div>
+      <div class="diff-annotations">
+        <div style="font-size:11px;color:var(--text-dim);margin-bottom:8px;font-weight:600;text-transform:uppercase;letter-spacing:1px;">Source Details</div>
+        <div class="diff-item"><div class="diff-dot" style="background:var(--text-dim)"></div><span class="diff-label">Language: English</span></div>
+        <div class="diff-item"><div class="diff-dot" style="background:var(--text-dim)"></div><span class="diff-label">Currency: USD</span></div>
+        <div class="diff-item"><div class="diff-dot" style="background:var(--text-dim)"></div><span class="diff-label">Tone: Neutral/Western</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="vs-divider">
+    <div class="vs-line"></div>
+    <div class="vs-badge">VS</div>
+    <div class="vs-line"></div>
+  </div>
+
+  <!-- Localized -->
+  <div class="compare-panel" id="localPanel">
+    <div class="panel-header">
+      <div class="panel-badge localized">Localized</div>
+      <div class="panel-lang">🇯🇵 Japanese</div>
+    </div>
+    <div class="compare-card">
+      <div class="compare-visual">
+        <div class="ad-mockup">
+          <div class="ad-hero" style="background:linear-gradient(135deg,#F48FB1,#fce4ec);">🌸</div>
+          <div class="ad-body">
+            <div class="ad-title">東京：ガイドブックの先へ</div>
+            <div class="ad-desc">地元の人だけが知る隠れた寺院、ラーメン店、桜の秘密スポットを巡る旅。</div>
+            <div class="ad-price">¥38,800 より / 5泊</div>
+            <div class="ad-cta" style="background:#E91E63;">今すぐ予約</div>
+          </div>
+        </div>
+      </div>
+      <div class="diff-annotations">
+        <div style="font-size:11px;color:var(--brand-purple);margin-bottom:8px;font-weight:600;text-transform:uppercase;letter-spacing:1px;">Changes Applied</div>
+        <div class="diff-item"><div class="diff-dot changed"></div><span class="diff-label">Title translated to Japanese</span><span class="diff-detail">AI-adapted</span></div>
+        <div class="diff-item"><div class="diff-dot changed"></div><span class="diff-label">CTA: "Book Now" → "今すぐ予約"</span><span class="diff-detail">Localized</span></div>
+        <div class="diff-item"><div class="diff-dot adapted"></div><span class="diff-label">Color softened (+10% lightness)</span><span class="diff-detail">Cultural fit</span></div>
+        <div class="diff-item"><div class="diff-dot changed"></div><span class="diff-label">Currency: $899 → ¥38,800</span><span class="diff-detail">Converted</span></div>
+        <div class="diff-item"><div class="diff-dot adapted"></div><span class="diff-label">Copy tone: softer, polite form</span><span class="diff-detail">Cultural fit</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  setTimeout(() => {
+    document.getElementById('origPanel').style.animation = 'fadeUp 0.5s ease forwards';
+  }, 400);
+  setTimeout(() => {
+    document.getElementById('localPanel').style.animation = 'fadeUp 0.5s ease forwards';
+  }, 700);
+</script>
+</body>
+</html>

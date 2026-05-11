@@ -35,14 +35,14 @@ type Props = {
 }
 
 const VERTICALS = [
-  'Casino / Slots',
-  'Sports Betting',
-  'Poker',
-  'Lottery',
-  'Fantasy Sports',
-  'Esports Betting',
-  'Bingo',
-  'Other iGaming',
+  'E-commerce / Retail',
+  'Mobile Apps',
+  'Gaming & Entertainment',
+  'SaaS / Technology',
+  'Finance & Insurance',
+  'Education & Training',
+  'Health & Wellness',
+  'Other',
 ]
 
 // ──────────────────────────────────────────────────────────────────
@@ -574,7 +574,7 @@ function ProductFormStep({
               type="text"
               value={productName}
               onChange={(e) => setProductName(e.target.value)}
-              placeholder="e.g. Lucky Spin Casino"
+              placeholder="e.g. Acme Store"
               className="ob-input"
               maxLength={120}
             />
@@ -1013,7 +1013,7 @@ function ProductHybridStep({
               type="text"
               value={productName}
               onChange={(e) => setProductName(e.target.value)}
-              placeholder="e.g. Lucky Spin Casino"
+              placeholder="e.g. Acme Store"
               className="ob-input"
               maxLength={120}
             />

@@ -10,10 +10,10 @@
  *
  * Auto-executes merge/deprecate decisions with rollback support.
  *
- * Three Principles (用户要求):
- *   原则1: 所有修改均可一键回滚
- *   原则2: 修改记录到changelog，随时可查看
- *   原则3: 新修改admin登录时提示，确认后删除backup
+ * Three Principles (user requirements):
+ *   Principle 1: All changes can be rolled back with one click
+ *   Principle 2: Changes are logged to the changelog and can be viewed at any time
+ *   Principle 3: New changes prompt on admin login; backup is deleted after confirmation
  */
 
 import { supabaseService } from '@/lib/db'
@@ -42,7 +42,7 @@ export interface Mutation {
   createdAt: string
 }
 
-// ─── Changelog Logger (原则2) ────────────────────────────────────────
+// ─── Changelog Logger (Principle 2) ──────────────────────────────────
 
 export async function logChangelog(
   level: 'info' | 'warn' | 'error' | 'evolution' | 'rollback',
@@ -93,7 +93,7 @@ export async function createMutation(params: {
   const mutationId = `mut_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`
 
   if (adlReport.verdict === 'fail') {
-    await logChangelog('warn', 'adl', `ADL拒绝了修改: ${params.description}`, {
+    await logChangelog('warn', 'adl', `ADL rejected the change: ${params.description}`, {
       target: params.target,
       reason: adlReport.overallReason,
       report: adlReport,
@@ -101,7 +101,7 @@ export async function createMutation(params: {
     return { mutation: null, adlReport }
   }
 
-  // Step 2: Create mutation record (原则1: 存储rollback数据)
+  // Step 2: Create mutation record (Principle 1: store rollback data)
   const mutation: Mutation = {
     id: mutationId,
     mutationType: params.mutationType,
@@ -142,8 +142,8 @@ export async function createMutation(params: {
     return { mutation: null, adlReport }
   }
 
-  // Step 3: Log to changelog (原则2)
-  await logChangelog('evolution', 'mutation', `新进化修改: ${params.description}`, {
+  // Step 3: Log to changelog (Principle 2)
+  await logChangelog('evolution', 'mutation', `New evolution change: ${params.description}`, {
     mutationId: mutation.id,
     type: params.mutationType,
     target: params.target,
@@ -186,9 +186,9 @@ export async function executeAgentEnhance(
   const { mutation } = await createMutation({
     mutationType: 'agent_enhance',
     target: agentId,
-    description: `增强Agent "${agent.nameZh}": ${
-      enhancement.newPrompt ? 'prompt更新' : ''
-    }${enhancement.newTools ? ' tools更新' : ''}${enhancement.newVersion ? ` → v${enhancement.newVersion}` : ''}`,
+    description: `Enhance agent "${agent.nameZh}": ${
+      enhancement.newPrompt ? 'prompt updated' : ''
+    }${enhancement.newTools ? ' tools updated' : ''}${enhancement.newVersion ? ` → v${enhancement.newVersion}` : ''}`,
     changes: { before, after },
     rollbackData: before,
     triggeredBy,
@@ -222,7 +222,7 @@ export async function executeAgentTune(
   const { mutation } = await createMutation({
     mutationType: 'agent_tune',
     target: agentId,
-    description: `微调Agent "${agent.nameZh}": ${Object.keys(tuning).join(', ')}`,
+    description: `Fine-tune agent "${agent.nameZh}": ${Object.keys(tuning).join(', ')}`,
     changes: { before, after },
     rollbackData: before,
     triggeredBy,
@@ -232,7 +232,7 @@ export async function executeAgentTune(
   return mutation
 }
 
-// ─── Rollback (原则1) ────────────────────────────────────────────────
+// ─── Rollback (Principle 1) ──────────────────────────────────────────
 
 /**
  * Rollback a mutation — restore previous state.
@@ -286,7 +286,7 @@ export async function rollbackMutation(mutationId: string): Promise<boolean> {
     return false
   }
 
-  await logChangelog('rollback', 'executor', `已回滚修改: ${mutation.description}`, {
+  await logChangelog('rollback', 'executor', `Rolled back change: ${mutation.description}`, {
     mutationId,
     target: mutation.target,
     type: mutation.mutation_type,
@@ -295,7 +295,7 @@ export async function rollbackMutation(mutationId: string): Promise<boolean> {
   return true
 }
 
-// ─── Confirm (原则3) ─────────────────────────────────────────────────
+// ─── Confirm (Principle 3) ───────────────────────────────────────────
 
 /**
  * Admin confirms a mutation — marks it as confirmed, removes backup need.
@@ -318,7 +318,7 @@ export async function confirmMutation(mutationId: string, confirmedBy: string): 
     return false
   }
 
-  await logChangelog('info', 'executor', `管理员已确认修改: ${mutationId}`, {
+  await logChangelog('info', 'executor', `Admin confirmed change: ${mutationId}`, {
     confirmedBy,
     mutationId,
   }, mutationId)
@@ -329,7 +329,7 @@ export async function confirmMutation(mutationId: string, confirmedBy: string): 
 // ─── Query ───────────────────────────────────────────────────────────
 
 /**
- * Get all pending mutations (原则3: admin login时展示).
+ * Get all pending mutations (Principle 3: displayed on admin login).
  */
 export async function getPendingMutations(): Promise<Mutation[]> {
   const sb = supabaseService()
@@ -458,7 +458,7 @@ export async function executeViaOrchestrator(params: {
   const { mutation } = await createMutation({
     mutationType: params.scope === 'agent' ? 'agent_create' : 'pipeline_update',
     target: params.description.substring(0, 100),
-    description: `[自主进化] ${params.description}`,
+    description: `[Autonomous Evolution] ${params.description}`,
     changes: {
       before: null,
       after: orchestratorResult,

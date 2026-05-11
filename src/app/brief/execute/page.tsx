@@ -1250,7 +1250,7 @@ Visual direction: ${brandStyle.applicationGuidance.forImages}
 Design principles: ${brandStyle.designPrinciples.slice(0, 3).join('. ')}.`
     : `\nStyle: Clean, modern, Apple-inspired aesthetic. High contrast. Bold typography.`
 
-  return `Create a professional iGaming marketing banner for "${productName}".
+  return `Create a professional marketing banner for "${productName}".
 
 Target audience: ${group.audienceTag} in ${group.region}.
 Selling point: ${group.sellingPoint}
@@ -1288,7 +1288,7 @@ Visual direction: ${brandStyle.applicationGuidance.forVideo}
 Design principles: ${brandStyle.designPrinciples.slice(0, 3).join('. ')}.`
     : `\nStyle: Cinematic, premium feel. Apple-inspired clean aesthetics.`
 
-  return `Create a 15-second promotional video for "${productName}" — an iGaming product.
+  return `Create a 15-second promotional video for "${productName}".
 
 Target audience: ${group.audienceTag} in ${group.region}.
 Selling point: ${group.sellingPoint}

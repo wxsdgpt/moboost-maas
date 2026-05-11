@@ -48,7 +48,7 @@ export default function BriefChatPage() {
     {
       role: 'assistant',
       content:
-        'Hi — just tell me what kind of creative you want, e.g. "Make an IG Reel for new iGaming users, 30s, aggressive tone."\n\nYou can also paste a competitor link or reference page, and I\'ll fetch and analyze it automatically.',
+        'Hi — just tell me what kind of creative you want, e.g. "Make an IG Reel for our e-commerce summer sale, 30s, energetic tone."\n\nYou can also paste a competitor link or reference page, and I\'ll fetch and analyze it automatically.',
     },
   ])
   const [input, setInput] = useState('')

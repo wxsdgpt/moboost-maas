@@ -1,0 +1,29 @@
+{
+  "id": "gen-1777269807-wcuFuTNY4Nlh3TY22Cxc",
+  "object": "chat.completion",
+  "created": 1777269807,
+  "model": "google/gemini-3-pro-image-preview-20251120",
+  "provider": "Google",
+  "system_fingerprint": null,
+  "choices": [
+    {
+      "index": 0,
+      "logprobs": null,
+      "finish_reason": "stop",
+      "native_finish_reason": "STOP",
+      "message": {
+        "role": "assistant",
+        "content": null,
+        "refusal": null,
+        "reasoning": "**Analyzing the Request Details**\n\nI'm currently focused on the prompt's specifics: close-up, warm tones, indoor setting, Asian woman's hands, iPhone, and phone screen focus. I am breaking it down to ensure all aspects are addressed.\n\n\n**Dissecting the Scene Elements**\n\nMy current focus is on building the prompt. I am concentrating on the precise elements: the woman's hands, the iPhone, and the screen content. I'm striving to combine these components in a way that aligns with the requested \"lifestyle mobile usage photography\" style.\n\n\n**Formulating the Details**\n\nI am now integrating the scene elements into a detailed prompt. I am paying particular attention to the pose (\"gently holding\") and the screen's visual content, specifying the ad's nature and cat breed.\n\n\n**Reviewing Image Composition**\n\n\\n\\n\n\nI've confirmed the initial depiction accurately reflects the user's prompt. The scene presents a close-up of the woman, showcasing the requested details like her attire, hair, and the iPhone's advertisement. The composition appears straightforward.\n\n\n**Evaluating Detailed Correspondence**\n\n\\n\\n\n\nMy current focus is on a thorough comparison between the generated image and the original user request. The image closely aligns with the specifications. The scene includes the Asian woman, short hair, beige sweater, and iPhone displaying the Siamese cat food ad. I'm noting the accuracy of details.\n\n\n",
+        "reasoning_details": [
+          {
+            "type": "reasoning.text",
+            "text": "**Analyzing the Request Details**\n\nI'm currently focused on the prompt's specifics: close-up, warm tones, indoor setting, Asian woman's hands, iPhone, and phone screen focus. I am breaking it down to ensure all aspects are addressed.\n\n\n**Dissecting the Scene Elements**\n\nMy current focus is on building the prompt. I am concentrating on the precise elements: the woman's hands, the iPhone, and the screen content. I'm striving to combine these components in a way that aligns with the requested \"lifestyle mobile usage photography\" style.\n\n\n**Formulating the Details**\n\nI am now integrating the scene elements into a detailed prompt. I am paying particular attention to the pose (\"gently holding\") and the screen's visual content, specifying the ad's nature and cat breed.\n\n\n**Reviewing Image Composition**\n\n\\n\\n\n\nI've confirmed the initial depiction accurately reflects the user's prompt. The scene presents a close-up of the woman, showcasing the requested details like her attire, hair, and the iPhone's advertisement. The composition appears straightforward.\n\n\n**Evaluating Detailed Correspondence**\n\n\\n\\n\n\nMy current focus is on a thorough comparison between the generated image and the original user request. The image closely aligns with the specifications. The scene includes the Asian woman, short hair, beige sweater, and iPhone displaying the Siamese cat food ad. I'm noting the accuracy of details.\n\n\n",
+            "format": "google-gemini-v1",
+            "index": 0
+          },
+          {
+            "type": "reasoning.encrypted",
+            "data": "CtTuVwGPPWtfyTqAAvFgZU4OEaEfko94Jvb3wvP/flrV+qFueQXHbhH57SwqySOrYok2DtgwEYU8WBpNZn3aF5DKvyw4BdrajGj0oY2qr5Zz8nLmg7Nq+4S3YWUfH+Juwsx8hkLkmIu+J4QV9EM9SlpX6dSHDq1miu7MJmuQNMT4x+K9ZG+jsLOJIFX4VOdzB9ElMgQNz0/6ZgpyM0jnKUVFz+ekBfEjKES7Ptr+MjiT4mZe+QnGW6TPKh533GiUSkfQ/ol3dC5px/Bpogn8vKiV3nDBLDXiABIpuHBZ7bJXCxZDjUiy8bqB3uVt7H6Dis1dvZTjZrnTNmKyGGr9tPxUfRxuZjIzXMb9v8ZqqVAHXGekBWgDUMfYMDmnjt0OOa0ORdp8BuW96HHQwxed6f91bp18GDnt0MZfIpyqYM6JivzBGYBK07wKDiacHk24hqz/0fRMHymljZ6IjyFFxD7Mt0zrpYLcoI0kqM+gus9OCnlKuzSZUZKtIPBROFbXot0bj2TaIoUW1X9ONMn1QmgPBwDJTw+2eeESMcpwSDyKiE0hd2OrRPEEEZZrHkFX8Rq4OPiZNTodMOsXHRkGAkIIqjDi7y60MULX60o5KHUdGgUqss8H0AQW4bCzIBxPPHcyaW8t0du4u3VF30559Slyr+K3fZ/GnRBx5Uycxw6cnv8uI037FXCEDEwxcXtY9c042qMYlLnhSM2pRus7INoOjspmSmz3z1pTt08knu5dKwGUlJmtxw76Tqyi9HjdXCA8TB03TfqhKutIZY9qSCYF+nKrj1v7ZnnxTj2pGKbsYDEiNMk+07hu9UBBKrnkYa/vspXugfLtX54PDg2/MLPnI2NLZo2i4NyzZnDAwlRPoAnJ6d5WILvbBbqrj7z6Orz23FNTs+5FEmNmlY2uwotV4WjzAcB3DQwPXdUmPJESTbZjHazA3sLLYQV9+3TaE+dn/rhwDlF/4JSYjl2c+vg6cBiEPRnryMcGYWlt964G1tKdpr7OXrZg9CDkq161JNcxJT6QELR8MtLkTN+rYss5iDDIc6QR15qAZrl2eJuwg5OMLob7ctld+7Nv8b3Jy9S0IHc5r6rP8IiKac+DUHkASUJhoJggo/RrMo9Uj5Ac7ztYPDadwFMsrHWRvYOQ7MqLxjBToAbo7x3i3nDcRNtSObydvYuLZva7cqzuUCOM/Bn0Cihpn6hF/2LaFtgafFWtcdTUXWw1lguqAW8N2V4jSK8TQ9YHhs/I5Gpws7prdXotfFi3RdW4ywRMeor1+yOCWJSBig6oZTN/40NnoGxOe5hnKRZTOQineNHZb7kORFoZdwM0MFXm6nPyc//PHal+BvBlQnMOIjtq2XBK24tWxo
+... (truncated)

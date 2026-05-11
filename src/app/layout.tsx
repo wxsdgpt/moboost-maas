@@ -15,7 +15,7 @@ import { LocaleProvider } from '@/lib/i18n/LocaleProvider'
 
 export const metadata: Metadata = {
   title: 'Moboost AI — MAAS Platform',
-  description: 'Marketing-as-a-Service for iGaming',
+  description: 'AI-Powered Marketing-as-a-Service',
   themeColor: '#000000',
   appleWebApp: {
     capable: true,

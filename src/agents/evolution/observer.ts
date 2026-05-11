@@ -263,7 +263,7 @@ function detectAnomalies(
       anomalies.push({
         type: 'quality_drop',
         severity: 'warning',
-        description: `质量评分下降 ${Math.round(((historicalAvg - recentAvg) / historicalAvg) * 100)}%：历史均值 ${historicalAvg.toFixed(1)} → 近期 ${recentAvg.toFixed(1)}`,
+        description: `Quality score dropped ${Math.round(((historicalAvg - recentAvg) / historicalAvg) * 100)}%: historical avg ${historicalAvg.toFixed(1)} -> recent ${recentAvg.toFixed(1)}`,
         detectedAt: new Date().toISOString(),
         dataPoints: { historicalAvg, recentAvg, dropPct: ((historicalAvg - recentAvg) / historicalAvg) * 100 },
       })
@@ -275,7 +275,7 @@ function detectAnomalies(
     anomalies.push({
       type: 'failure_burst',
       severity: 'critical',
-      description: `失败率异常：${Math.round((1 - stats.successRate) * 100)}% 的执行失败`,
+      description: `Abnormal failure rate: ${Math.round((1 - stats.successRate) * 100)}% of executions failed`,
       detectedAt: new Date().toISOString(),
       dataPoints: { successRate: stats.successRate, totalRuns: stats.totalRuns },
     })
@@ -295,7 +295,7 @@ function detectAnomalies(
       anomalies.push({
         type: 'cost_spike',
         severity: 'warning',
-        description: `成本飙升 ${(recentCost / historicalCost).toFixed(1)}x：$${historicalCost.toFixed(4)} → $${recentCost.toFixed(4)}/次`,
+        description: `Cost spike ${(recentCost / historicalCost).toFixed(1)}x: $${historicalCost.toFixed(4)} -> $${recentCost.toFixed(4)}/run`,
         detectedAt: new Date().toISOString(),
         dataPoints: { historicalCost, recentCost, ratio: recentCost / historicalCost },
       })
@@ -307,7 +307,7 @@ function detectAnomalies(
     anomalies.push({
       type: 'usage_shift',
       severity: 'warning',
-      description: `用户拒绝率过高：${Math.round(stats.rejectRate * 100)}% 的产出被用户拒绝`,
+      description: `User rejection rate too high: ${Math.round(stats.rejectRate * 100)}% of outputs were rejected by users`,
       detectedAt: new Date().toISOString(),
       dataPoints: { rejectRate: stats.rejectRate, modifyRate: stats.modifyRate, acceptRate: stats.acceptRate },
     })
@@ -322,7 +322,7 @@ function detectAnomalies(
       anomalies.push({
         type: 'pattern_change',
         severity: 'info',
-        description: `市场 ${market.toUpperCase()} 的修改率为 ${Math.round((modified / total) * 100)}%，可能需要本地化专项优化`,
+        description: `Market ${market.toUpperCase()} has a modification rate of ${Math.round((modified / total) * 100)}%, may need localization-specific optimization`,
         detectedAt: new Date().toISOString(),
         dataPoints: { modifyRate: modified / total, sampleSize: total },
       })
@@ -383,11 +383,11 @@ export async function detectCrossAgentPatterns(
       patterns.push({
         type: 'co_invocation',
         agents: [a, b],
-        description: `${a} 和 ${b} 在 ${Math.round(frequency * 100)}% 的执行中同时被调用`,
+        description: `${a} and ${b} are co-invoked in ${Math.round(frequency * 100)}% of executions`,
         frequency,
         suggestion: frequency > 0.95
-          ? `考虑合并为一个复合Agent以减少LLM调用开销`
-          : `频繁协作，确保数据传递接口稳定`,
+          ? `Consider merging into a single composite agent to reduce LLM call overhead`
+          : `Frequent collaboration detected — ensure data-passing interfaces are stable`,
       })
     }
   })
@@ -414,9 +414,9 @@ export async function detectCrossAgentPatterns(
       patterns.push({
         type: 'bottleneck',
         agents: [agentId],
-        description: `${agentId} 平均耗时 ${Math.round(avg)}ms，是全局均值的 ${(avg / globalAvg).toFixed(1)}x，构成管线瓶颈`,
+        description: `${agentId} avg duration ${Math.round(avg)}ms, ${(avg / globalAvg).toFixed(1)}x the global average — pipeline bottleneck`,
         frequency: 1,
-        suggestion: `考虑优化prompt长度、减少tool调用次数、或使用更快的模型`,
+        suggestion: `Consider optimizing prompt length, reducing tool call count, or using a faster model`,
       })
     }
   })

@@ -15,7 +15,8 @@ import { useEffect, useState, useRef, useCallback } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { SignIn, useAuth } from '@clerk/nextjs'
-import { Loader2, Sparkles, CheckCircle2 } from 'lucide-react'
+import Image from 'next/image'
+import { Loader2, CheckCircle2 } from 'lucide-react'
 import { useLocale } from '@/lib/i18n/LocaleProvider'
 import dynamic from 'next/dynamic'
 import { GLOBE_STAGE, type GlobeStage } from '@/components/LoginGlobe'
@@ -188,9 +189,14 @@ export default function SignInClient() {
             transitionDelay: '0ms',
           }}
         >
-          <div className="auth-logo-mark">
-            <Sparkles className="w-4 h-4" style={{ color: '#000' }} />
-          </div>
+          <Image
+            src="/logo/black/icon/white_icon_transparent_background.png"
+            alt="Moboost"
+            width={32}
+            height={32}
+            style={{ objectFit: 'contain' }}
+            priority
+          />
           <span className="auth-logo-text">MOBOOST</span>
         </div>
 

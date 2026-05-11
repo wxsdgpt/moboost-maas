@@ -1,0 +1,29 @@
+{
+  "id": "gen-1777269907-hvSvGJWXayGmPbmRP7V7",
+  "object": "chat.completion",
+  "created": 1777269907,
+  "model": "google/gemini-3-pro-image-preview-20251120",
+  "provider": "Google AI Studio",
+  "system_fingerprint": null,
+  "choices": [
+    {
+      "index": 0,
+      "logprobs": null,
+      "finish_reason": "stop",
+      "native_finish_reason": "STOP",
+      "message": {
+        "role": "assistant",
+        "content": null,
+        "refusal": null,
+        "reasoning": "**Defining the Subject**\n\nI'm currently focused on defining the subject and scene. The goal is a street photograph of a Japanese woman on a Tokyo subway during the evening commute. I'm working on details such as low, warm lighting, and cool urban tones for the image, specifically for a 4K resolution image.\n\n\n**Clarifying the Focus**\n\nI've specified the scene as a Tokyo metro train car during the evening commute, focusing on low, warm lighting and cool urban tones for a 4K resolution image. I've defined the subject as a 27-year-old Japanese woman with black hair, wearing AirPods and a light blue denim jacket, gently smiling while holding her phone. The phone screen will display a cherry blossom travel advertisement. I've also added background details like blurred passengers, a crowded train interior with reflective surfaces, hand straps, Japanese advertisements, and a dark/blurry view outside the train.\n\n\n**Assessing Photo Execution**\n\nI'm evaluating the photo's adherence to the original brief, specifically how well it represents the subject's features and accessories within the specified Tokyo train setting. I'm focusing on the successful depiction of evening lighting and the requested street photography aesthetic, with cool tones.\n\n\n**Verifying Style Adherence**\n\nI'm now focusing on the prompt's request for cool urban tones with a warm phone glow to ensure this is appropriately reflected. I'm also assessing the accuracy of the subject's features and accessories within the specific Tokyo train car. The evening commute lighting is rendered, as requested.\n\n\n",
+        "reasoning_details": [
+          {
+            "type": "reasoning.text",
+            "text": "**Defining the Subject**\n\nI'm currently focused on defining the subject and scene. The goal is a street photograph of a Japanese woman on a Tokyo subway during the evening commute. I'm working on details such as low, warm lighting, and cool urban tones for the image, specifically for a 4K resolution image.\n\n\n**Clarifying the Focus**\n\nI've specified the scene as a Tokyo metro train car during the evening commute, focusing on low, warm lighting and cool urban tones for a 4K resolution image. I've defined the subject as a 27-year-old Japanese woman with black hair, wearing AirPods and a light blue denim jacket, gently smiling while holding her phone. The phone screen will display a cherry blossom travel advertisement. I've also added background details like blurred passengers, a crowded train interior with reflective surfaces, hand straps, Japanese advertisements, and a dark/blurry view outside the train.\n\n\n**Assessing Photo Execution**\n\nI'm evaluating the photo's adherence to the original brief, specifically how well it represents the subject's features and accessories within the specified Tokyo train setting. I'm focusing on the successful depiction of evening lighting and the requested street photography aesthetic, with cool tones.\n\n\n**Verifying Style Adherence**\n\nI'm now focusing on the prompt's request for cool urban tones with a warm phone glow to ensure this is appropriately reflected. I'm also assessing the accuracy of the subject's features and accessories within the specific Tokyo train car. The evening commute lighting is rendered, as requested.\n\n\n",
+            "format": "google-gemini-v1",
+            "index": 0
+          },
+          {
+            "type": "reasoning.encrypted",
+            "data": "ErvTYwq302MBDDnWx7M72ifFpKrIZQs0noZLU94MOnhZwzJeyb5YrRRwTQGqtisqG6tQ52UeYHcw3kj5m5T2PBRNtq+gcsZ+PbDgz6rGKvMXGgE8k6dbi7mLjGuewfBMrmcCwt5qhQrbUX0N5sVH1pobc5Io9TG1qZzCPz7R2vgB9f0U2R2sXv56rpdgarXpV2Spr1XGYrOR+0iHAAIqeacjSKtcxOUQsxA0EZeRBVeFxAjpM4U3T1PvFBG+1M6HX7H9W220KdhT9D7fLJx+I1EgNW2zamLJmcxFKWzJkZaO1PIfSscvYKJMn/744a0vndx1elx8/uJPn9tFX4JzEMyaaDVh6NJfxYfUrrjz+69Zm2CpvtXfkaXoi7RBkRc345WRt/EXn0aoYaQVjlOB6HohJmaLYuTVMy0uV06sTDOw1uJYUoQVwqSTVhbY0S/wOII37rS/Rmc0cASVFZuh+vgCQkX7BbK9rFh6kTQQejkAg+qwIwCW1QZk8LmUkeRJ3qNMyFAO5lPYihFPY4iKNKk+zzOuAPClX8aION30jG9JsHhOQBQ36Fdi93ffgmWK8kMBdJyiU9AgJlUCWqwBDrXtXtAMTAd2bburGkB2x9MdpATkClUvYEWWUsBoNDv4TOFGjwvifFGhT8YtO/v2ueHbyxJaKL/8BOV1ZKa7jGlvk3Qq1B+aoekNgVYP+ubIzUaavIPbCOr5+oWgjK9C9e/KjA1BThU9DlexSBF4JyHWwkqymeCTzEdbeI3EXublIv1HqfUCfS/X9lMVCZ2cfiWuAV0Ojg0CVy6N0oRzOpptb2yFvRQQ7p1FLDGjs3+Dvtaz8r4B0XTD0rRqJYtOdQGdOyl3ApX5aaSdFz/jT93d47gyc80X7lo56OnpYkeXMtkpMWt5utuLxJ3lTSyZRbF40uYRPdzTiKXXOnPcbS23e3T6ZQ3DEcVseGTKJzCq7q0nUor5nVSYCgr5spO7EonJ+HAG+SkEzd3jp5cRlEzUBGvcSgdUAYSZQ4BySi0bYiVlDBIKCKTfaRP//g0vtOGugg+CkiT/
+... (truncated)

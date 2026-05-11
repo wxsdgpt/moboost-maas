@@ -43,6 +43,7 @@ export const en: Dict = {
   'nav.project': 'Project',
   'nav.reports': 'Reports',
   'nav.landing': 'Landing Pages',
+  'nav.localization': 'Localization',
   'nav.evolution': 'Agent Evolution',
   'nav.tools': 'Tools',
   'nav.signIn': 'Sign in',
@@ -68,7 +69,7 @@ export const en: Dict = {
   'auth.signUp.settingUp': 'Setting up your account…',
 
   // Home / hero
-  'home.tagline': 'Ad creatives, landing pages, and competitive intelligence for iGaming',
+  'home.tagline': 'Ad creatives, landing pages, and competitive intelligence — powered by AI',
 
   // Welcome banner
   'welcome.title': 'Welcome to Moboost',
@@ -120,6 +121,42 @@ export const en: Dict = {
   'artifacts.generating': 'Generating…',
   'artifacts.loading': 'Loading artifacts…',
   'artifacts.promptRequired': 'Prompt is required',
+
+  // Localization
+  'loc.title': 'Ad Localization',
+  'loc.subtitle': 'Localize your creatives across multiple markets',
+  'loc.newJob': 'New Localization Job',
+  'loc.selectAsset': 'Select Asset',
+  'loc.selectMarkets': 'Select Markets',
+  'loc.startLocalization': 'Start Localization',
+  'loc.processing': 'Processing…',
+  'loc.status.pending': 'Pending',
+  'loc.status.parsing': 'Parsing',
+  'loc.status.processing': 'Processing',
+  'loc.status.review': 'Review',
+  'loc.status.completed': 'Completed',
+  'loc.status.failed': 'Failed',
+  'loc.markets.us': 'United States',
+  'loc.markets.uk': 'United Kingdom',
+  'loc.markets.ph': 'Philippines',
+  'loc.markets.in': 'India',
+  'loc.markets.br': 'Brazil',
+  'loc.markets.fr': 'France',
+  'loc.markets.de': 'Germany',
+  'loc.markets.ng': 'Nigeria',
+  'loc.strategy.keep': 'Keep Original',
+  'loc.strategy.literal': 'Literal Translation',
+  'loc.strategy.light': 'Light Localization',
+  'loc.strategy.transcreate': 'Transcreation',
+  'loc.strategy.userProvided': 'User Provided',
+  'loc.noJobs': 'No localization jobs yet',
+  'loc.noJobs.desc': 'Start by selecting an asset to localize, or go to a project and click the Localize button.',
+  'loc.assets': 'Source Assets',
+  'loc.localized': 'Localized Outputs',
+  'loc.compliance': 'Compliance Report',
+  'loc.confirm': 'Confirm & Distribute',
+  'loc.localizeBtn': 'Localize',
+  'loc.localizeBtn.desc': 'Localize this asset across markets',
 }
 
 export const zh: Dict = {
@@ -137,6 +174,7 @@ export const zh: Dict = {
   'nav.project': '项目',
   'nav.reports': '报告',
   'nav.landing': '落地页',
+  'nav.localization': '本地化',
   'nav.evolution': '智能体演化',
   'nav.tools': '工具',
   'nav.signIn': '登录',
@@ -162,7 +200,7 @@ export const zh: Dict = {
   'auth.signUp.settingUp': '正在设置账户…',
 
   // Home / hero
-  'home.tagline': '为 iGaming 提供广告创意、落地页与竞品情报',
+  'home.tagline': 'AI 驱动的广告创意、落地页与竞品情报平台',
 
   // Welcome banner
   'welcome.title': '欢迎使用 Moboost',
@@ -214,6 +252,42 @@ export const zh: Dict = {
   'artifacts.generating': '生成中…',
   'artifacts.loading': '加载资产中…',
   'artifacts.promptRequired': '请填写 prompt',
+
+  // Localization
+  'loc.title': '广告本地化',
+  'loc.subtitle': '将你的创意素材本地化到多个市场',
+  'loc.newJob': '新建本地化任务',
+  'loc.selectAsset': '选择素材',
+  'loc.selectMarkets': '选择市场',
+  'loc.startLocalization': '开始本地化',
+  'loc.processing': '处理中…',
+  'loc.status.pending': '待处理',
+  'loc.status.parsing': '解析中',
+  'loc.status.processing': '处理中',
+  'loc.status.review': '待审核',
+  'loc.status.completed': '已完成',
+  'loc.status.failed': '失败',
+  'loc.markets.us': '美国',
+  'loc.markets.uk': '英国',
+  'loc.markets.ph': '菲律宾',
+  'loc.markets.in': '印度',
+  'loc.markets.br': '巴西',
+  'loc.markets.fr': '法国',
+  'loc.markets.de': '德国',
+  'loc.markets.ng': '尼日利亚',
+  'loc.strategy.keep': '保留原文',
+  'loc.strategy.literal': '忠实翻译',
+  'loc.strategy.light': '轻度本地化',
+  'loc.strategy.transcreate': '创译',
+  'loc.strategy.userProvided': '用户提供',
+  'loc.noJobs': '暂无本地化任务',
+  'loc.noJobs.desc': '选择一个素材开始本地化，或前往项目页点击本地化按钮。',
+  'loc.assets': '源素材',
+  'loc.localized': '本地化产出',
+  'loc.compliance': '合规报告',
+  'loc.confirm': '确认并分发',
+  'loc.localizeBtn': '本地化',
+  'loc.localizeBtn.desc': '将此素材本地化到多个市场',
 }
 
 export const dictionaries: Record<Locale, Dict> = { en, zh }

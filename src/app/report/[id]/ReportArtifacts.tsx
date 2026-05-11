@@ -15,6 +15,7 @@
  */
 
 import { useEffect, useState, useCallback } from 'react'
+import { useRouter } from 'next/navigation'
 import { Image as ImageIcon, Film, Globe, RefreshCw, ExternalLink } from 'lucide-react'
 import { useLocale } from '@/lib/i18n/LocaleProvider'
 
@@ -297,6 +298,7 @@ function CreativeCard({ creative, reportId, onRegenerated }: {
   creative: Creative; reportId: string; onRegenerated: () => void;
 }) {
   const { t } = useLocale()
+  const router = useRouter()
   const [open, setOpen] = useState(false)
   const [prompt, setPrompt] = useState(creative.prompt || '')
   const [busy, setBusy] = useState(false)
@@ -366,17 +368,30 @@ function CreativeCard({ creative, reportId, onRegenerated }: {
           >
             {t('common.open')} <ExternalLink size={10} />
           </a>
-          <button
-            onClick={() => setOpen(o => !o)}
-            style={{
-              background: 'none', border: `1px solid ${C.linkBlue}`,
-              color: C.linkBlue, borderRadius: 980, padding: '3px 10px',
-              fontSize: 11, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4,
-            }}
-          >
-            <RefreshCw size={10} />
-            {open ? t('common.cancel') : t('common.regenerate')}
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <button
+              onClick={() => router.push(`/localization/new?sourceUrl=${encodeURIComponent(creative.url)}&type=${creative.type}`)}
+              style={{
+                background: 'none', border: '1px solid var(--brand)',
+                color: 'var(--brand)', borderRadius: 980, padding: '3px 10px',
+                fontSize: 11, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4,
+              }}
+            >
+              <Globe size={10} />
+              {t('loc.localizeBtn')}
+            </button>
+            <button
+              onClick={() => setOpen(o => !o)}
+              style={{
+                background: 'none', border: `1px solid ${C.linkBlue}`,
+                color: C.linkBlue, borderRadius: 980, padding: '3px 10px',
+                fontSize: 11, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4,
+              }}
+            >
+              <RefreshCw size={10} />
+              {open ? t('common.cancel') : t('common.regenerate')}
+            </button>
+          </div>
         </div>
 
         {open && (

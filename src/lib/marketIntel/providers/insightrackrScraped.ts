@@ -116,7 +116,7 @@ export class InsightrackrScrapedProvider implements MarketIntelProvider {
       const brandKey = f.brand.toLowerCase().replace(/\s+/g, '')
       const brandVertical = BRAND_VERTICAL_MAP[brandKey]
       // Include if brand's vertical matches, OR if we have few brands for this vertical
-      return brandVertical === vertical || vertical === 'Casino' || vertical === 'Sports Betting'
+      return brandVertical === vertical || vertical === 'E-commerce' || vertical === 'SaaS'
     })
 
     // If no brands match this specific vertical, use all (cross-vertical intel is still useful)

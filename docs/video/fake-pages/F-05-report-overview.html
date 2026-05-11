@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920">
+<title>Moboost - Brand Report</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  /* SF Pro Display - system font, no import needed */
+  :root {
+    --bg-dark: #0a0a0a;
+    --bg-card: rgba(255,255,255,0.04);
+    --brand-purple: #c0e463;
+    --brand-glow: rgba(192, 228, 99, 0.25);
+    --text-white: #ffffff;
+    --text-gray: #8a8a9a;
+    --text-dim: #555566;
+    --paws-orange: #FF6B35;
+    --success-green: #28c840;
+  }
+  body {
+    font-family: 'SF Pro Display', -apple-system, 'Helvetica Neue', Arial, sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-white);
+    width: 1920px; height: 1080px;
+    overflow: hidden; display: flex; flex-direction: column;
+  }
+  .navbar {
+    height: 56px; background: rgba(10,10,10,0.85); backdrop-filter: saturate(120%) blur(24px);
+    border-bottom: 1px solid rgba(192,228,99,0.15);
+    display: flex; align-items: center; padding: 0 32px;
+  }
+  .logo { font-size: 20px; font-weight: 700; }
+  .logo span { color: var(--brand-purple); }
+  .nav-tabs { margin-left: 48px; display: flex; gap: 4px; }
+  .nav-tab {
+    padding: 8px 18px; border-radius: 8px;
+    font-size: 13px; color: var(--text-dim); cursor: pointer;
+  }
+  .nav-tab.active { background: rgba(192,228,99,0.15); color: var(--brand-purple); }
+  .nav-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+  .brand-badge {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--bg-card); border-radius: 8px;
+    padding: 6px 14px; font-size: 13px;
+  }
+  .brand-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--paws-orange); }
+
+  .content { flex: 1; padding: 32px 48px; overflow: hidden; }
+
+  /* Hero - Brand Health Score */
+  .hero {
+    display: flex; align-items: center; gap: 48px;
+    margin-bottom: 36px;
+    opacity: 0; transform: translateY(20px);
+    animation: fadeUp 0.6s ease forwards 0.3s;
+  }
+  .score-ring {
+    position: relative; width: 160px; height: 160px; flex-shrink: 0;
+  }
+  .score-ring svg { width: 160px; height: 160px; transform: rotate(-90deg); }
+  .score-ring .bg { fill: none; stroke: rgba(192,228,99,0.1); stroke-width: 8; }
+  .score-ring .fill {
+    fill: none; stroke: var(--brand-purple); stroke-width: 8;
+    stroke-linecap: round;
+    stroke-dasharray: 440; stroke-dashoffset: 440;
+    transition: stroke-dashoffset 2s ease;
+    filter: drop-shadow(0 0 8px rgba(192,228,99,0.3));
+  }
+  .score-num {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%); text-align: center;
+  }
+  .score-num .big { font-size: 44px; font-weight: 700; }
+  .score-num .sub { font-size: 12px; color: var(--text-gray); }
+  .hero-text h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+  .hero-text .rating {
+    display: inline-block;
+    background: rgba(192,228,99,0.15);
+    color: var(--brand-purple);
+    border-radius: 6px; padding: 4px 12px;
+    font-size: 13px; font-weight: 600;
+  }
+  .hero-text .desc { color: var(--text-gray); font-size: 14px; margin-top: 10px; line-height: 1.5; max-width: 500px; }
+
+  /* Three column charts */
+  .charts-row {
+    display: flex; gap: 24px; margin-bottom: 36px;
+  }
+  .chart-card {
+    flex: 1;
+    background: var(--bg-card);
+    border: 1px solid rgba(192,228,99,0.1);
+    border-radius: 12px;
+    padding: 24px;
+    opacity: 0; transform: translateY(20px);
+  }
+  .chart-title {
+    font-size: 13px; font-weight: 600; color: var(--text-gray);
+    margin-bottom: 18px;
+    text-transform: uppercase; letter-spacing: 1px;
+  }
+
+  /* Radar Chart */
+  .radar-container { position: relative; width: 100%; height: 260px; display: flex; justify-content: center; }
+  .radar-svg { width: 280px; height: 260px; }
+  .radar-axis { stroke: rgba(192,228,99,0.08); stroke-width: 1; fill: none; }
+  .radar-fill {
+    fill: rgba(192,228,99,0.15);
+    stroke: var(--brand-purple); stroke-width: 2;
+    stroke-dasharray: 1000; stroke-dashoffset: 1000;
+    transition: stroke-dashoffset 1.5s ease;
+  }
+  .radar-fill.animated { stroke-dashoffset: 0; }
+  .radar-dot { fill: var(--brand-purple); r: 4; opacity: 0; transition: opacity 0.5s; }
+  .radar-dot.show { opacity: 1; }
+  .radar-label { font-size: 11px; fill: var(--text-gray); text-anchor: middle; }
+
+  /* Pie Chart */
+  .pie-container { position: relative; width: 100%; height: 260px; display: flex; align-items: center; justify-content: center; gap: 24px; }
+  .pie-svg { width: 180px; height: 180px; }
+  .pie-segment {
+    fill: none; stroke-width: 32;
+    stroke-dasharray: 0 502;
+    transition: stroke-dasharray 1s ease;
+    transform-origin: center;
+  }
+  .pie-legend { display: flex; flex-direction: column; gap: 12px; }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-gray); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 3px; }
+  .legend-pct { font-weight: 600; color: var(--text-white); margin-left: auto; }
+
+  /* Metric Cards */
+  .metrics-col { display: flex; flex-direction: column; gap: 14px; }
+  .metric-card {
+    background: rgba(192,228,99,0.05);
+    border: 1px solid rgba(192,228,99,0.1);
+    border-radius: 12px;
+    padding: 16px 20px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .metric-label { font-size: 12px; color: var(--text-gray); }
+  .metric-value { font-size: 24px; font-weight: 700; }
+  .metric-change {
+    font-size: 11px; font-weight: 600;
+    padding: 2px 8px; border-radius: 4px;
+  }
+  .metric-change.up { background: rgba(40, 200, 64, 0.15); color: var(--success-green); }
+  .metric-change.down { background: rgba(255, 87, 87, 0.15); color: #ff5757; }
+
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="logo"><span>Mo</span>boost</div>
+  <div class="nav-tabs">
+    <div class="nav-tab active">Overview</div>
+    <div class="nav-tab">Competitors</div>
+    <div class="nav-tab">Audience</div>
+    <div class="nav-tab">Optimization</div>
+  </div>
+  <div class="nav-right">
+    <div class="brand-badge"><div class="brand-dot"></div> Paws Delight</div>
+  </div>
+</nav>
+
+<div class="content">
+  <div class="hero">
+    <div class="score-ring">
+      <svg viewBox="0 0 160 160">
+        <circle class="bg" cx="80" cy="80" r="70"/>
+        <circle class="fill" id="scoreFill" cx="80" cy="80" r="70"/>
+      </svg>
+      <div class="score-num">
+        <div class="big" id="scoreNum">0</div>
+        <div class="sub">/ 100</div>
+      </div>
+    </div>
+    <div class="hero-text">
+      <h1>Brand Health Report</h1>
+      <div class="rating">Good — Room to grow</div>
+      <div class="desc">Your brand has strong product-market fit and loyal audience base. Key opportunities exist in visual consistency, mobile experience, and untapped audience segments.</div>
+    </div>
+  </div>
+
+  <div class="charts-row">
+    <!-- Radar Chart -->
+    <div class="chart-card" id="radarCard">
+      <div class="chart-title">Competitive Analysis</div>
+      <div class="radar-container">
+        <svg class="radar-svg" viewBox="0 0 280 260">
+          <!-- Grid rings -->
+          <polygon class="radar-axis" points="140,30 230,90 210,195 70,195 50,90"/>
+          <polygon class="radar-axis" points="140,65 200,105 185,177 95,177 80,105"/>
+          <polygon class="radar-axis" points="140,100 170,120 162,160 118,160 110,120"/>
+          <!-- Axis lines -->
+          <line class="radar-axis" x1="140" y1="130" x2="140" y2="30"/>
+          <line class="radar-axis" x1="140" y1="130" x2="230" y2="90"/>
+          <line class="radar-axis" x1="140" y1="130" x2="210" y2="195"/>
+          <line class="radar-axis" x1="140" y1="130" x2="70" y2="195"/>
+          <line class="radar-axis" x1="140" y1="130" x2="50" y2="90"/>
+          <!-- Data polygon -->
+          <polygon class="radar-fill" id="radarFill"
+            points="140,50 210,100 190,180 85,170 65,95"/>
+          <!-- Dots -->
+          <circle class="radar-dot" id="rd0" cx="140" cy="50"/>
+          <circle class="radar-dot" id="rd1" cx="210" cy="100"/>
+          <circle class="radar-dot" id="rd2" cx="190" cy="180"/>
+          <circle class="radar-dot" id="rd3" cx="85" cy="170"/>
+          <circle class="radar-dot" id="rd4" cx="65" cy="95"/>
+          <!-- Labels -->
+          <text class="radar-label" x="140" y="20">Brand Recall</text>
+          <text class="radar-label" x="248" y="90">Content Quality</text>
+          <text class="radar-label" x="220" y="215">SEO Presence</text>
+          <text class="radar-label" x="55" y="215">Social Reach</text>
+          <text class="radar-label" x="32" y="85">Innovation</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Pie Chart -->
+    <div class="chart-card" id="pieCard">
+      <div class="chart-title">Audience Segments</div>
+      <div class="pie-container">
+        <svg class="pie-svg" viewBox="0 0 200 200">
+          <circle class="pie-segment" id="seg0" cx="100" cy="100" r="80"
+            stroke="#c0e463" transform="rotate(-90 100 100)"/>
+          <circle class="pie-segment" id="seg1" cx="100" cy="100" r="80"
+            stroke="#FF6B35" transform="rotate(-90 100 100)"/>
+          <circle class="pie-segment" id="seg2" cx="100" cy="100" r="80"
+            stroke="#28c840" transform="rotate(-90 100 100)"/>
+        </svg>
+        <div class="pie-legend">
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#c0e463"></div>
+            Cat Lovers <span class="legend-pct">45%</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#FF6B35"></div>
+            Dog Owners <span class="legend-pct">35%</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#28c840"></div>
+            Multi-Pet <span class="legend-pct">20%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Metric Cards -->
+    <div class="chart-card" id="metricsCard">
+      <div class="chart-title">Key Metrics</div>
+      <div class="metrics-col">
+        <div class="metric-card">
+          <div>
+            <div class="metric-label">Monthly Visitors</div>
+            <div class="metric-value" id="mv0">0</div>
+          </div>
+          <div class="metric-change up">+12.3%</div>
+        </div>
+        <div class="metric-card">
+          <div>
+            <div class="metric-label">Engagement Rate</div>
+            <div class="metric-value" id="mv1">0%</div>
+          </div>
+          <div class="metric-change up">+5.7%</div>
+        </div>
+        <div class="metric-card">
+          <div>
+            <div class="metric-label">Avg. CTR</div>
+            <div class="metric-value" id="mv2">0%</div>
+          </div>
+          <div class="metric-change down">-1.2%</div>
+        </div>
+        <div class="metric-card">
+          <div>
+            <div class="metric-label">Brand Sentiment</div>
+            <div class="metric-value" id="mv3">0%</div>
+          </div>
+          <div class="metric-change up">+8.1%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function animateCards(delay) {
+    const cards = document.querySelectorAll('.chart-card');
+    cards.forEach((c, i) => {
+      setTimeout(() => { c.style.animation = `fadeUp 0.6s ease forwards`; }, delay + i * 200);
+    });
+  }
+
+  // Score animation
+  function animateScore() {
+    const circumf = 2 * Math.PI * 70;
+    const target = 78;
+    let curr = 0;
+    const el = document.getElementById('scoreNum');
+    const fill = document.getElementById('scoreFill');
+    const step = () => {
+      if (curr < target) {
+        curr++;
+        el.textContent = curr;
+        fill.style.strokeDashoffset = circumf - (curr / 100) * circumf;
+        setTimeout(step, 25);
+      }
+    };
+    setTimeout(step, 600);
+  }
+
+  // Radar animation
+  function animateRadar() {
+    setTimeout(() => {
+      document.getElementById('radarFill').classList.add('animated');
+      for (let i = 0; i < 5; i++) {
+        setTimeout(() => document.getElementById('rd' + i).classList.add('show'), 400 + i * 150);
+      }
+    }, 1200);
+  }
+
+  // Pie animation
+  function animatePie() {
+    const circumf = 2 * Math.PI * 80;
+    const segs = [
+      { id: 'seg0', pct: 45, offset: 0 },
+      { id: 'seg1', pct: 35, offset: 45 },
+      { id: 'seg2', pct: 20, offset: 80 },
+    ];
+    segs.forEach((s, i) => {
+      setTimeout(() => {
+        const el = document.getElementById(s.id);
+        const len = (s.pct / 100) * circumf;
+        const gap = circumf - len;
+        el.style.strokeDasharray = `${len} ${gap}`;
+        el.style.transform = `rotate(${-90 + (s.offset / 100) * 360}deg)`;
+        el.style.transformOrigin = 'center';
+      }, 1400 + i * 300);
+    });
+  }
+
+  // Metrics counter
+  function animateMetrics() {
+    const targets = [
+      { id: 'mv0', val: 284, suffix: 'K', dur: 1500 },
+      { id: 'mv1', val: 4.2, suffix: '%', dur: 1200, dec: 1 },
+      { id: 'mv2', val: 2.8, suffix: '%', dur: 1000, dec: 1 },
+      { id: 'mv3', val: 87, suffix: '%', dur: 1300 },
+    ];
+    targets.forEach((t, i) => {
+      setTimeout(() => {
+        let start = 0;
+        const steps = 40;
+        const inc = t.val / steps;
+        const interval = setInterval(() => {
+          start += inc;
+          if (start >= t.val) { start = t.val; clearInterval(interval); }
+          const display = t.dec ? start.toFixed(t.dec) : Math.round(start);
+          document.getElementById(t.id).textContent = display + (t.suffix || '');
+        }, t.dur / steps);
+      }, 1600 + i * 200);
+    });
+  }
+
+  animateScore();
+  animateCards(800);
+  animateRadar();
+  animatePie();
+  animateMetrics();
+</script>
+</body>
+</html>

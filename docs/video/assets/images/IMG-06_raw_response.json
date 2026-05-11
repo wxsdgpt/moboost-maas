@@ -1,0 +1,29 @@
+{
+  "id": "gen-1777269848-UlERbvCoDWTaoDeuZq0H",
+  "object": "chat.completion",
+  "created": 1777269848,
+  "model": "google/gemini-3-pro-image-preview-20251120",
+  "provider": "Google",
+  "system_fingerprint": null,
+  "choices": [
+    {
+      "index": 0,
+      "logprobs": null,
+      "finish_reason": "stop",
+      "native_finish_reason": "STOP",
+      "message": {
+        "role": "assistant",
+        "content": null,
+        "refusal": null,
+        "reasoning": "**Visualizing the Setup**\n\nI'm focusing on the composition. I've considered the man's age, build, and hairstyle. I'm now thinking through how to capture the motion, specifically the mid-stride running action, against the backdrop of a modern gym. The lighting and equipment details are also at the forefront of my thinking.\n\n\n**Crafting the Description**\n\nI am now building the descriptions of the man and his environment. The athletic build, crew cut, tank top, and focused expression are starting to come together. I'm moving on to outlining the gym's features, including the screen, exposed brick, and other equipment to bring the scene to life. I intend to specify the photography style, including the lighting and mood.\n\n\n**Reviewing Image Compliance**\n\nI'm checking that the generated image aligns with the user's explicit request. The athletic man, the gym setting, and key details like the clothing are all accounted for. Further details regarding the man's features are now being analyzed.\n\n\n**Validating the Details**\n\nI have finished cross-referencing the image against the user's prompt. I've confirmed the subject, the athletic man, the gym setting, and specific elements like clothing. Furthermore, the energetic pose is correct. I am ready to conclude the task.\n\n\n",
+        "reasoning_details": [
+          {
+            "type": "reasoning.text",
+            "text": "**Visualizing the Setup**\n\nI'm focusing on the composition. I've considered the man's age, build, and hairstyle. I'm now thinking through how to capture the motion, specifically the mid-stride running action, against the backdrop of a modern gym. The lighting and equipment details are also at the forefront of my thinking.\n\n\n**Crafting the Description**\n\nI am now building the descriptions of the man and his environment. The athletic build, crew cut, tank top, and focused expression are starting to come together. I'm moving on to outlining the gym's features, including the screen, exposed brick, and other equipment to bring the scene to life. I intend to specify the photography style, including the lighting and mood.\n\n\n**Reviewing Image Compliance**\n\nI'm checking that the generated image aligns with the user's explicit request. The athletic man, the gym setting, and key details like the clothing are all accounted for. Further details regarding the man's features are now being analyzed.\n\n\n**Validating the Details**\n\nI have finished cross-referencing the image against the user's prompt. I've confirmed the subject, the athletic man, the gym setting, and specific elements like clothing. Furthermore, the energetic pose is correct. I am ready to conclude the task.\n\n\n",
+            "format": "google-gemini-v1",
+            "index": 0
+          },
+          {
+            "type": "reasoning.encrypted",
+            "data": "Cv6MWwGPPWtfr4pX3vG0zZuOnH5JLBfhZrLmAtWQMq6yoHiKhreI0vBc4HtigTA7cBlB53rCqXCCVKcWO5rSJGQP2l7oBdSSbf1/swuJaLP6kGFCka5qadrZvTydLntlj1By3bN6Pn81u92WsxFd4nuUCo/ekL+vbrFjnY3QwqXw/1Iug6iKGuQb0h91qX+q5kI+K3FgBCx7mdGKksolgfsZWJnOoTGGaP6DK9LaBfa/0lUHc6WlPIXKxlI8t+LyEPxDceVinaq6DTw8ffVknifY1bKvYXYPqeZq9pb4L4Yt0zRF5kuvjgYFK1/Q+47h9TGXDTeHy1jXh7Jm5csgTwOax/alRVr3lmKGjodaU+n4BWFFa5SKA4tTfaB2infY2EtPqBzquaEKmMEVsuAZvMZGuFK/JMOaHhLmwtDh/02GNj1Pbkngd5Tpiavva2ROT98PJ3Lyy8zEAvnc52mRigGE7/xKl2C7x33vtJAXlfbMWQqunqqGj7LlE2NWGQm0Xb4NCD25rHmWHLkI7f/8iKwJeBkHkj9ATB1kCraaRStbfdJh+tVKqFgzyGu5v22rbEz3ChuY7XpI1w3Mb/R01fS2cSevTA/4UH/yD31Ll/92E/HcOR/ZKiPx+iD1WP/6c5Ss8ibv+gRLmyjcNjuYIFjoyMkwif6FVDbILtZLbm1rPCVBt+W+OkKgyoA2eD44EwVOOG3wJEpwOa+Meaa9oSVWQQdjNHhganjCBr66drtfEx8ehG3HwtVgJ8VeSeiWLLyDnSfpqG/bPyKu1EDbFsQqhepulKcCFm7U5Anu8xMzLLK7RGri1vyiJ7C70NvdRrULE39kTlcY43sY7hEgbVV/LRQfh73hYR1LxzCjlKnqDCz3hc/zK/VMj+BVygM7LyRtGQOdRR9Ywkj4dJHx7lzaeptYBL+M2SvvYtDomDnZqIeQo0hgZH4MEbNYI2TmvLq44bdLA+xJyz4KGF4rM46H1oCWG0cXJ4lJuGsVUEtAtLLcBgJK6nGnc9o/1m7dEzOHFWFCgu1ZyxlxGk327OZHt7Ut9GXwsiTi+O4T5JDZrXeA8+bLG/jMBYykA5oqcZ2bm0uM17mNYHKrvmc+pnBt2dRaiGtQXW2CpLTUQeiPiJhS8LcogWY6zS/C+YqKDsVGw+P6N8HYmBsOSbpPS3tdWl3+0wo8g05+JqPsuHn4/8+Qw3PVPMDws8hNaC8JvT/9ERaj8ULV/QJZ/QOJpIwVicNCmbrnf4WiqyHZnvpO4tfGlAYOxigWnOqyspwzxGf2cCv6ge+X1P2cMPO9wJXbOSbl3EiTVqr3d8WVII+5/5Zohc5Vz3btew46BCgsKteD0nloQcUpbLiMHMoZhV4JpxvqkHGWKEWcgl1hwCQNsOD9Y8UC1jAH23axY2uOlrNC3erTtFOnsVqx7jcUOlaoBIMpNkucbr3xcJ/jy5A5D6iOiGspkzs1X9H8oMMLMK4kvUZK9pcTp7YXmqh7c9/kzLPqj4zVShRjHTL6UdByKPkiySu3SKJF03VqOjja2Q6CEnmdpaEBCDmZOLlB6tsO9s/bhmxJ/Ve/9QkezpVmGM1czx8z1HbtozxYNUmytNXKWbRWjR/M7V+kwWI7Ot847Ik9h8C2bNumgHukHOrO1/y7oF92gF2Ceo4xDADqARAdPrEC
+... (truncated)

@@ -5,15 +5,15 @@
  * Scores capability candidates aligned with WHY/HOW/WHAT goal framework.
  *
  * V-Score dimensions:
- *   WHY层 (weight 4x):
- *     1. expectationMatch — 能否提升生成结果与客户预期的匹配度？
- *     2. clientGrowth    — 能否帮助系统伴随客户成长？
- *   HOW层 (weight 3x):
- *     3. speed           — 能否让用户更快拿到结果？
- *     4. simplicity      — 能否减少用户交互轮次和修改成本？
- *   WHAT层 (weight 2x):
- *     5. quality         — 能否提升信息准确性和生成质量？
- *     6. coverage        — 能否覆盖更多市场/语言/素材类型？
+ *   WHY layer (weight 4x):
+ *     1. expectationMatch — Can it improve the match between generated results and client expectations?
+ *     2. clientGrowth    — Can it help the system grow alongside each client?
+ *   HOW layer (weight 3x):
+ *     3. speed           — Can it help users get results faster?
+ *     4. simplicity      — Can it reduce the number of interaction rounds and revision costs?
+ *   WHAT layer (weight 2x):
+ *     5. quality         — Can it improve information accuracy and generation quality?
+ *     6. coverage        — Can it cover more markets/languages/asset types?
  *
  * Threshold: totalWeighted < 50 → reject candidate
  *
@@ -30,15 +30,15 @@ import type { CapabilityCandidate } from './candidates'
 // ─── Layer 7: Value Function ─────────────────────────────────────────
 
 export interface VFMScore {
-  // WHY层
-  expectationMatch: number  // 0-10: 提升客户预期匹配度
-  clientGrowth: number      // 0-10: 帮助系统伴随客户成长
-  // HOW层
-  speed: number             // 0-10: 更快产出
-  simplicity: number        // 0-10: 更少交互轮次 / 更低修改成本
-  // WHAT层
-  quality: number           // 0-10: 更准的信息 / 更高的生成质量
-  coverage: number          // 0-10: 更广的能力覆盖
+  // WHY layer
+  expectationMatch: number  // 0-10: Improve client expectation match
+  clientGrowth: number      // 0-10: Help system grow alongside client
+  // HOW layer
+  speed: number             // 0-10: Faster output
+  simplicity: number        // 0-10: Fewer interaction rounds / lower revision cost
+  // WHAT layer
+  quality: number           // 0-10: More accurate information / higher generation quality
+  coverage: number          // 0-10: Broader capability coverage
 
   totalWeighted: number     // computed
 }
@@ -63,67 +63,67 @@ export async function scoreCandidate(candidate: CapabilityCandidate): Promise<VF
   const messages: LLMMessage[] = [
     {
       role: 'system',
-      content: `你是Moboost AI的进化价值评估引擎。
+      content: `You are the evolution value assessment engine for Moboost AI.
 
-核心使命：在MarTech市场上生成效果最符合客户预期的产品，伴随每个客户不断成长。
+Core mission: Build the product in the MarTech market that best matches client expectations, growing alongside each client.
 
-对每个能力候选从6个维度打分（0-10），分为三层：
+Score each capability candidate on 6 dimensions (0-10), divided into three layers:
 
-【WHY — 为什么用我们】权重最高
-1. expectationMatch: 这个能力能否提升"生成结果与客户预期的匹配度"？
-   - 直接提升accept rate = 10
-   - 减少客户需要修改的内容 = 7
-   - 间接改善 = 4
-   - 几乎无关 = 1
+[WHY — Why use us] Highest weight
+1. expectationMatch: Can this capability improve the "match between generated results and client expectations"?
+   - Directly improves accept rate = 10
+   - Reduces content the client needs to revise = 7
+   - Indirect improvement = 4
+   - Almost irrelevant = 1
 
-2. clientGrowth: 这个能力能否帮助系统"伴随客户成长"？（学习偏好、记住历史、越用越准）
-   - 显著增强个性化/学习能力 = 10
-   - 有一定积累效应 = 6
-   - 每次独立无积累 = 2
+2. clientGrowth: Can this capability help the system "grow alongside the client"? (learn preferences, remember history, improve with use)
+   - Significantly enhances personalization/learning capability = 10
+   - Has some cumulative effect = 6
+   - Independent each time, no accumulation = 2
 
-【HOW — 怎么用我们】
-3. speed: 能否让用户更快拿到结果？（更快≠更少token，是用户可感知的速度提升）
-   - 显著加快生成速度 = 10
-   - 减少等待/重试 = 7
-   - 无感知变化 = 1
+[HOW — How to use us]
+3. speed: Can it help users get results faster? (faster != fewer tokens; it means user-perceivable speed improvement)
+   - Significantly accelerates generation speed = 10
+   - Reduces waiting/retries = 7
+   - No perceivable change = 1
 
-4. simplicity: 能否让用户交互更简洁？（更少轮次、更少手动修改）
-   - 用户一句话搞定原来需要3轮的事 = 10
-   - 减少1-2轮交互 = 6
-   - 不影响 = 1
+4. simplicity: Can it make user interactions simpler? (fewer rounds, less manual editing)
+   - User accomplishes in one message what used to take 3 rounds = 10
+   - Reduces 1-2 interaction rounds = 6
+   - No impact = 1
 
-【WHAT — 用哪些功能】
-5. quality: 能否提升信息准确性和生成质量？（合规更准、数据更可靠、素材更专业）
-   - 消除关键质量问题 = 10
-   - 提升细节质量 = 6
-   - 仅视觉/格式改善 = 2
+[WHAT — Which features]
+5. quality: Can it improve information accuracy and generation quality? (more accurate compliance, more reliable data, more professional assets)
+   - Eliminates critical quality issues = 10
+   - Improves detail quality = 6
+   - Only visual/formatting improvements = 2
 
-6. coverage: 能否扩展能力覆盖面？（支持更多市场/语言/素材类型）
-   - 打开全新市场 = 10
-   - 新增重要素材类型 = 7
-   - 边缘场景 = 2
+6. coverage: Can it expand capability coverage? (support more markets/languages/asset types)
+   - Opens an entirely new market = 10
+   - Adds an important asset type = 7
+   - Edge cases = 2
 
-严格规则：
-- 只改善内部系统成本但用户无感 → 所有维度 ≤ 2
-- 仅在极端场景使用 → coverage ≤ 2, speed ≤ 2
-- 增加用户操作复杂度 → simplicity = 0
+Strict rules:
+- Only improves internal system cost but user cannot perceive it -> all dimensions <= 2
+- Only used in extreme scenarios -> coverage <= 2, speed <= 2
+- Increases user operational complexity -> simplicity = 0
 
-输出JSON:
+Output JSON:
 {
   "expectationMatch": N, "clientGrowth": N,
   "speed": N, "simplicity": N,
   "quality": N, "coverage": N,
-  "reasoning": "一句话理由"
+  "reasoning": "one-sentence rationale"
 }`,
     },
     {
       role: 'user',
-      content: `能力候选:
-标题: ${candidate.title}
-描述: ${candidate.description}
-能力轮廓: ${JSON.stringify(candidate.capabilityShape)}
-来源: ${candidate.source}
-证据: ${JSON.stringify(candidate.evidence)}`,
+      content: `Capability candidate:
+Title: ${candidate.title}
+Description: ${candidate.description}
+Capability shape: ${JSON.stringify(candidate.capabilityShape)}
+Source: ${candidate.source}
+Evidence: ${JSON.stringify(candidate.evidence)}`,
     },
   ]
 
@@ -206,46 +206,46 @@ export async function validateADL(mutation: {
   const messages: LLMMessage[] = [
     {
       role: 'system',
-      content: `你是反劣化锁（Anti-Degeneration Lock, ADL）审核引擎。
+      content: `You are the Anti-Degeneration Lock (ADL) review engine.
 
-你的职责是验证一个进化修改是否满足以下优先级约束（不可违反）：
-1. Stability（稳定性）：修改后能跑1000次不崩吗？
-2. Explainability（可解释性）：能说清为什么做这个修改吗？
-3. Reusability（可复用性）：修改后的能力能用在别的场景吗？
-4. Novelty Bias（新颖性偏差）：是不是为了新颖而牺牲了稳定？
+Your responsibility is to verify whether an evolution mutation satisfies the following priority constraints (must not be violated):
+1. Stability: Can it run 1000 times without crashing after the change?
+2. Explainability: Can you clearly explain why this change was made?
+3. Reusability: Can the modified capability be used in other scenarios?
+4. Novelty Bias: Was stability sacrificed for the sake of novelty?
 
-附加约束（WHY/HOW/WHAT框架）：
-- 修改必须对用户有可感知的价值（更准、更快、更简单）
-- 仅优化内部成本（减少token）但用户无感的修改 → FAIL
-- 增加用户操作复杂度的修改 → FAIL
+Additional constraints (WHY/HOW/WHAT framework):
+- The change must have user-perceivable value (more accurate, faster, simpler)
+- Changes that only optimize internal costs (reduce tokens) but are imperceptible to users -> FAIL
+- Changes that increase user operational complexity -> FAIL
 
-劣化进化检测清单：
-- Fake Intelligence：为了"显得聪明"增加无意义复杂步骤 → FAIL
-- Unverifiable：引入无法验证结果的机制 → FAIL
-- Vague Concepts：使用"某种程度上"、"本质上"等玄学术语 → FAIL
-- Novelty Bias：为了新颖而牺牲稳定 → FAIL
-- User Invisible：对用户完全不可见的优化 → WARN
+Degenerate evolution detection checklist:
+- Fake Intelligence: Adding meaningless complex steps to "appear smart" -> FAIL
+- Unverifiable: Introducing mechanisms whose results cannot be verified -> FAIL
+- Vague Concepts: Using mystical terms like "to some extent", "essentially" -> FAIL
+- Novelty Bias: Sacrificing stability for novelty -> FAIL
+- User Invisible: Optimizations completely invisible to users -> WARN
 
-输出JSON：
+Output JSON:
 {
   "stabilityCheck": { "passed": bool, "reason": "..." },
   "explainabilityCheck": { "passed": bool, "reason": "..." },
   "reusabilityCheck": { "passed": bool, "reason": "..." },
   "noveltyBiasCheck": { "passed": bool, "reason": "..." },
-  "rollbackPlan": "如果炸了，如何一键恢复",
-  "failureCondition": "怎么判断它炸了（如accept rate下降5%以上）",
+  "rollbackPlan": "How to restore with one click if it fails",
+  "failureCondition": "How to determine it failed (e.g., accept rate drops by more than 5%)",
   "verdict": "pass" | "fail" | "warn",
-  "overallReason": "一句话总结"
+  "overallReason": "one-sentence summary"
 }`,
     },
     {
       role: 'user',
-      content: `待审核的进化修改：
-类型: ${mutation.type}
-目标: ${mutation.target}
-描述: ${mutation.description}
-变更前: ${JSON.stringify(mutation.changes.before)}
-变更后: ${JSON.stringify(mutation.changes.after)}`,
+      content: `Evolution mutation pending review:
+Type: ${mutation.type}
+Target: ${mutation.target}
+Description: ${mutation.description}
+Before change: ${JSON.stringify(mutation.changes.before)}
+After change: ${JSON.stringify(mutation.changes.after)}`,
     },
   ]
 
@@ -261,7 +261,7 @@ export async function validateADL(mutation: {
       rollbackPlan: 'Revert all changes from rollback_data',
       failureCondition: 'ADL engine failure — auto-reject for safety',
       verdict: 'fail',
-      overallReason: 'ADL引擎调用失败，安全起见拒绝此修改',
+      overallReason: 'ADL engine call failed; rejecting this mutation as a safety precaution',
     }
   }
 }

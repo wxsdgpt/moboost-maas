@@ -2,7 +2,8 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, FolderKanban, Dna, Wrench, Sparkles, LogIn, User, Layout, FileText, Lightbulb } from 'lucide-react'
+import Image from 'next/image'
+import { Home, FolderKanban, Dna, Wrench, Sparkles, LogIn, User, Layout, FileText, Lightbulb, Globe } from 'lucide-react'
 import { useState, useSyncExternalStore } from 'react'
 import { SignedIn, SignedOut, UserButton, SignInButton, SignUpButton, useUser } from '@clerk/nextjs'
 import { store } from '@/lib/store'
@@ -17,6 +18,7 @@ const navItems = [
   { href: '/project', key: 'nav.project', icon: FolderKanban },
   { href: '/reports', key: 'nav.reports', icon: FileText },
   { href: '/landing', key: 'nav.landing', icon: Layout },
+  { href: '/localization', key: 'nav.localization', icon: Globe },
   { href: '/evolution', key: 'nav.evolution', icon: Dna },
   { href: '/tools', key: 'nav.tools', icon: Wrench },
 ] as const
@@ -77,13 +79,25 @@ export default function Sidebar() {
         }}
       >
         <Link href="/" className="flex items-center gap-2.5 group">
-          <div
-            className="w-8 h-8 rounded-lg flex items-center justify-center shadow-sm flex-shrink-0"
-            style={{
-              background: 'var(--brand)',
-            }}
-          >
-            <Sparkles className="w-4 h-4" style={{ color: 'var(--brand-contrast)' }} />
+          <div className="w-7 h-7 flex-shrink-0 relative flex items-center justify-center">
+            {/* Light mode: color1 icon */}
+            <Image
+              src="/logo/color1/icon/color1_icon_transparent_background.png"
+              alt="Moboost"
+              width={28}
+              height={28}
+              className="sidebar-logo-light"
+              style={{ objectFit: 'contain' }}
+            />
+            {/* Dark mode: white icon */}
+            <Image
+              src="/logo/black/icon/white_icon_transparent_background.png"
+              alt="Moboost"
+              width={28}
+              height={28}
+              className="sidebar-logo-dark"
+              style={{ objectFit: 'contain' }}
+            />
           </div>
           {isExpanded && (
             <div className="overflow-hidden whitespace-nowrap">
@@ -145,17 +159,6 @@ export default function Sidebar() {
           borderTop: '1px solid var(--border)',
         }}
       >
-        {/* Credit balance pill — only renders for signed-in users
-            (CreditBalance handles its own SignedIn gating). */}
-        <div className={`flex ${isExpanded ? 'px-1' : 'justify-center'}`}>
-          <CreditBalance collapsed={!isExpanded} />
-        </div>
-
-        {/* Notification bell */}
-        <div className={`flex ${isExpanded ? 'px-1' : 'justify-center'}`}>
-          <NotificationBell />
-        </div>
-
         {/* User account — Clerk-owned */}
         <div className="relative">
           <SignedIn>

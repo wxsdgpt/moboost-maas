@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920">
+<title>Moboost - Generating Report</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  /* SF Pro Display - system font, no import needed */
+  :root {
+    --bg-dark: #0a0a0a;
+    --bg-card: rgba(255,255,255,0.04);
+    --brand-purple: #c0e463;
+    --brand-glow: rgba(192, 228, 99, 0.25);
+    --text-white: #ffffff;
+    --text-gray: #8a8a9a;
+    --text-dim: #555566;
+  }
+  body {
+    font-family: 'SF Pro Display', -apple-system, 'Helvetica Neue', Arial, sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-white);
+    width: 1920px; height: 1080px;
+    overflow: hidden; display: flex; flex-direction: column;
+  }
+  .navbar {
+    height: 56px;
+    background: rgba(10,10,10,0.85); backdrop-filter: saturate(120%) blur(24px);
+    border-bottom: 1px solid rgba(192,228,99,0.15);
+    display: flex; align-items: center; padding: 0 32px;
+  }
+  .logo { font-size: 20px; font-weight: 700; }
+  .logo span { color: var(--brand-purple); }
+
+  .main {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    position: relative;
+  }
+
+  /* Particles flowing upward */
+  .particles { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+  .particle {
+    position: absolute; bottom: -10px;
+    width: 2px; height: 2px;
+    background: var(--brand-purple);
+    border-radius: 50%;
+    opacity: 0;
+    animation: floatUp linear infinite;
+  }
+
+  /* Large progress ring */
+  .ring-container {
+    position: relative;
+    width: 260px; height: 260px; z-index: 2;
+    margin-bottom: 48px;
+  }
+  .ring-outer {
+    position: absolute; inset: 0;
+    border: 2px solid rgba(192,228,99,0.08);
+    border-radius: 50%;
+  }
+  .ring-svg {
+    width: 260px; height: 260px;
+    transform: rotate(-90deg);
+  }
+  .ring-bg { fill: none; stroke: rgba(192,228,99,0.1); stroke-width: 5; }
+  .ring-fill {
+    fill: none; stroke: var(--brand-purple); stroke-width: 5;
+    stroke-linecap: round;
+    stroke-dasharray: 754; stroke-dashoffset: 754;
+    filter: drop-shadow(0 0 12px rgba(192,228,99,0.3));
+    transition: stroke-dashoffset 0.8s ease;
+  }
+  /* Inner rotating accent */
+  .ring-accent {
+    position: absolute; inset: 20px;
+    border: 1px dashed rgba(192,228,99,0.15);
+    border-radius: 50%;
+    animation: spin 20s linear infinite;
+  }
+  .ring-pct {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  .ring-pct .num { font-size: 56px; font-weight: 700; }
+  .ring-pct .label { font-size: 14px; color: var(--text-gray); margin-top: -4px; }
+
+  /* Brand context mini card */
+  .brand-mini {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    top: calc(50% - 190px);
+    display: flex; align-items: center; gap: 10px;
+    background: var(--bg-card);
+    border: 1px solid rgba(192,228,99,0.15);
+    border-radius: 10px;
+    padding: 8px 16px;
+    z-index: 3;
+  }
+  .brand-mini .dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FF6B35, #ff9a6c);
+  }
+  .brand-mini .name { font-size: 13px; font-weight: 600; }
+  .brand-mini .sep { color: var(--text-dim); }
+  .brand-mini .url { font-size: 12px; color: var(--text-gray); }
+
+  /* Status messages */
+  .status-container {
+    z-index: 2;
+    text-align: center;
+  }
+  .status-line {
+    font-size: 18px;
+    color: var(--text-gray);
+    opacity: 0;
+    transform: translateY(8px);
+    transition: all 0.5s ease;
+    position: absolute;
+    left: 50%; transform: translateX(-50%);
+    white-space: nowrap;
+  }
+  .status-line.active {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  .status-line.done {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-8px);
+  }
+
+  /* Bottom checklist */
+  .checklist {
+    position: absolute; bottom: 120px;
+    display: flex; gap: 40px; z-index: 2;
+  }
+  .check-item {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; color: var(--text-dim);
+    transition: all 0.5s ease;
+  }
+  .check-item.done { color: var(--brand-purple); }
+  .check-icon {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    border: 1.5px solid var(--text-dim);
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.4s;
+  }
+  .check-item.done .check-icon {
+    border-color: var(--brand-purple);
+    background: rgba(192,228,99,0.15);
+  }
+
+  @keyframes floatUp {
+    0% { opacity: 0; transform: translateY(0); }
+    10% { opacity: 0.5; }
+    90% { opacity: 0.3; }
+    100% { opacity: 0; transform: translateY(-1100px); }
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="logo"><span>Mo</span>boost</div>
+</nav>
+<div class="main">
+  <div class="particles" id="particles"></div>
+
+  <div class="brand-mini">
+    <div class="dot"></div>
+    <span class="name">Paws Delight</span>
+    <span class="sep">|</span>
+    <span class="url">www.pawsdelight.com</span>
+  </div>
+
+  <div class="ring-container">
+    <div class="ring-outer"></div>
+    <div class="ring-accent"></div>
+    <svg class="ring-svg" viewBox="0 0 260 260">
+      <circle class="ring-bg" cx="130" cy="130" r="120"/>
+      <circle class="ring-fill" id="ringFill" cx="130" cy="130" r="120"/>
+    </svg>
+    <div class="ring-pct">
+      <div class="num" id="pctNum">0%</div>
+      <div class="label">Generating Report</div>
+    </div>
+  </div>
+
+  <div class="status-container" style="position:relative;height:30px;width:600px;">
+    <div class="status-line" id="s0">Analyzing competitors...</div>
+    <div class="status-line" id="s1">Mapping audience segments...</div>
+    <div class="status-line" id="s2">Evaluating visual consistency...</div>
+    <div class="status-line" id="s3">Checking mobile optimization...</div>
+    <div class="status-line" id="s4">Generating optimization insights...</div>
+    <div class="status-line" id="s5">Compiling brand health score...</div>
+    <div class="status-line" id="s6">Report ready!</div>
+  </div>
+
+  <div class="checklist">
+    <div class="check-item" id="c0">
+      <div class="check-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+      Competitor Analysis
+    </div>
+    <div class="check-item" id="c1">
+      <div class="check-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+      Audience Mapping
+    </div>
+    <div class="check-item" id="c2">
+      <div class="check-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+      Visual Audit
+    </div>
+    <div class="check-item" id="c3">
+      <div class="check-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+      Mobile Check
+    </div>
+    <div class="check-item" id="c4">
+      <div class="check-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+      Health Score
+    </div>
+  </div>
+</div>
+
+<script>
+  // Particles
+  const pEl = document.getElementById('particles');
+  for (let i = 0; i < 50; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.animationDelay = Math.random() * 5 + 's';
+    p.style.animationDuration = (4 + Math.random() * 4) + 's';
+    pEl.appendChild(p);
+  }
+
+  const circumf = 2 * Math.PI * 120;
+  const ringFill = document.getElementById('ringFill');
+  let pct = 0;
+
+  const timeline = [
+    { pct: 18, status: 0, check: 0, delay: 1200 },
+    { pct: 35, status: 1, check: 1, delay: 1500 },
+    { pct: 52, status: 2, check: 2, delay: 1400 },
+    { pct: 68, status: 3, check: 3, delay: 1200 },
+    { pct: 85, status: 4, check: null, delay: 1300 },
+    { pct: 95, status: 5, check: 4, delay: 1000 },
+    { pct: 100, status: 6, check: null, delay: 0 },
+  ];
+
+  let prevStatus = -1;
+
+  function animateTo(target, cb) {
+    const step = () => {
+      if (pct < target) {
+        pct++;
+        document.getElementById('pctNum').textContent = pct + '%';
+        ringFill.style.strokeDashoffset = circumf - (pct / 100) * circumf;
+        setTimeout(step, 20);
+      } else if (cb) cb();
+    };
+    step();
+  }
+
+  function run(idx) {
+    if (idx >= timeline.length) return;
+    const t = timeline[idx];
+
+    // Switch status text
+    if (prevStatus >= 0) document.getElementById('s' + prevStatus).classList.replace('active', 'done');
+    document.getElementById('s' + t.status).classList.add('active');
+    prevStatus = t.status;
+
+    // Check off item
+    if (t.check !== null) document.getElementById('c' + t.check).classList.add('done');
+
+    animateTo(t.pct, () => {
+      if (idx < timeline.length - 1) setTimeout(() => run(idx + 1), timeline[idx + 1].delay);
+    });
+  }
+
+  setTimeout(() => run(0), 800);
+</script>
+</body>
+</html>

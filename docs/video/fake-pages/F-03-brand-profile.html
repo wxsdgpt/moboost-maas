@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920">
+<title>Moboost - Brand Profile</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  /* SF Pro Display - system font, no import needed */
+  :root {
+    --bg-dark: #0a0a0a;
+    --bg-card: rgba(255,255,255,0.04);
+    --bg-card-alt: rgba(255,255,255,0.03);
+    --brand-purple: #c0e463;
+    --brand-glow: rgba(192, 228, 99, 0.25);
+    --text-white: #ffffff;
+    --text-gray: #8a8a9a;
+    --text-dim: #555566;
+    --paws-orange: #FF6B35;
+    --paws-green: #2D5016;
+    --paws-cream: #F5E6D3;
+  }
+  body {
+    font-family: 'SF Pro Display', -apple-system, 'Helvetica Neue', Arial, sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-white);
+    width: 1920px; height: 1080px;
+    overflow: hidden;
+    display: flex; flex-direction: column;
+  }
+  .navbar {
+    height: 56px;
+    background: rgba(10,10,10,0.85); backdrop-filter: saturate(120%) blur(24px);
+    border-bottom: 1px solid rgba(192,228,99,0.15);
+    display: flex; align-items: center; padding: 0 32px;
+  }
+  .logo { font-size: 20px; font-weight: 700; }
+  .logo span { color: var(--brand-purple); }
+  .nav-right { margin-left: auto; display: flex; align-items: center; gap: 16px; }
+  .nav-step { font-size: 13px; color: var(--text-dim); }
+  .nav-step.active { color: var(--brand-purple); }
+
+  .main {
+    flex: 1; display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+
+  .bg-glow {
+    position: absolute; width: 900px; height: 900px;
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(192,228,99,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* Brand Profile Card */
+  .profile-card {
+    width: 720px;
+    background: var(--bg-card);
+    border: 1px solid rgba(192,228,99,0.2);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+    z-index: 2;
+    opacity: 0;
+    transform: translateX(100px);
+    animation: slideIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards 0.5s;
+  }
+
+  .card-header {
+    padding: 28px 32px;
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(192,228,99,0.1));
+    border-bottom: 1px solid rgba(192,228,99,0.1);
+    display: flex; align-items: center; gap: 20px;
+  }
+  .brand-icon {
+    width: 64px; height: 64px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--paws-orange), #ff9a6c);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; font-weight: 800; color: white;
+    box-shadow: 0 8px 24px rgba(255, 107, 53, 0.3);
+  }
+  .brand-info h2 {
+    font-size: 24px; font-weight: 700; margin-bottom: 4px;
+  }
+  .brand-info .domain {
+    font-size: 13px; color: var(--text-gray);
+  }
+  .verified-badge {
+    margin-left: auto;
+    background: rgba(40, 200, 64, 0.15);
+    color: #28c840;
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 12px; font-weight: 600;
+    display: flex; align-items: center; gap: 6px;
+  }
+
+  .card-body { padding: 28px 32px; }
+
+  .section-label {
+    font-size: 11px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+
+  /* Brand Colors */
+  .color-row {
+    display: flex; gap: 12px; margin-bottom: 28px;
+    opacity: 0; transform: translateY(10px);
+    animation: fadeUp 0.5s ease forwards 1.4s;
+  }
+  .color-chip {
+    flex: 1;
+    height: 56px;
+    border-radius: 12px;
+    display: flex; align-items: flex-end; justify-content: center;
+    padding-bottom: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  }
+  .color-chip .label {
+    font-size: 10px; font-weight: 600;
+    background: rgba(0,0,0,0.4);
+    padding: 2px 8px;
+    border-radius: 4px;
+    color: white;
+  }
+
+  /* Product Lines */
+  .product-tags {
+    display: flex; gap: 10px; margin-bottom: 28px; flex-wrap: wrap;
+  }
+  .ptag {
+    background: rgba(255, 107, 53, 0.12);
+    border: 1px solid rgba(255, 107, 53, 0.25);
+    color: var(--paws-orange);
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-size: 14px; font-weight: 500;
+    opacity: 0; transform: scale(0.8);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .ptag .icon { font-size: 18px; }
+
+  /* Audience Tags */
+  .audience-tags {
+    display: flex; gap: 10px; flex-wrap: wrap;
+  }
+  .atag {
+    background: rgba(192,228,99,0.12);
+    border: 1px solid rgba(192,228,99,0.25);
+    color: var(--brand-purple);
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-size: 13px; font-weight: 500;
+    opacity: 0; transform: scale(0.8);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .atag .dot {
+    width: 6px; height: 6px;
+    background: var(--brand-purple);
+    border-radius: 50%;
+  }
+
+  .section-group {
+    opacity: 0; transform: translateY(10px);
+  }
+
+  @keyframes slideIn {
+    to { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes popIn {
+    to { opacity: 1; transform: scale(1); }
+  }
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="logo"><span>Mo</span>boost</div>
+  <div class="nav-right">
+    <span class="nav-step active">Brand Profile</span>
+    <span style="color: var(--text-dim);">|</span>
+    <span class="nav-step">Report</span>
+    <span style="color: var(--text-dim);">|</span>
+    <span class="nav-step">Creative Studio</span>
+  </div>
+</nav>
+
+<div class="main">
+  <div class="bg-glow"></div>
+
+  <div class="profile-card">
+    <div class="card-header">
+      <div class="brand-icon">PD</div>
+      <div class="brand-info">
+        <h2>Paws Delight</h2>
+        <div class="domain">www.pawsdelight.com</div>
+      </div>
+      <div class="verified-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        Analyzed
+      </div>
+    </div>
+
+    <div class="card-body">
+      <div class="section-group" id="colorSection">
+        <div class="section-label">Brand Colors</div>
+        <div class="color-row" id="colorRow">
+          <div class="color-chip" style="background: #FF6B35;">
+            <span class="label">#FF6B35</span>
+          </div>
+          <div class="color-chip" style="background: #2D5016;">
+            <span class="label">#2D5016</span>
+          </div>
+          <div class="color-chip" style="background: #F5E6D3;">
+            <span class="label" style="color: #333;">#F5E6D3</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-group" id="productSection">
+        <div class="section-label">Product Lines</div>
+        <div class="product-tags" id="productTags">
+          <div class="ptag" id="p1"><span class="icon">🐱</span> Cat Food</div>
+          <div class="ptag" id="p2"><span class="icon">🐕</span> Dog Food</div>
+          <div class="ptag" id="p3"><span class="icon">🦴</span> Treats</div>
+          <div class="ptag" id="p4"><span class="icon">💊</span> Supplements</div>
+        </div>
+      </div>
+
+      <div class="section-group" id="audienceSection">
+        <div class="section-label">Target Audience (AI-detected)</div>
+        <div class="audience-tags" id="audienceTags">
+          <div class="atag" id="a1"><span class="dot"></span> Pet Owners</div>
+          <div class="atag" id="a2"><span class="dot"></span> Health-Conscious</div>
+          <div class="atag" id="a3"><span class="dot"></span> Age 25-45</div>
+          <div class="atag" id="a4"><span class="dot"></span> Urban Lifestyle</div>
+          <div class="atag" id="a5"><span class="dot"></span> Premium Buyers</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function showWithDelay(el, delay) {
+    setTimeout(() => {
+      el.style.animation = 'fadeUp 0.5s ease forwards';
+    }, delay);
+  }
+
+  function popWithDelay(el, delay) {
+    setTimeout(() => {
+      el.style.animation = 'popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards';
+    }, delay);
+  }
+
+  // Animate sections in sequence
+  showWithDelay(document.getElementById('colorSection'), 1300);
+  showWithDelay(document.getElementById('productSection'), 1800);
+  showWithDelay(document.getElementById('audienceSection'), 2800);
+
+  // Pop product tags
+  popWithDelay(document.getElementById('p1'), 2000);
+  popWithDelay(document.getElementById('p2'), 2200);
+  popWithDelay(document.getElementById('p3'), 2400);
+  popWithDelay(document.getElementById('p4'), 2600);
+
+  // Pop audience tags
+  popWithDelay(document.getElementById('a1'), 3000);
+  popWithDelay(document.getElementById('a2'), 3200);
+  popWithDelay(document.getElementById('a3'), 3400);
+  popWithDelay(document.getElementById('a4'), 3600);
+  popWithDelay(document.getElementById('a5'), 3800);
+</script>
+</body>
+</html>

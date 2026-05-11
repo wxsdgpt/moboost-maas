@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920">
+<title>Moboost - Localization Complete</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  /* SF Pro Display - system font, no import needed */
+  :root {
+    --bg-dark: #0a0a0a; --bg-card: rgba(255,255,255,0.04);
+    --brand-purple: #c0e463; --brand-glow: rgba(192,228,99,0.3);
+    --text-white: #fff; --text-gray: #8a8a9a; --text-dim: #555566;
+    --green: #28c840;
+  }
+  body {
+    font-family: 'SF Pro Display', -apple-system, 'Helvetica Neue', Arial, sans-serif;
+    background: var(--bg-dark); color: var(--text-white);
+    width: 1920px; height: 1080px;
+    overflow: hidden; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+  }
+
+  /* Confetti canvas */
+  canvas#confetti {
+    position: fixed; inset: 0; z-index: 10; pointer-events: none;
+  }
+
+  .success-container {
+    text-align: center; z-index: 5;
+    opacity: 0; transform: scale(0.9);
+    animation: popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards 0.3s;
+  }
+
+  .check-circle {
+    width: 96px; height: 96px;
+    border-radius: 50%;
+    background: rgba(40,200,64,0.12);
+    border: 3px solid var(--green);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 24px;
+  }
+  .check-circle svg { color: var(--green); }
+
+  h1 { font-size: 36px; font-weight: 700; margin-bottom: 8px; }
+  h1 span { color: var(--brand-purple); }
+  .subtitle { font-size: 18px; color: var(--text-gray); margin-bottom: 48px; }
+
+  .stats-row {
+    display: flex; gap: 48px; justify-content: center; margin-bottom: 48px;
+  }
+  .stat-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(192,228,99,0.12);
+    border-radius: 12px;
+    padding: 24px 40px;
+    text-align: center;
+    opacity: 0; transform: translateY(20px);
+  }
+  .stat-card .icon { font-size: 28px; margin-bottom: 8px; }
+  .stat-card .val { font-size: 32px; font-weight: 700; margin-bottom: 4px; }
+  .stat-card .label { font-size: 12px; color: var(--text-dim); }
+  .stat-card .val.purple { color: var(--brand-purple); }
+  .stat-card .val.green { color: var(--green); }
+
+  .time-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--bg-card);
+    border: 1px solid rgba(192,228,99,0.15);
+    border-radius: 10px;
+    padding: 10px 24px;
+    font-size: 14px; color: var(--text-gray);
+    opacity: 0;
+    animation: fadeUp 0.5s ease forwards 2s;
+  }
+  .time-badge svg { color: var(--brand-purple); }
+
+  @keyframes popIn { to { opacity: 1; transform: scale(1); } }
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+<canvas id="confetti"></canvas>
+
+<div class="success-container">
+  <div class="check-circle">
+    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+  </div>
+  <h1><span>8/8</span> Markets Complete</h1>
+  <div class="subtitle">All localized assets have been generated successfully</div>
+
+  <div class="stats-row">
+    <div class="stat-card" id="s0">
+      <div class="icon">📦</div>
+      <div class="val purple">24</div>
+      <div class="label">Assets Generated</div>
+    </div>
+    <div class="stat-card" id="s1">
+      <div class="icon">🌍</div>
+      <div class="val purple">8</div>
+      <div class="label">Markets Covered</div>
+    </div>
+    <div class="stat-card" id="s2">
+      <div class="icon">🌐</div>
+      <div class="val purple">6</div>
+      <div class="label">Languages</div>
+    </div>
+    <div class="stat-card" id="s3">
+      <div class="icon">💰</div>
+      <div class="val green">$2.40</div>
+      <div class="label">Total Cost</div>
+    </div>
+  </div>
+
+  <div class="time-badge">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    Time: 2 min 47 sec
+  </div>
+</div>
+
+<script>
+  // Animate stat cards
+  document.querySelectorAll('.stat-card').forEach((card, i) => {
+    setTimeout(() => {
+      card.style.animation = 'fadeUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards';
+    }, 800 + i * 200);
+  });
+
+  // Confetti animation
+  const canvas = document.getElementById('confetti');
+  const ctx = canvas.getContext('2d');
+  canvas.width = 1920; canvas.height = 1080;
+
+  const particles = [];
+  const colors = ['#c0e463','#FF6B35','#28c840','#ffbd2e','#F48FB1','#64B5F6'];
+
+  function createParticle() {
+    return {
+      x: Math.random() * 1920,
+      y: -20,
+      w: 6 + Math.random() * 6,
+      h: 4 + Math.random() * 4,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      vy: 2 + Math.random() * 3,
+      vx: (Math.random() - 0.5) * 2,
+      rot: Math.random() * 360,
+      rotSpeed: (Math.random() - 0.5) * 10,
+      opacity: 1,
+    };
+  }
+
+  let frame = 0;
+  function animate() {
+    ctx.clearRect(0, 0, 1920, 1080);
+    if (frame < 120) {
+      for (let i = 0; i < 4; i++) particles.push(createParticle());
+    }
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i];
+      p.y += p.vy;
+      p.x += p.vx;
+      p.rot += p.rotSpeed;
+      if (p.y > 800) p.opacity -= 0.02;
+      if (p.opacity <= 0 || p.y > 1100) { particles.splice(i, 1); continue; }
+
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot * Math.PI / 180);
+      ctx.globalAlpha = p.opacity;
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+      ctx.restore();
+    }
+    frame++;
+    if (particles.length > 0 || frame < 120) requestAnimationFrame(animate);
+  }
+
+  setTimeout(() => { frame = 0; animate(); }, 500);
+</script>
+</body>
+</html>

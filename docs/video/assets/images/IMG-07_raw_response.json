@@ -1,0 +1,29 @@
+{
+  "id": "gen-1777269884-1P1uV4Mt0R8Nl53Ot6l0",
+  "object": "chat.completion",
+  "created": 1777269884,
+  "model": "google/gemini-3-pro-image-preview-20251120",
+  "provider": "Google AI Studio",
+  "system_fingerprint": null,
+  "choices": [
+    {
+      "index": 0,
+      "logprobs": null,
+      "finish_reason": "stop",
+      "native_finish_reason": "STOP",
+      "message": {
+        "role": "assistant",
+        "content": null,
+        "refusal": null,
+        "reasoning": "**Defining the Scenario**\n\nI'm currently focused on defining the initial scenario. I've broken down the core request, isolating elements such as the man's physical description and the setting, noting the specific lunch item.\n\n\n**Refining the Details**\n\nI'm now refining the details. I've analyzed the core elements to provide a man on his lunch break at work and fleshed out the background, adding the window, plant, lamp, and blurred colleagues. Further, I've considered the laptop content, specifying the gear-related landing page, to emphasize the casual work theme. I've also identified the photographic style, including the angle, lighting, and palette.\n\n\n**Verifying Photo Accuracy**\n\nI am now confirming the details match the original request. The setting, subject, and the laptop screen's content all align effectively with the initial prompt. I am currently evaluating the alignment of other components.\n\n\n**Confirming Prompt Adherence**\n\nI'm checking the details against the prompt again. Subject, setting, and on-screen content match well, so now I'm paying attention to the other aspects of the scene to ensure total alignment. The natural lighting and high resolution add to the overall impression, but I must remain rigorous in my evaluation.\n\n\n",
+        "reasoning_details": [
+          {
+            "type": "reasoning.text",
+            "text": "**Defining the Scenario**\n\nI'm currently focused on defining the initial scenario. I've broken down the core request, isolating elements such as the man's physical description and the setting, noting the specific lunch item.\n\n\n**Refining the Details**\n\nI'm now refining the details. I've analyzed the core elements to provide a man on his lunch break at work and fleshed out the background, adding the window, plant, lamp, and blurred colleagues. Further, I've considered the laptop content, specifying the gear-related landing page, to emphasize the casual work theme. I've also identified the photographic style, including the angle, lighting, and palette.\n\n\n**Verifying Photo Accuracy**\n\nI am now confirming the details match the original request. The setting, subject, and the laptop screen's content all align effectively with the initial prompt. I am currently evaluating the alignment of other components.\n\n\n**Confirming Prompt Adherence**\n\nI'm checking the details against the prompt again. Subject, setting, and on-screen content match well, so now I'm paying attention to the other aspects of the scene to ensure total alignment. The natural lighting and high resolution add to the overall impression, but I must remain rigorous in my evaluation.\n\n\n",
+            "format": "google-gemini-v1",
+            "index": 0
+          },
+          {
+            "type": "reasoning.encrypted",
+            "data": "EpibPgqUmz4BDDnWx0zjZfq5fJu+a/Xm2dnu//D8VYqs+IiBUnORGJR8ddZnaephb4fThFz1XJbmEyYzA5NI2UQEGr4Q7IUfZSIQ09h/irUiekMVrQei96c2AyZofaDAUrfWuGM2Y+GegfRv0HqQlsE18wHhTwes4U8WluZUgOOAr3d2rskNCqpi+PzAeXYawv3mnFI51I0oVH/s8zrpCdrmTihTU5NADEjdyUahN7zptB8HQ4CAZDlbCKsXNyElKXj4ZlZlep5mcWgPijPTxztjM9jsx/bjDbgYkGmVPDwOvAHmPY5d8IC39G5wKJmY2EUdrmkbC4qhqfVGD+s3FgwvbW/H32e9HROkut64IroZWQZQEoL0J/LnPiIcSptaH/xz+SQ8CHzh8U2kyqOxqA1trzX/9bflciCtMCHCrrvRLxGFLnuRJn701Oz41PvKO3Jwd5thshOFotSE6towfYHGoFUaTbXXDqDhN2ag/LfA8e2vXFNDcdN1wAcJXjI+XBxIW6ZFfy8VuOcrIrsL7bnJXuJKf5MllqMI9ut+6Kt6rauBXdalzQeuNs3QLjR+Mf/DkP6gFnAwlvCLpqQjMduxdgeDmh4OYXfpyF/cEjsK5s0Xk2aICaSb4GmqkZ6dTDI6RJzCX215z5U1OgIfD01wy7adgGpS9zyZeqW5v7MAk9hCYAs6XM1Nr5y3aMJ3hq/6xRwj/JsIUBZw1jTdukwNW3Vay5MSFM6gl+yESvzEmcoBEYuY16woMHRBWt5vTlUwONw1uS/4Y43W0aD0cyR5fPMn+RQM2/TmtL4Gztgculs+MC/XIuXBtEus65twjtoOw2X5ohqGWXVdVMGqg8DvaJOmcEQYGB4OVmyUTgiBNojW+LH3BN6NVoWoe4su9MIOqjp3E6Qm0rOdI3mcu8oyrlVOw1GOoAX+MOHrNlatx1N9rcTRcghQrTh17w2DcfdQwZianYyRXD6KdCP5BPh444DC7NmaE2TRR1viehO+OtNRcEOIyC1+FcXjYT4qCiSl3dQW4BIMW0VV3UkNspDrsJXRXr+G+gf4MfXxpCsJrA5WDcdJMgSypl9EN3ByFzm2M4PisPVK1wyiqk2TA/IQ5p82Q6BVX00Ei6tGvb/70R2D6niwsCiP08OnXbTUb8eZC9SZvuv69q2GuIx8KtTQsWoYarGzlAK0IWEiBKDS668bVMm9R/NEdmWOBos0FGqWewC5TZUEIb/KtmYMqb4ruASmsJ3noTGfCxsvQPBUxL8P45EgArrSI5doMBEtyYm22VIWcwm1MXg4JxSoediEDQrwqB9+MW8DavE0GqQ/ENj0Guk4eNuTrd4qDX2iI1DcBGVJ8ifuVapbkBNlh4R35Ig9ntAKN7NdfN8a7R0OvHfpIrZ/m+YY8wnXlJdDUrwOnjfYeYcR+XUCEgtcIKO4RZWj0J5Vz/QCF8ndQsvpXEQaMqrkwXal6aLaZsXIkqsrnWqUlGUNhqdJVwXQQ7AcyzC30erCFF8JCeGQk1ojS1UzR+iU4A78Ejno9pF5cadyMzC2jNsRehgFwt+JmOeNbazrcVtJ9CS2xeFTcBfpImKu2mDqy1Aud0j5t3zlGmJP2QB3Ls+dHDyVP+/ilYtSNprke2uZPrrs+5DG/rANDhUvG/PdaIIVVvHnVuoLCDLuoAU4yRJITRgdxIdart+7EQo0sxmxo83dsX
+... (truncated)

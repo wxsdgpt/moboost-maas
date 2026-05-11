@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920">
+<title>Moboost - Localizing Markets</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  /* SF Pro Display - system font, no import needed */
+  :root {
+    --bg-dark: #0a0a0a; --bg-card: rgba(255,255,255,0.04);
+    --brand-purple: #c0e463; --brand-glow: rgba(192,228,99,0.25);
+    --text-white: #fff; --text-gray: #8a8a9a; --text-dim: #555566;
+    --green: #28c840;
+  }
+  body {
+    font-family: 'SF Pro Display', -apple-system, 'Helvetica Neue', Arial, sans-serif;
+    background: var(--bg-dark); color: var(--text-white);
+    width: 1920px; height: 1080px;
+    overflow: hidden; display: flex; flex-direction: column;
+  }
+  .navbar {
+    height: 56px; background: rgba(10,10,10,0.85); backdrop-filter: saturate(120%) blur(24px);
+    border-bottom: 1px solid rgba(192,228,99,0.15);
+    display: flex; align-items: center; padding: 0 32px;
+  }
+  .logo { font-size: 20px; font-weight: 700; }
+  .logo span { color: var(--brand-purple); }
+
+  .content { flex: 1; padding: 40px 200px; display: flex; flex-direction: column; }
+
+  .page-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 32px;
+  }
+  .page-header h1 { font-size: 24px; font-weight: 600; }
+  .overall-status { font-size: 14px; color: var(--text-gray); }
+  .overall-status span { color: var(--brand-purple); font-weight: 700; }
+
+  .market-list { display: flex; flex-direction: column; gap: 12px; flex: 1; }
+
+  .market-row {
+    background: var(--bg-card);
+    border: 1px solid rgba(192,228,99,0.08);
+    border-radius: 14px;
+    padding: 18px 24px;
+    display: flex; align-items: center; gap: 20px;
+    transition: all 0.3s;
+  }
+  .market-row.complete {
+    border-color: rgba(40,200,64,0.2);
+  }
+
+  .market-flag { font-size: 28px; width: 40px; text-align: center; }
+  .market-info { width: 180px; }
+  .market-name { font-size: 15px; font-weight: 600; }
+  .market-lang { font-size: 11px; color: var(--text-dim); }
+
+  .progress-area { flex: 1; display: flex; align-items: center; gap: 12px; }
+  .progress-bar {
+    flex: 1; height: 8px;
+    background: rgba(192,228,99,0.08);
+    border-radius: 4px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--brand-purple);
+    border-radius: 4px;
+    width: 0%;
+    transition: width 0.3s ease;
+  }
+  .market-row.complete .progress-fill { background: var(--green); }
+  .progress-pct { width: 48px; text-align: right; font-size: 13px; font-weight: 600; color: var(--text-gray); }
+  .market-row.complete .progress-pct { color: var(--green); }
+
+  .market-status {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(192,228,99,0.08);
+    transition: all 0.3s;
+  }
+  .market-row.complete .market-status {
+    background: rgba(40,200,64,0.15);
+    color: var(--green);
+  }
+
+  /* Thumbnails that appear when done */
+  .market-thumbs {
+    display: flex; gap: 6px;
+    opacity: 0; transform: translateX(-10px);
+    transition: all 0.4s;
+  }
+  .market-row.complete .market-thumbs {
+    opacity: 1; transform: translateX(0);
+  }
+  .thumb {
+    width: 36px; height: 36px;
+    border-radius: 6px;
+    border: 1px solid rgba(192,228,99,0.2);
+  }
+</style>
+</head>
+<body>
+<nav class="navbar"><div class="logo"><span>Mo</span>boost</div></nav>
+
+<div class="content">
+  <div class="page-header">
+    <h1>Localizing to 8 Markets</h1>
+    <div class="overall-status"><span id="doneCount">0</span> / 8 Complete</div>
+  </div>
+
+  <div class="market-list" id="marketList"></div>
+</div>
+
+<script>
+  const markets = [
+    { flag: '🇺🇸', name: 'United States', lang: 'English (US)', speed: 1.0, colors: ['#2196F3','#64B5F6','#1976D2'] },
+    { flag: '🇯🇵', name: 'Japan', lang: 'Japanese (日本語)', speed: 0.85, colors: ['#F48FB1','#E91E63','#F8BBD0'] },
+    { flag: '🇧🇷', name: 'Brazil', lang: 'Portuguese (BR)', speed: 0.75, colors: ['#4CAF50','#66BB6A','#388E3C'] },
+    { flag: '🇳🇬', name: 'Nigeria', lang: 'English (NG)', speed: 0.9, colors: ['#FF9800','#FFB74D','#F57C00'] },
+    { flag: '🇰🇷', name: 'South Korea', lang: 'Korean (한국어)', speed: 0.8, colors: ['#3F51B5','#7986CB','#303F9F'] },
+    { flag: '🇩🇪', name: 'Germany', lang: 'German (Deutsch)', speed: 0.7, colors: ['#795548','#A1887F','#5D4037'] },
+    { flag: '🇮🇳', name: 'India', lang: 'Hindi (हिंदी)', speed: 0.65, colors: ['#FF5722','#FF8A65','#E64A19'] },
+    { flag: '🇫🇷', name: 'France', lang: 'French (Français)', speed: 0.6, colors: ['#9C27B0','#BA68C8','#7B1FA2'] },
+  ];
+
+  const list = document.getElementById('marketList');
+  markets.forEach((m, i) => {
+    list.innerHTML += `
+      <div class="market-row" id="mr${i}">
+        <div class="market-flag">${m.flag}</div>
+        <div class="market-info">
+          <div class="market-name">${m.name}</div>
+          <div class="market-lang">${m.lang}</div>
+        </div>
+        <div class="progress-area">
+          <div class="progress-bar"><div class="progress-fill" id="pf${i}"></div></div>
+          <div class="progress-pct" id="pp${i}">0%</div>
+        </div>
+        <div class="market-thumbs" id="mt${i}">
+          <div class="thumb" style="background:linear-gradient(135deg,${m.colors[0]},${m.colors[1]})"></div>
+          <div class="thumb" style="background:linear-gradient(135deg,${m.colors[1]},${m.colors[2]})"></div>
+          <div class="thumb" style="background:linear-gradient(135deg,${m.colors[2]},${m.colors[0]})"></div>
+        </div>
+        <div class="market-status" id="ms${i}">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+      </div>
+    `;
+  });
+
+  let doneCount = 0;
+  const progresses = markets.map(() => 0);
+  const speeds = markets.map((m) => m.speed + Math.random() * 0.3);
+  const done = markets.map(() => false);
+
+  function tick() {
+    let allDone = true;
+    for (let i = 0; i < markets.length; i++) {
+      if (done[i]) continue;
+      allDone = false;
+      progresses[i] += speeds[i] + Math.random() * 0.8;
+      if (progresses[i] >= 100) {
+        progresses[i] = 100;
+        done[i] = true;
+        doneCount++;
+        document.getElementById('mr' + i).classList.add('complete');
+        document.getElementById('doneCount').textContent = doneCount;
+      }
+      document.getElementById('pf' + i).style.width = progresses[i] + '%';
+      document.getElementById('pp' + i).textContent = Math.round(progresses[i]) + '%';
+    }
+    if (!allDone) requestAnimationFrame(tick);
+  }
+
+  setTimeout(() => requestAnimationFrame(tick), 1000);
+</script>
+</body>
+</html>

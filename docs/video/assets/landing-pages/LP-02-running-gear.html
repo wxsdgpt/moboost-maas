@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Running Gear, Personalized</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #F5F7FA;
+    color: #1A1A2E;
+    max-width: 390px;
+    margin: 0 auto;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Hero */
+  .hero {
+    position: relative;
+    width: 100%;
+    height: 380px;
+    overflow: hidden;
+  }
+  .hero-bg {
+    width: 100%;
+    height: 100%;
+    background:
+      linear-gradient(160deg, #0F0F1A 0%, #1A1A3E 40%, #2D1B69 70%, #4A2C8A 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    position: relative;
+  }
+  .hero-runner {
+    font-size: 90px;
+    filter: drop-shadow(0 4px 20px rgba(74,44,138,0.5));
+    margin-bottom: 6px;
+  }
+  .hero-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(0,210,255,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .hero-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 30px 20px 20px;
+    background: linear-gradient(transparent, rgba(15,15,26,0.9));
+  }
+  .hero-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #00D2FF, #7B61FF);
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  .hero-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: white;
+    line-height: 1.1;
+    margin-bottom: 6px;
+  }
+  .hero-subtitle {
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+  }
+
+  /* Stats Bar */
+  .stats-bar {
+    display: flex;
+    background: white;
+    padding: 16px 20px;
+    gap: 0;
+    border-bottom: 1px solid #EAEEF3;
+  }
+  .stat {
+    flex: 1;
+    text-align: center;
+    border-right: 1px solid #EAEEF3;
+  }
+  .stat:last-child { border-right: none; }
+  .stat-value {
+    font-size: 20px;
+    font-weight: 800;
+    color: #1A1A2E;
+  }
+  .stat-label {
+    font-size: 10px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+  }
+
+  /* Section */
+  .section {
+    padding: 24px 20px;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .section-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1A1A2E;
+  }
+  .section-link {
+    font-size: 13px;
+    color: #7B61FF;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  /* Shoe Cards (horizontal scroll) */
+  .shoes-scroll {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .shoes-scroll::-webkit-scrollbar { display: none; }
+  .shoe-card {
+    flex-shrink: 0;
+    width: 200px;
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+    border: 1px solid #EAEEF3;
+  }
+  .shoe-img {
+    width: 200px;
+    height: 160px;
+    background: linear-gradient(135deg, #F0F2FF, #E8EAFF);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 60px;
+  }
+  .shoe-info {
+    padding: 12px 14px;
+  }
+  .shoe-match {
+    display: inline-block;
+    background: #EEFFEE;
+    color: #2D8A2D;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-bottom: 6px;
+  }
+  .shoe-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1A1A2E;
+    margin-bottom: 2px;
+  }
+  .shoe-desc {
+    font-size: 11px;
+    color: #888;
+    margin-bottom: 8px;
+  }
+  .shoe-price {
+    font-size: 16px;
+    font-weight: 800;
+    color: #7B61FF;
+  }
+
+  /* Training Plan */
+  .plan {
+    margin: 0 20px 20px;
+    background: linear-gradient(135deg, #1A1A2E, #2D1B69);
+    border-radius: 18px;
+    padding: 20px;
+    color: white;
+  }
+  .plan-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .plan-desc {
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 16px;
+  }
+  .plan-days {
+    display: flex;
+    gap: 8px;
+  }
+  .plan-day {
+    flex: 1;
+    text-align: center;
+    padding: 10px 0;
+    background: rgba(255,255,255,0.08);
+    border-radius: 10px;
+  }
+  .plan-day.active {
+    background: linear-gradient(135deg, #00D2FF, #7B61FF);
+  }
+  .plan-day-label {
+    font-size: 10px;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 4px;
+  }
+  .plan-day.active .plan-day-label { color: rgba(255,255,255,0.9); }
+  .plan-day-km {
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  /* Testimonial */
+  .testimonial {
+    margin: 0 20px 20px;
+    padding: 18px;
+    background: white;
+    border-radius: 16px;
+    border: 1px solid #EAEEF3;
+    display: flex;
+    gap: 12px;
+  }
+  .testimonial-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00D2FF, #7B61FF);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .testimonial-text {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.5;
+    font-style: italic;
+  }
+  .testimonial-author {
+    font-size: 11px;
+    color: #999;
+    font-weight: 600;
+    margin-top: 6px;
+  }
+
+  /* CTA */
+  .cta-bar {
+    position: sticky;
+    bottom: 0;
+    background: white;
+    padding: 14px 20px;
+    border-top: 1px solid #EAEEF3;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
+  }
+  .cta-btn {
+    display: block;
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #7B61FF, #00D2FF);
+    color: white;
+    border: none;
+    border-radius: 14px;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+  }
+  .cta-sub {
+    text-align: center;
+    font-size: 11px;
+    color: #999;
+    margin-top: 6px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-bg">
+    <div class="hero-glow"></div>
+    <div class="hero-runner">🏃‍♂️</div>
+  </div>
+  <div class="hero-overlay">
+    <div class="hero-badge">Personalized for You</div>
+    <h1 class="hero-title">Your Running Gear,<br>Perfected</h1>
+    <p class="hero-subtitle">AI-matched to your pace, terrain & goals</p>
+  </div>
+</div>
+
+<!-- Stats -->
+<div class="stats-bar">
+  <div class="stat">
+    <div class="stat-value">5:42</div>
+    <div class="stat-label">Avg Pace</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value">32</div>
+    <div class="stat-label">Runs/Month</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value">168</div>
+    <div class="stat-label">Total KM</div>
+  </div>
+</div>
+
+<!-- Recommended Shoes -->
+<div class="section">
+  <div class="section-header">
+    <h2 class="section-title">Matched Shoes</h2>
+    <a class="section-link" href="#">See All</a>
+  </div>
+  <div class="shoes-scroll">
+    <div class="shoe-card">
+      <div class="shoe-img">👟</div>
+      <div class="shoe-info">
+        <div class="shoe-match">98% Match</div>
+        <div class="shoe-name">Nike Vaporfly 4</div>
+        <div class="shoe-desc">Carbon plate · For your tempo runs</div>
+        <div class="shoe-price">$249.99</div>
+      </div>
+    </div>
+    <div class="shoe-card">
+      <div class="shoe-img">👟</div>
+      <div class="shoe-info">
+        <div class="shoe-match">94% Match</div>
+        <div class="shoe-name">Hoka Mach X2</div>
+        <div class="shoe-desc">Max cushion · Daily trainer</div>
+        <div class="shoe-price">$189.99</div>
+      </div>
+    </div>
+    <div class="shoe-card">
+      <div class="shoe-img">👟</div>
+      <div class="shoe-info">
+        <div class="shoe-match">91% Match</div>
+        <div class="shoe-name">Asics Metaspeed+</div>
+        <div class="shoe-desc">Lightweight · Race day pick</div>
+        <div class="shoe-price">$274.99</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Training Plan -->
+<div class="plan">
+  <div class="plan-title">This Week's Plan</div>
+  <div class="plan-desc">Based on your recent performance & recovery</div>
+  <div class="plan-days">
+    <div class="plan-day active">
+      <div class="plan-day-label">Mon</div>
+      <div class="plan-day-km">5K</div>
+    </div>
+    <div class="plan-day active">
+      <div class="plan-day-label">Tue</div>
+      <div class="plan-day-km">8K</div>
+    </div>
+    <div class="plan-day">
+      <div class="plan-day-label">Wed</div>
+      <div class="plan-day-km">Rest</div>
+    </div>
+    <div class="plan-day">
+      <div class="plan-day-label">Thu</div>
+      <div class="plan-day-km">10K</div>
+    </div>
+    <div class="plan-day">
+      <div class="plan-day-label">Fri</div>
+      <div class="plan-day-km">5K</div>
+    </div>
+    <div class="plan-day">
+      <div class="plan-day-label">Sat</div>
+      <div class="plan-day-km">15K</div>
+    </div>
+    <div class="plan-day">
+      <div class="plan-day-label">Sun</div>
+      <div class="plan-day-km">Rest</div>
+    </div>
+  </div>
+</div>
+
+<!-- Testimonial -->
+<div class="testimonial">
+  <div class="testimonial-avatar">🏅</div>
+  <div>
+    <div class="testimonial-text">"The shoe matching is insanely accurate. Got the Vaporfly and dropped 30 seconds off my 5K in the first week."</div>
+    <div class="testimonial-author">— Jake M., Marathon Runner</div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-bar">
+  <button class="cta-btn">Get Your Gear Plan</button>
+  <div class="cta-sub">Free returns · 60-day trial on all shoes</div>
+</div>
+
+</body>
+</html>

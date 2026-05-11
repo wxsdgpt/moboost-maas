@@ -595,7 +595,7 @@ export default function NewBriefPage() {
           <textarea
             value={text}
             onChange={e => setText(e.target.value)}
-            placeholder="E.g. iGaming new user promo, 100% first deposit bonus, target Southeast Asia males 25-34, playful tone, dark theme, CTA is Get Now…"
+            placeholder="E.g. SaaS free trial campaign, 14-day pro access, target US marketers 25-44, professional tone, clean theme, CTA is Start Free Trial…"
             rows={5}
             className="w-full px-4 py-3 rounded-lg border text-sm outline-none resize-none"
             style={{

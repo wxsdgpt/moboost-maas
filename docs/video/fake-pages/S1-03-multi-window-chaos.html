@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920">
+<title>Scene 1 - Shot 3: Multi-Window Chaos</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'SF Pro Display', -apple-system, 'Segoe UI', Arial, sans-serif;
+    background: #111;
+    width: 1920px; height: 1080px;
+    overflow: hidden; position: relative;
+  }
+
+  .desktop {
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, #0d1117, #161b22);
+    position: relative;
+  }
+
+  /* Generic window */
+  .window {
+    position: absolute;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  .window.show { animation: windowIn 0.4s ease forwards; }
+  .window-bar {
+    height: 32px;
+    display: flex; align-items: center; padding: 0 12px; gap: 8px;
+  }
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot.r { background: #ff5f57; } .dot.y { background: #ffbd2e; } .dot.g { background: #28c840; }
+  .win-title { margin-left: 8px; font-size: 12px; color: rgba(255,255,255,0.6); }
+  .window-body { padding: 16px; }
+
+  /* Window 1: Google Translate — top left */
+  #w1 { left: 40px; top: 30px; width: 600px; height: 380px; z-index: 1; }
+  #w1 .window-bar { background: #202124; }
+  #w1 .window-body { background: #303134; display: flex; flex-direction: column; gap: 10px; }
+  .gt-header { display: flex; gap: 16px; align-items: center; font-size: 13px; color: #8ab4f8; }
+  .gt-arrow { color: #5f6368; font-size: 16px; }
+  .gt-box { flex: 1; background: #202124; border-radius: 8px; padding: 14px; font-size: 13px; line-height: 1.6; }
+  .gt-src { color: #e8eaed; }
+  .gt-dst { color: #8ab4f8; }
+  .gt-warn { background: rgba(255,160,0,0.12); border: 1px solid rgba(255,160,0,0.3); border-radius: 6px; padding: 6px 10px; font-size: 11px; color: #ffa000; }
+
+  /* Window 2: DeepL — overlapping */
+  #w2 { left: 320px; top: 180px; width: 620px; height: 360px; z-index: 2; }
+  #w2 .window-bar { background: #0f2b46; }
+  #w2 .window-body { background: #042b4a; display: flex; flex-direction: column; gap: 10px; }
+  .dl-logo { font-size: 16px; font-weight: 700; color: #0fa0ea; }
+  .dl-panels { flex: 1; display: flex; gap: 12px; }
+  .dl-panel { flex: 1; background: rgba(255,255,255,0.06); border-radius: 8px; padding: 12px; font-size: 12px; line-height: 1.7; }
+  .dl-panel.src { color: #ccd6e0; }
+  .dl-panel.dst { color: #5dc8f7; }
+
+  /* Window 3: Canva — right side */
+  #w3 { left: 780px; top: 20px; width: 560px; height: 420px; z-index: 1; }
+  #w3 .window-bar { background: #1a0a30; }
+  #w3 .window-body { background: #1e1133; display: flex; flex-direction: column; gap: 10px; }
+  .canva-toolbar { display: flex; gap: 6px; }
+  .canva-btn { padding: 4px 10px; border-radius: 4px; background: rgba(255,255,255,0.08); color: #b39ddb; font-size: 11px; border: 1px solid rgba(179,157,219,0.2); }
+  .canva-canvas { flex: 1; background: #0a0518; border-radius: 6px; display: flex; align-items: center; justify-content: center; position: relative; }
+  .canva-placeholder {
+    width: 240px; height: 240px; border: 2px dashed rgba(179,157,219,0.3); border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    color: #7c6aaa; font-size: 13px; text-align: center; line-height: 1.5;
+  }
+  .canva-error-badge {
+    position: absolute; top: 10px; right: 10px;
+    background: rgba(255,60,60,0.2); border: 1px solid rgba(255,60,60,0.4);
+    border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #ff6b6b;
+  }
+
+  /* Window 4: Excel tracker — far right */
+  #w4 { left: 1050px; top: 120px; width: 830px; height: 440px; z-index: 3; }
+  #w4 .window-bar { background: #1b3a1b; }
+  #w4 .window-body { background: #1a2e1a; display: flex; flex-direction: column; gap: 6px; }
+  .xl-toolbar { display: flex; gap: 6px; align-items: center; }
+  .xl-btn { padding: 3px 10px; border-radius: 4px; background: rgba(255,255,255,0.08); color: #7dbb7d; font-size: 10px; border: 1px solid rgba(255,255,255,0.1); }
+  .xl-btn.err { background: rgba(255,60,60,0.15); color: #ff6b6b; border-color: rgba(255,60,60,0.3); }
+  .xl-grid {
+    flex: 1; display: grid;
+    grid-template-columns: 50px repeat(6, 1fr);
+    grid-template-rows: 26px repeat(9, 1fr);
+    gap: 1px; background: rgba(255,255,255,0.04);
+  }
+  .xl-cell {
+    background: rgba(0,0,0,0.3); padding: 3px 6px; font-size: 10px; color: #8cb88c;
+    display: flex; align-items: center; overflow: hidden; white-space: nowrap;
+  }
+  .xl-cell.hdr { background: rgba(125,187,125,0.1); font-weight: 600; color: #a0d8a0; }
+  .xl-cell.err { background: rgba(255,60,60,0.12); color: #ff6b6b; }
+  .xl-cell.warn { background: rgba(255,160,0,0.1); color: #ffa000; }
+  .xl-cell.ok { color: #28c840; }
+
+  /* Window 5: Slack/Email notification — bottom left */
+  #w5 { left: 60px; top: 560px; width: 500px; height: 300px; z-index: 4; }
+  #w5 .window-bar { background: #340a3c; }
+  #w5 .window-body { background: #2a0832; display: flex; flex-direction: column; gap: 0; }
+  .slack-channel { font-size: 14px; font-weight: 700; color: #e0b0ff; margin-bottom: 10px; }
+  .slack-msg {
+    display: flex; gap: 10px; padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .slack-avatar {
+    width: 32px; height: 32px; border-radius: 6px;
+    background: linear-gradient(135deg, #ff6b35, #ff9a6c);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; color: #fff; flex-shrink: 0;
+  }
+  .slack-avatar.blue { background: linear-gradient(135deg, #3574d9, #6ba3f7); }
+  .slack-avatar.red { background: linear-gradient(135deg, #cc3333, #ee5555); }
+  .slack-text { font-size: 12px; color: #ccc; line-height: 1.5; }
+  .slack-name { font-weight: 700; color: #e0b0ff; }
+  .slack-time { font-size: 10px; color: #666; margin-left: 6px; }
+  .slack-urgent { color: #ff6b6b; font-weight: 600; }
+
+  /* Window 6: Figma — bottom middle */
+  #w6 { left: 580px; top: 520px; width: 480px; height: 280px; z-index: 2; }
+  #w6 .window-bar { background: #1a1a2e; }
+  #w6 .window-body { background: #12121f; display: flex; gap: 10px; }
+  .figma-sidebar {
+    width: 120px; background: rgba(255,255,255,0.03); border-radius: 6px; padding: 8px;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .figma-layer {
+    font-size: 10px; color: #777; padding: 3px 6px; border-radius: 3px;
+  }
+  .figma-layer.sel { background: rgba(100,100,255,0.15); color: #aaaaff; }
+  .figma-canvas {
+    flex: 1; background: #0a0a14; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .figma-frame {
+    width: 200px; height: 140px; border: 1px solid rgba(100,100,255,0.3);
+    border-radius: 4px; display: flex; align-items: center; justify-content: center;
+    color: #555; font-size: 11px; text-align: center; line-height: 1.4;
+  }
+
+  /* Error popups */
+  .error-popup {
+    position: absolute; z-index: 100;
+    background: #2d1111; border: 2px solid #cc3333; border-radius: 10px;
+    box-shadow: 0 12px 40px rgba(200,30,30,0.3);
+    opacity: 0; transform: scale(0.8); width: 400px;
+  }
+  .error-popup.show { animation: errorPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+  .err-bar { background: #cc3333; padding: 7px 14px; border-radius: 8px 8px 0 0; font-size: 12px; font-weight: 600; color: #fff; }
+  .err-body { padding: 16px; }
+  .err-icon { font-size: 28px; margin-bottom: 8px; }
+  .err-title { font-size: 14px; font-weight: 700; color: #ff6b6b; margin-bottom: 6px; }
+  .err-msg { font-size: 11px; color: #cc9999; line-height: 1.5; margin-bottom: 12px; }
+  .err-btn { padding: 6px 20px; border-radius: 6px; border: none; background: #cc3333; color: #fff; font-size: 12px; font-weight: 600; cursor: pointer; }
+
+  #err1 { left: 680px; top: 340px; }
+  #err2 { left: 1100px; top: 520px; }
+
+  /* Glitch */
+  .glitch-overlay {
+    position: absolute; inset: 0; z-index: 200; pointer-events: none; opacity: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,0,0,0.03) 2px, rgba(255,0,0,0.03) 4px);
+    mix-blend-mode: screen;
+  }
+  .glitch-overlay.active { animation: glitchFlash 0.15s ease 3; }
+
+  /* Theme text overlay */
+  .theme-text {
+    position: absolute;
+    bottom: 60px; left: 50%;
+    transform: translateX(-50%);
+    z-index: 150;
+    display: flex; gap: 24px; align-items: baseline;
+    opacity: 0;
+    white-space: nowrap;
+  }
+  .theme-text.show { animation: themeIn 0.7s ease forwards; }
+  .theme-word {
+    font-size: 30px; font-weight: 600; color: #fff;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.9);
+  }
+  .theme-word.red { color: #ff5555; }
+  .theme-dot { color: rgba(255,255,255,0.3); font-size: 24px; }
+
+  @keyframes themeIn {
+    0% { opacity: 0; transform: translateX(-50%) translateY(12px); }
+    100% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  }
+  @keyframes windowIn { 0% { opacity:0; transform:scale(0.92); } 100% { opacity:1; transform:scale(1); } }
+  @keyframes errorPop { 0% { opacity:0; transform:scale(0.8); } 60% { transform:scale(1.05); } 100% { opacity:1; transform:scale(1); } }
+  @keyframes glitchFlash { 0% { opacity:0; } 50% { opacity:1; transform:translateX(3px); } 100% { opacity:0; transform:translateX(-2px); } }
+</style>
+</head>
+<body>
+<div class="desktop">
+
+  <!-- W1: Google Translate -->
+  <div class="window" id="w1">
+    <div class="window-bar"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div><span class="win-title">Google Translate &mdash; translate.google.com</span></div>
+    <div class="window-body">
+      <div class="gt-header"><span>English</span><span class="gt-arrow">&rarr;</span><span>Japanese</span></div>
+      <div class="gt-box gt-src">Discover the perfect nutrition plan for your beloved cat. Premium ingredients, vet-approved formulas.</div>
+      <div class="gt-box gt-dst">&#x611B;&#x732B;&#x306B;&#x3074;&#x3063;&#x305F;&#x308A;&#x306E;&#x6804;&#x990A;&#x30D7;&#x30E9;&#x30F3;&#x3092;&#x898B;&#x3064;&#x3051;&#x307E;&#x3057;&#x3087;&#x3046;&#x3002;&#x30D7;&#x30EC;&#x30DF;&#x30A2;&#x30E0;&#x306A;&#x539F;&#x6750;&#x6599;...</div>
+      <div class="gt-warn">&#x26A0; Translation may not be accurate for marketing copy</div>
+    </div>
+  </div>
+
+  <!-- W2: DeepL -->
+  <div class="window" id="w2">
+    <div class="window-bar"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div><span class="win-title">DeepL Translator PRO</span></div>
+    <div class="window-body">
+      <div class="dl-logo">DeepL <span style="font-size:11px;color:#5f7a8f;font-weight:400">PRO &mdash; 12/50 translations today</span></div>
+      <div class="dl-panels">
+        <div class="dl-panel src">Shop the best running gear curated for your training goals. From trail to track.</div>
+        <div class="dl-panel dst">Compre os melhores equipamentos de corrida...<div style="color:#ff6b6b;font-size:10px;margin-top:8px">&#x26A0; Character limit exceeded (142/90 chars)</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- W3: Canva -->
+  <div class="window" id="w3">
+    <div class="window-bar"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div><span class="win-title">Canva &mdash; JP_Ad_Resize_1080x1080</span></div>
+    <div class="window-body">
+      <div class="canva-toolbar">
+        <div class="canva-btn">Resize</div><div class="canva-btn">Elements</div><div class="canva-btn">Text</div><div class="canva-btn">Upload</div><div class="canva-btn" style="color:#ff6b6b;border-color:rgba(255,60,60,0.3)">&#x26A0; Fonts</div>
+      </div>
+      <div class="canva-canvas">
+        <div class="canva-placeholder">&#x1F3A8;<br>Resizing 1200&times;628 &rarr; 1080&times;1080<br>Text overflow detected</div>
+        <div class="canva-error-badge">&#x26A0; 2 text layers out of bounds</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- W4: Excel Tracker -->
+  <div class="window" id="w4">
+    <div class="window-bar"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div><span class="win-title">Asset_Tracker_Q2.xlsx &mdash; Localization Matrix</span></div>
+    <div class="window-body">
+      <div class="xl-toolbar">
+        <div class="xl-btn">Auto-fit</div><div class="xl-btn">Format</div><div class="xl-btn">Validate</div>
+        <div class="xl-btn err">&#x26A0; 11 Errors</div>
+        <div style="margin-left:auto;font-size:10px;color:#666">Last saved: 3 hrs ago</div>
+      </div>
+      <div class="xl-grid">
+        <div class="xl-cell hdr"></div><div class="xl-cell hdr">Image</div><div class="xl-cell hdr">Video</div><div class="xl-cell hdr">LP Copy</div><div class="xl-cell hdr">CTA</div><div class="xl-cell hdr">Compliance</div><div class="xl-cell hdr">Status</div>
+        <div class="xl-cell hdr">&#x1F1FA;&#x1F1F8; US</div><div class="xl-cell ok">&#x2713;</div><div class="xl-cell ok">&#x2713;</div><div class="xl-cell ok">&#x2713;</div><div class="xl-cell ok">&#x2713;</div><div class="xl-cell ok">&#x2713;</div><div class="xl-cell ok">Done</div>
+        <div class="xl-cell hdr">&#x1F1EF;&#x1F1F5; JP</div><div class="xl-cell err">&#x2717; size</div><div class="xl-cell warn">pending</div><div class="xl-cell err">&#x2717; encode</div><div class="xl-cell err">&#x2717; font</div><div class="xl-cell warn">?</div><div class="xl-cell err">3 errors</div>
+        <div class="xl-cell hdr">&#x1F1E7;&#x1F1F7; BR</div><div class="xl-cell ok">&#x2713;</div><div class="xl-cell err">&#x2717; codec</div><div class="xl-cell warn">review</div><div class="xl-cell err">&#x2717; length</div><div class="xl-cell err">&#x2717; CDC</div><div class="xl-cell err">3 errors</div>
+        <div class="xl-cell hdr">&#x1F1E9;&#x1F1EA; DE</div><div class="xl-cell warn">pending</div><div class="xl-cell warn">pending</div><div class="xl-cell warn">pending</div><div class="xl-cell warn">pending</div><div class="xl-cell warn">pending</div><div class="xl-cell warn">0%</div>
+        <div class="xl-cell hdr">&#x1F1F0;&#x1F1F7; KR</div><div class="xl-cell err">&#x2717; font</div><div class="xl-cell warn">pending</div><div class="xl-cell err">&#x2717; RTL</div><div class="xl-cell warn">pending</div><div class="xl-cell warn">?</div><div class="xl-cell err">2 errors</div>
+        <div class="xl-cell hdr">&#x1F1EE;&#x1F1F3; IN</div><div class="xl-cell warn">pending</div><div class="xl-cell warn">pending</div><div class="xl-cell warn">pending</div><div class="xl-cell warn">pending</div><div class="xl-cell warn">pending</div><div class="xl-cell warn">0%</div>
+        <div class="xl-cell hdr">&#x1F1F3;&#x1F1EC; NG</div><div class="xl-cell warn">pending</div><div class="xl-cell warn">pending</div><div class="xl-cell warn">pending</div><div class="xl-cell warn">pending</div><div class="xl-cell warn">pending</div><div class="xl-cell warn">0%</div>
+        <div class="xl-cell hdr">&#x1F1EB;&#x1F1F7; FR</div><div class="xl-cell ok">&#x2713;</div><div class="xl-cell err">&#x2717; ratio</div><div class="xl-cell ok">&#x2713;</div><div class="xl-cell ok">&#x2713;</div><div class="xl-cell err">&#x2717; GDPR</div><div class="xl-cell err">2 errors</div>
+        <div class="xl-cell hdr">&#x1F1EA;&#x1F1F8; ES</div><div class="xl-cell warn">pending</div><div class="xl-cell warn">pending</div><div class="xl-cell err">&#x2717; tone</div><div class="xl-cell warn">pending</div><div class="xl-cell warn">pending</div><div class="xl-cell err">1 error</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- W5: Slack -->
+  <div class="window" id="w5">
+    <div class="window-bar"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div><span class="win-title">Slack &mdash; #global-creative-ops</span></div>
+    <div class="window-body">
+      <div class="slack-channel"># global-creative-ops</div>
+      <div class="slack-msg">
+        <div class="slack-avatar red">VP</div>
+        <div><span class="slack-name">VP Marketing</span><span class="slack-time">3:45 PM</span><br><span class="slack-text slack-urgent">Where are the Japan assets? Client call is in 2 HOURS.</span></div>
+      </div>
+      <div class="slack-msg">
+        <div class="slack-avatar blue">DM</div>
+        <div><span class="slack-name">Design Manager</span><span class="slack-time">3:52 PM</span><br><span class="slack-text">Font rendering issue on JP set, DeepL hit the daily limit, Canva resize broke the layout. Working on it...</span></div>
+      </div>
+      <div class="slack-msg">
+        <div class="slack-avatar">LC</div>
+        <div><span class="slack-name">Legal Counsel</span><span class="slack-time">4:01 PM</span><br><span class="slack-text slack-urgent">Brazil LP missing consumer protection disclaimer. CANNOT publish without it.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- W6: Figma -->
+  <div class="window" id="w6">
+    <div class="window-bar"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div><span class="win-title">Figma &mdash; Q2_Global_Ads_v14_final_FINAL2</span></div>
+    <div class="window-body">
+      <div class="figma-sidebar">
+        <div class="figma-layer sel">&#x25B6; Frame / US_1080</div>
+        <div class="figma-layer">&nbsp;&nbsp;&#x25B7; JP_1080 &#x26A0;</div>
+        <div class="figma-layer">&nbsp;&nbsp;&#x25B7; BR_628</div>
+        <div class="figma-layer">&nbsp;&nbsp;&#x25B7; DE_1080</div>
+        <div class="figma-layer" style="color:#ff6b6b">&nbsp;&nbsp;&#x25B7; KR_1080 &#x2717;</div>
+        <div class="figma-layer">&nbsp;&nbsp;&#x25B7; FR_stories</div>
+      </div>
+      <div class="figma-canvas">
+        <div class="figma-frame">v14_final_FINAL2.fig<br><span style="color:#ff6b6b;font-size:10px">6 variants &bull; 3 broken</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Error popups -->
+  <div class="error-popup" id="err1">
+    <div class="err-bar">&#x26D4; Export Error</div>
+    <div class="err-body">
+      <div class="err-icon">&#x1F6A8;</div>
+      <div class="err-title">Font rendering failed</div>
+      <div class="err-msg">Cannot render Japanese characters in JP_IMG_02.psd.<br>Missing font: "Noto Sans JP Bold"<br>Fallback produced incorrect line breaks.</div>
+      <button class="err-btn">Dismiss</button>
+    </div>
+  </div>
+  <div class="error-popup" id="err2">
+    <div class="err-bar">&#x26D4; Compliance Warning</div>
+    <div class="err-body">
+      <div class="err-icon">&#x26A0;&#xFE0F;</div>
+      <div class="err-title">Brazil: Missing disclaimer</div>
+      <div class="err-msg">BR_LP_01.html missing required consumer protection disclaimer (CDC Art. 31).<br>Cannot publish without legal review.</div>
+      <button class="err-btn">Dismiss</button>
+    </div>
+  </div>
+
+  <div class="glitch-overlay" id="glitch"></div>
+
+  <!-- Theme text -->
+  <div class="theme-text" id="themeText">
+    <span class="theme-word">6 tools.</span>
+    <span class="theme-word red">11 errors.</span>
+    <span class="theme-word">Still not done.</span>
+  </div>
+</div>
+
+<script>
+  // Staggered windows
+  const wins = ['w1','w3','w4','w2','w5','w6'];
+  wins.forEach((id, i) => {
+    setTimeout(() => document.getElementById(id).classList.add('show'), 200 + i * 280);
+  });
+
+  // Error popups after windows
+  setTimeout(() => {
+    document.getElementById('err1').classList.add('show');
+    document.getElementById('glitch').classList.add('active');
+  }, 2200);
+  setTimeout(() => {
+    document.getElementById('glitch').className = 'glitch-overlay';
+  }, 2700);
+  setTimeout(() => {
+    document.getElementById('err2').classList.add('show');
+    document.getElementById('glitch').classList.add('active');
+  }, 2800);
+
+  // Theme text after all chaos
+  setTimeout(() => {
+    document.getElementById('themeText').classList.add('show');
+  }, 3200);
+</script>
+</body>
+</html>

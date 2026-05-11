@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920">
+<title>Moboost - Generating Creative Assets</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  /* SF Pro Display - system font, no import needed */
+  :root {
+    --bg-dark: #0a0a0a; --bg-card: rgba(255,255,255,0.04); --bg-cell: rgba(255,255,255,0.02);
+    --brand-purple: #c0e463; --brand-glow: rgba(192,228,99,0.3);
+    --text-white: #fff; --text-gray: #8a8a9a; --text-dim: #555566;
+    --paws-orange: #FF6B35; --green: #28c840;
+  }
+  body {
+    font-family: 'SF Pro Display', -apple-system, 'Helvetica Neue', Arial, sans-serif;
+    background: var(--bg-dark); color: var(--text-white);
+    width: 1920px; height: 1080px;
+    overflow: hidden; display: flex; flex-direction: column;
+  }
+  .navbar {
+    height: 56px; background: rgba(10,10,10,0.85); backdrop-filter: saturate(120%) blur(24px);
+    border-bottom: 1px solid rgba(192,228,99,0.15);
+    display: flex; align-items: center; padding: 0 32px;
+  }
+  .logo { font-size: 20px; font-weight: 700; }
+  .logo span { color: var(--brand-purple); }
+  .nav-breadcrumb {
+    margin-left: 24px; display: flex; gap: 8px; align-items: center;
+    font-size: 13px; color: var(--text-dim);
+  }
+  .nav-breadcrumb .current { color: var(--text-white); font-weight: 500; }
+
+  .layout { flex: 1; display: flex; overflow: hidden; }
+
+  .left-panel {
+    width: 280px; background: var(--bg-card);
+    border-right: 1px solid rgba(192,228,99,0.1);
+    padding: 24px 20px; display: flex; flex-direction: column;
+  }
+  .panel-title { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 600; }
+  .audience-item-sm {
+    display: flex; align-items: center; gap: 8px; padding: 8px 10px;
+    background: rgba(255,255,255,0.03); border-radius: 8px; margin-bottom: 6px; font-size: 12px;
+  }
+
+  .right-area { flex: 1; padding: 24px 32px; display: flex; flex-direction: column; }
+
+  /* Top progress bar */
+  .top-bar { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+  .progress-outer {
+    flex: 1; height: 6px; background: rgba(192,228,99,0.1);
+    border-radius: 3px; overflow: hidden;
+  }
+  .progress-inner {
+    height: 100%; background: var(--brand-purple);
+    border-radius: 3px; width: 0%;
+    transition: width 0.5s ease;
+    box-shadow: 0 0 10px var(--brand-glow);
+  }
+  .progress-label { font-size: 12px; color: var(--text-gray); white-space: nowrap; }
+
+  /* Column headers */
+  .col-headers { display: flex; padding-left: 176px; margin-bottom: 10px; }
+  .col-h { flex: 1; text-align: center; font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; }
+
+  .grid-body { flex: 1; display: flex; flex-direction: column; gap: 14px; }
+  .grid-row { display: flex; gap: 14px; flex: 1; }
+  .row-label {
+    width: 162px; flex-shrink: 0; display: flex; align-items: center; gap: 8px; padding: 0 8px;
+    border-right: 2px solid rgba(192,228,99,0.1);
+  }
+  .row-emoji { font-size: 22px; }
+  .row-name { font-size: 13px; font-weight: 500; }
+  .row-status { font-size: 10px; color: var(--text-dim); margin-top: 2px; }
+  .row-status.done { color: var(--brand-purple); font-weight: 600; }
+
+  /* Grid cells */
+  .grid-cell {
+    flex: 1; background: var(--bg-cell);
+    border: 1px solid rgba(192,228,99,0.08);
+    border-radius: 14px; position: relative;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden; transition: all 0.5s ease;
+  }
+  .grid-cell.generating {
+    border-color: rgba(192,228,99,0.3);
+  }
+  .grid-cell.complete {
+    border-color: rgba(192,228,99,0.4);
+    box-shadow: 0 0 20px rgba(192,228,99,0.1);
+  }
+
+  /* Spinner */
+  .cell-spinner {
+    width: 32px; height: 32px;
+    border: 3px solid rgba(192,228,99,0.15);
+    border-top-color: var(--brand-purple);
+    border-radius: 50%;
+    display: none;
+  }
+  .grid-cell.generating .cell-spinner {
+    display: block;
+    animation: spin 1s linear infinite;
+  }
+
+  /* Ripple effect */
+  .ripple {
+    position: absolute; inset: 0;
+    border-radius: 14px;
+    pointer-events: none;
+    display: none;
+  }
+  .grid-cell.generating .ripple {
+    display: block;
+    animation: rippleOut 2s ease-in-out infinite;
+  }
+
+  /* Generated content preview */
+  .cell-preview {
+    position: absolute; inset: 0;
+    border-radius: 13px; overflow: hidden;
+    opacity: 0; transform: scale(0.9);
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .grid-cell.complete .cell-preview {
+    opacity: 1; transform: scale(1);
+  }
+  .preview-img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+  }
+  /* Gradient placeholder for images */
+  .preview-gradient {
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-size: 11px; color: rgba(255,255,255,0.8); font-weight: 500;
+    position: relative;
+  }
+  .preview-gradient .icon { font-size: 36px; margin-bottom: 4px; }
+  .preview-gradient .lbl { background: rgba(0,0,0,0.3); padding: 2px 8px; border-radius: 4px; font-size: 10px; }
+
+  /* Video play icon overlay */
+  .play-overlay {
+    position: absolute;
+    width: 40px; height: 40px;
+    background: rgba(0,0,0,0.5);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* Landing page mini preview */
+  .lp-mini {
+    width: 60%; height: 85%;
+    background: white; border-radius: 8px;
+    overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+  .lp-header { height: 20%; display: flex; align-items: center; justify-content: center; }
+  .lp-body { padding: 6px 8px; }
+  .lp-line { height: 4px; background: #e0e0e0; border-radius: 2px; margin-bottom: 4px; }
+  .lp-line.short { width: 60%; }
+  .lp-btn-sm { width: 50%; height: 10px; border-radius: 3px; margin: 6px auto 0; }
+
+  /* Completion banner */
+  .complete-banner {
+    position: fixed; top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    background: var(--bg-card);
+    border: 2px solid var(--brand-purple);
+    border-radius: 14px; padding: 32px 48px;
+    text-align: center; z-index: 10;
+    opacity: 0; pointer-events: none;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .complete-banner.show {
+    opacity: 1; transform: translate(-50%, -50%) scale(1);
+    pointer-events: all;
+  }
+  .complete-banner .check {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: rgba(40,200,64,0.12); color: var(--green);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 12px; font-size: 28px;
+  }
+  .complete-banner h2 { font-size: 22px; margin-bottom: 6px; }
+  .complete-banner .sub { font-size: 14px; color: var(--text-gray); }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes rippleOut {
+    0% { box-shadow: 0 0 0 0 rgba(192,228,99,0.2); }
+    70% { box-shadow: 0 0 0 15px rgba(192,228,99,0); }
+    100% { box-shadow: 0 0 0 0 rgba(192,228,99,0); }
+  }
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="logo"><span>Mo</span>boost</div>
+  <div class="nav-breadcrumb">
+    <span>Paws Delight</span>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+    <span class="current">Creative Studio</span>
+  </div>
+</nav>
+<div class="layout">
+  <div class="left-panel">
+    <div class="panel-title">Segments</div>
+    <div class="audience-item-sm"><span>🐱</span> Cat Lovers</div>
+    <div class="audience-item-sm"><span>🏃</span> Fitness Enthusiasts</div>
+    <div class="audience-item-sm"><span>✈️</span> Travel Seekers</div>
+  </div>
+  <div class="right-area">
+    <div class="top-bar">
+      <div class="progress-outer"><div class="progress-inner" id="mainProgress"></div></div>
+      <div class="progress-label" id="progressLabel">0 / 9 assets</div>
+    </div>
+    <div class="col-headers">
+      <div class="col-h">Image</div>
+      <div class="col-h">Video</div>
+      <div class="col-h">Landing Page</div>
+    </div>
+    <div class="grid-body">
+      <!-- Row 0: Cat Lovers -->
+      <div class="grid-row">
+        <div class="row-label"><span class="row-emoji">🐱</span><div><div class="row-name">Cat Lovers</div><div class="row-status" id="rs0">Waiting...</div></div></div>
+        <div class="grid-cell" id="c00"><div class="ripple"></div><div class="cell-spinner"></div>
+          <div class="cell-preview"><img class="preview-img" src="../assets/images/IMG-05.png" alt="Siamese Cat Ad"></div>
+        </div>
+        <div class="grid-cell" id="c01"><div class="ripple"></div><div class="cell-spinner"></div>
+          <div class="cell-preview"><video class="preview-img" src="../assets/videos/VID-01.mp4" autoplay muted loop playsinline style="object-fit:cover;width:100%;height:100%;"></video></div>
+        </div>
+        <div class="grid-cell" id="c02"><div class="ripple"></div><div class="cell-spinner"></div>
+          <div class="cell-preview"><div style="width:100%;height:100%;background:#111;display:flex;align-items:center;justify-content:center;"><div style="width:55%;height:88%;background:white;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.4);"><div style="height:35%;background:linear-gradient(135deg,#FF6B35,#ffb088);display:flex;align-items:center;justify-content:center;font-size:28px;">🐱</div><div style="padding:8px 10px;"><div style="font-size:9px;font-weight:700;color:#333;margin-bottom:4px;">Premium Cat Nutrition</div><div style="display:flex;gap:4px;margin-bottom:6px;"><div style="width:32px;height:32px;border-radius:6px;background:#f5e6d3;"></div><div style="width:32px;height:32px;border-radius:6px;background:#f5e6d3;"></div><div style="width:32px;height:32px;border-radius:6px;background:#f5e6d3;"></div></div><div style="width:80%;height:8px;background:#FF6B35;border-radius:4px;margin:0 auto;"></div></div></div></div></div>
+        </div>
+      </div>
+      <!-- Row 1: Fitness -->
+      <div class="grid-row">
+        <div class="row-label"><span class="row-emoji">🏃</span><div><div class="row-name">Fitness Enthusiasts</div><div class="row-status" id="rs1">Waiting...</div></div></div>
+        <div class="grid-cell" id="c10"><div class="ripple"></div><div class="cell-spinner"></div>
+          <div class="cell-preview"><img class="preview-img" src="../assets/images/IMG-08.png" alt="Runner Silhouette"></div>
+        </div>
+        <div class="grid-cell" id="c11"><div class="ripple"></div><div class="cell-spinner"></div>
+          <div class="cell-preview"><video class="preview-img" src="../assets/videos/VID-02.mp4" autoplay muted loop playsinline style="object-fit:cover;width:100%;height:100%;"></video></div>
+        </div>
+        <div class="grid-cell" id="c12"><div class="ripple"></div><div class="cell-spinner"></div>
+          <div class="cell-preview"><div style="width:100%;height:100%;background:#111;display:flex;align-items:center;justify-content:center;"><div style="width:55%;height:88%;background:white;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.4);"><div style="height:35%;background:linear-gradient(135deg,#7B61FF,#00D2FF);display:flex;align-items:center;justify-content:center;font-size:28px;">🏃</div><div style="padding:8px 10px;"><div style="font-size:9px;font-weight:700;color:#333;margin-bottom:4px;">Your Running Gear</div><div style="display:flex;gap:4px;margin-bottom:6px;"><div style="width:32px;height:32px;border-radius:6px;background:#e8e0ff;"></div><div style="width:32px;height:32px;border-radius:6px;background:#e0f5ff;"></div><div style="width:32px;height:32px;border-radius:6px;background:#e8e0ff;"></div></div><div style="width:80%;height:8px;background:#7B61FF;border-radius:4px;margin:0 auto;"></div></div></div></div></div>
+        </div>
+      </div>
+      <!-- Row 2: Travel -->
+      <div class="grid-row">
+        <div class="row-label"><span class="row-emoji">✈️</span><div><div class="row-name">Travel Seekers</div><div class="row-status" id="rs2">Waiting...</div></div></div>
+        <div class="grid-cell" id="c20"><div class="ripple"></div><div class="cell-spinner"></div>
+          <div class="cell-preview"><img class="preview-img" src="../assets/images/IMG-10.png" alt="Cherry Blossom"></div>
+        </div>
+        <div class="grid-cell" id="c21"><div class="ripple"></div><div class="cell-spinner"></div>
+          <div class="cell-preview"><video class="preview-img" src="../assets/videos/VID-03.mp4" autoplay muted loop playsinline style="object-fit:cover;width:100%;height:100%;"></video></div>
+        </div>
+        <div class="grid-cell" id="c22"><div class="ripple"></div><div class="cell-spinner"></div>
+          <div class="cell-preview"><div style="width:100%;height:100%;background:#111;display:flex;align-items:center;justify-content:center;"><div style="width:55%;height:88%;background:white;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.4);"><div style="height:35%;background:linear-gradient(135deg,#C44569,#F8BBD0);display:flex;align-items:center;justify-content:center;font-size:28px;">🌸</div><div style="padding:8px 10px;"><div style="font-size:9px;font-weight:700;color:#333;margin-bottom:4px;">Tokyo: Beyond the Guidebook</div><div style="display:flex;gap:4px;margin-bottom:6px;"><div style="width:32px;height:32px;border-radius:6px;background:#fce4ec;"></div><div style="width:32px;height:32px;border-radius:6px;background:#fce4ec;"></div><div style="width:32px;height:32px;border-radius:6px;background:#fce4ec;"></div></div><div style="width:80%;height:8px;background:#C44569;border-radius:4px;margin:0 auto;"></div></div></div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="complete-banner" id="completeBanner">
+  <div class="check"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+  <h2>3 Sets Complete</h2>
+  <div class="sub">9 Assets Generated</div>
+</div>
+
+<script>
+  const cells = [
+    ['c00','c01','c02'],
+    ['c10','c11','c12'],
+    ['c20','c21','c22']
+  ];
+  const rowStatuses = ['rs0','rs1','rs2'];
+  const rowNames = ['Set 1 · Cat Lovers','Set 2 · Fitness Enthusiasts','Set 3 · Travel Seekers'];
+  let completed = 0;
+
+  function updateProgress() {
+    completed++;
+    document.getElementById('mainProgress').style.width = (completed / 9 * 100) + '%';
+    document.getElementById('progressLabel').textContent = completed + ' / 9 assets';
+  }
+
+  function genCell(id, delay) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        const el = document.getElementById(id);
+        el.classList.add('generating');
+        setTimeout(() => {
+          el.classList.remove('generating');
+          el.classList.add('complete');
+          updateProgress();
+          resolve();
+        }, 800 + Math.random() * 400);
+      }, delay);
+    });
+  }
+
+  async function generateRow(rowIdx) {
+    const rs = document.getElementById(rowStatuses[rowIdx]);
+    rs.textContent = 'Generating...';
+    rs.classList.remove('done');
+
+    // Generate 3 cells in row with slight stagger
+    await genCell(cells[rowIdx][0], 0);
+    await genCell(cells[rowIdx][1], 200);
+    await genCell(cells[rowIdx][2], 200);
+
+    rs.textContent = rowNames[rowIdx] + ' ✓';
+    rs.classList.add('done');
+  }
+
+  async function runAll() {
+    await new Promise(r => setTimeout(r, 1000));
+    await generateRow(0);
+    await new Promise(r => setTimeout(r, 400));
+    await generateRow(1);
+    await new Promise(r => setTimeout(r, 400));
+    await generateRow(2);
+    // Show complete banner
+    setTimeout(() => {
+      document.getElementById('completeBanner').classList.add('show');
+    }, 600);
+  }
+
+  runAll();
+</script>
+</body>
+</html>

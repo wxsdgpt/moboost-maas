@@ -3,20 +3,22 @@
 import { useState, useEffect, useSyncExternalStore } from 'react'
 import { useRouter } from 'next/navigation'
 import {
-  Sparkles, FolderKanban, Clock
+  FolderKanban, Clock
 } from 'lucide-react'
 import { store } from '@/lib/store'
 import WelcomeBanner from '@/components/WelcomeBanner'
 import UnifiedCollector from '@/components/UnifiedCollector'
+import CreditBalance from '@/components/CreditBalance'
+import { NotificationBell } from '@/components/Notifications'
 import { useLocale } from '@/lib/i18n/LocaleProvider'
 
 const TEMPLATES = [
-  { id: 't1', name: 'Sports Betting Hero', category: 'Sports', preview: '🏈', desc: 'High-energy sports CTA with live odds' },
-  { id: 't2', name: 'Casino Welcome Bonus', category: 'Casino', preview: '🎰', desc: 'Welcome offer with deposit match' },
-  { id: 't3', name: 'Esports Tournament', category: 'Esports', preview: '🎮', desc: 'Tournament promo with team showcase' },
-  { id: 't4', name: 'Live Dealer Promo', category: 'Casino', preview: '🃏', desc: 'Immersive live dealer experience' },
-  { id: 't5', name: 'Parlay Builder', category: 'Sports', preview: '📊', desc: 'Multi-bet builder promotional' },
-  { id: 't6', name: 'Mobile App Download', category: 'General', preview: '📱', desc: 'App store conversion landing' },
+  { id: 't1', name: 'Product Launch', category: 'Growth', preview: '🚀', desc: 'High-converting launch campaign with hero CTA' },
+  { id: 't2', name: 'Lead Gen Funnel', category: 'Conversion', preview: '🎯', desc: 'Capture leads with optimized forms and copy' },
+  { id: 't3', name: 'Social Ad Suite', category: 'Ads', preview: '📱', desc: 'Multi-platform ad creatives for social channels' },
+  { id: 't4', name: 'Email Campaign', category: 'Retention', preview: '📧', desc: 'Engaging email sequence with A/B variants' },
+  { id: 't5', name: 'Competitor Analysis', category: 'Intel', preview: '📊', desc: 'In-depth competitive intelligence report' },
+  { id: 't6', name: 'Landing Page', category: 'Conversion', preview: '🖥️', desc: 'Conversion-optimized landing page builder' },
 ]
 
 function useStoreValue<T>(sel: () => T): T {
@@ -64,67 +66,44 @@ export default function HomePage() {
 
   return (
     <div className="w-full" style={{ minHeight: '100vh', background: 'var(--bg)' }}>
+      {/* Top-right: Credits + Notifications */}
+      <div className="flex items-center justify-end gap-3 px-6 pt-4 pb-0">
+        <CreditBalance collapsed={false} />
+        <NotificationBell />
+      </div>
+
       {/* Hero Section */}
       <div
-        className="w-full py-16 px-8 text-center"
+        className="w-full pt-10 pb-6 px-8 text-center"
         style={{
           background: 'var(--bg)',
           color: 'var(--text-1)',
         }}
       >
         <div className="max-w-[720px] mx-auto">
-          <div style={{ marginBottom: '24px' }}>
-            <div
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-4"
-              style={{
-                background: 'var(--brand-light)',
-                border: '1px solid rgba(192,228,99,0.15)',
-                fontFamily: 'SF Pro Text, -apple-system, BlinkMacSystemFont, sans-serif',
-                fontSize: '12px',
-                fontWeight: '500',
-                color: 'var(--brand)',
-              }}
-            >
-              <Sparkles className="w-3.5 h-3.5" style={{ color: 'var(--brand)' }} />
-              <span>Moboost AI</span>
-            </div>
-          </div>
           <h1
-            className="mb-3"
             style={{
               fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif',
-              fontSize: '56px',
+              fontSize: '48px',
               fontWeight: '600',
-              lineHeight: '1.07',
+              lineHeight: '1.12',
               letterSpacing: '-0.5px',
               color: 'var(--text-1)',
             }}
           >
-            Create with AI
+            Create with Moboost AI
           </h1>
-          <p
-            style={{
-              fontFamily: 'SF Pro Text, -apple-system, BlinkMacSystemFont, sans-serif',
-              fontSize: '17px',
-              fontWeight: '400',
-              color: 'var(--text-3)',
-              lineHeight: '1.47',
-              letterSpacing: '-0.374px',
-            }}
-          >
-            {t('home.tagline')}
-          </p>
         </div>
       </div>
 
       {/* Collector Section */}
-      <div className="w-full px-8 py-12" style={{ background: 'var(--bg)' }}>
-        <div className="max-w-[720px] mx-auto">
+      <div className="w-full px-8 py-6" style={{ background: 'var(--bg)' }}>
+        <div className="max-w-[800px] mx-auto">
           <WelcomeBanner />
 
           {/* Unified Collector — dark glass surface */}
           <div
-            className="rounded-2xl p-6 mb-8"
+            className="rounded-2xl p-8 mb-8"
             style={{
               background: 'var(--surface-1)',
               backdropFilter: 'saturate(120%) blur(24px)',

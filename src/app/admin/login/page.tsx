@@ -2,7 +2,8 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Shield, Eye, EyeOff, Loader2 } from 'lucide-react'
+import Image from 'next/image'
+import { Eye, EyeOff, Loader2 } from 'lucide-react'
 
 export default function AdminLoginPage() {
   const router = useRouter()
@@ -48,16 +49,17 @@ export default function AdminLoginPage() {
       <div className="w-full max-w-[380px] mx-4">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div
-            className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4"
-            style={{
-              background: 'linear-gradient(135deg, #e94560 0%, #0f3460 100%)',
-              boxShadow: 'var(--shadow-md)',
-            }}
-          >
-            <Shield className="w-8 h-8 text-white" />
+          <div className="flex justify-center mb-4">
+            <Image
+              src="/logo/black/icon/white_icon_transparent_background.png"
+              alt="Moboost"
+              width={56}
+              height={56}
+              style={{ objectFit: 'contain' }}
+              priority
+            />
           </div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">Moboost Admin</h1>
+          <h1 className="text-2xl font-bold text-white tracking-tight">Admin Console</h1>
           <p className="text-sm mt-1" style={{ color: 'var(--text-2)' }}>
             管理员控制台
           </p>

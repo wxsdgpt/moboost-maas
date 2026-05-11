@@ -1,0 +1,29 @@
+{
+  "id": "gen-1777269931-5HzYeHc9nY9zC6YN8aAo",
+  "object": "chat.completion",
+  "created": 1777269931,
+  "model": "google/gemini-3-pro-image-preview-20251120",
+  "provider": "Google AI Studio",
+  "system_fingerprint": null,
+  "choices": [
+    {
+      "index": 0,
+      "logprobs": null,
+      "finish_reason": "stop",
+      "native_finish_reason": "STOP",
+      "message": {
+        "role": "assistant",
+        "content": null,
+        "refusal": null,
+        "reasoning": "**Defining the Scene**\n\nI am now focusing on the essential elements of this scene. I'm visualizing a 27-year-old Japanese woman in a cozy home environment. The mood is dreamy and yearning, so I am concentrating on how the lighting and environment play into that. I am also planning how to include the beige sofa and weekend afternoon light.\n\n\n**Composing the Elements**\n\nI'm now detailing the subject: a Japanese woman reclining with an iPad. I am adding her long, straight black hair, cotton t-shirt, and pajama pants. I'm focusing on her pose and dreamy expression. I am visualizing the iPad's screen showing a Japanese food travel video, specifically a sushi plating scene. I am trying to incorporate soft natural light and the cozy details of the home.\n\n\n**Verifying Visual Fidelity**\n\nI'm checking the visual alignment against the original request. The key elements seem consistent, and I'm assessing the degree to which it captures the specified attributes. The initial assessment is that these elements align.\n\n\n**Confirming Accurate Translation**\n\nI've confirmed the image's faithfulness to the prompt. It reflects the core elements: a Japanese woman, a beige sofa, natural light, pose, expression, laptop with Japanese text, and a cozy environment. I'm focusing on ensuring each detail is represented in the output. The request has been translated effectively.\n\n\n",
+        "reasoning_details": [
+          {
+            "type": "reasoning.text",
+            "text": "**Defining the Scene**\n\nI am now focusing on the essential elements of this scene. I'm visualizing a 27-year-old Japanese woman in a cozy home environment. The mood is dreamy and yearning, so I am concentrating on how the lighting and environment play into that. I am also planning how to include the beige sofa and weekend afternoon light.\n\n\n**Composing the Elements**\n\nI'm now detailing the subject: a Japanese woman reclining with an iPad. I am adding her long, straight black hair, cotton t-shirt, and pajama pants. I'm focusing on her pose and dreamy expression. I am visualizing the iPad's screen showing a Japanese food travel video, specifically a sushi plating scene. I am trying to incorporate soft natural light and the cozy details of the home.\n\n\n**Verifying Visual Fidelity**\n\nI'm checking the visual alignment against the original request. The key elements seem consistent, and I'm assessing the degree to which it captures the specified attributes. The initial assessment is that these elements align.\n\n\n**Confirming Accurate Translation**\n\nI've confirmed the image's faithfulness to the prompt. It reflects the core elements: a Japanese woman, a beige sofa, natural light, pose, expression, laptop with Japanese text, and a cozy environment. I'm focusing on ensuring each detail is represented in the output. The request has been translated effectively.\n\n\n",
+            "format": "google-gemini-v1",
+            "index": 0
+          },
+          {
+            "type": "reasoning.encrypted",
+            "data": "Ep3aVAqZ2lQBDDnWx75V1HlU0pmLXfQOs4nQz03h65/kNu/9yauYNS+Ty94wlb+sTr0oabmaLW7YwN/kLqmowWEfqvPjbMW6/mc3nVSQNItw0DNeOE51BGKCKGbxKfZI1+XgGjuZ6IgOlE0i8sU4yHyjAyNru1sDWcULvmKqhEqp2HG5Nze2FVk3zbMTMHF6PM9DXDtM9zuBOm4/kuYFaR+jv3j0dA7x0Njvq0NCJ6Io+c4uCL/GHrC7rpmqYjcNsduReYHI4qLznDrgLU6Jp0HVGdScZ1HQzJF86OUNEPVgOF8c7WeZ0+Pa6dGa6Mg8c3G/0+rRetVHRkY8hEkit47pycPU0gql2PSQzzz/zJej8s8bW7pQOFVbnaVMnZWvrytbVu+hDOsBYuANjdzI9gv5Y6GiOupXWTVeU/mp4PU2GYhgOAWRst30QxK3fWFdwhKi1FllLPbpPrRB3IO9gBjKL6s2hCQtKD5z4uiRAX9pGcfmf0Qj9ologGdIOMucvy8iyZMOkf5AXFu9BzEDQuh0/yeVXx/LQYr65/ibGnQktBgHRD26ZBHRtnEbBMFrmkh4kZG57k/PKN8AHmVbbEaTmOnB31Oe9+yN0seLQlVy7eHsmkFN/zdcmWRXX6/sp9zLZIkJueVXSWRu9zudjRc8IAPVDGDzK2IxD52HtE+rl6TAjNXennxnN6ktTzKwiakQUZ15rjppFnBZUmqri3RMDIhcT88jj68fPb0mow/bdCFb61Fy9oAoW3yY/Pm4JrLkYuJg0N6F7oNiE1yTY4ExzxwAFKFJjr4RaB+YmR8Q2m7rScqbOhgOfAVDPr2eG0ChD7n2trE+1WIM0bfaM516ux73fU/a+YlOzqIhtkB37BZ4Ua+QJU0cZQIe35TP8vdaUXGzmLX1tfQD/hE/i+PMbjenpIsd0168bpx6DxP+wNGFqZE1KvP1iVXi+jhqsX0i2Ll7m/6GOTV/qh3fj3bpMdRDTJq//1v4irxOx6xTDyhF7hgrCdbSvw0/7E+hYRShfFrjrNfFqNGBCe7dXfn9vW0AdjGF2+2sokH0Gl80656tiucq4QHieQ+Irw0ONE1/UBr5VKvTZsX8eAXTIKVOCHktRb5eSedDV9qQtkP5telbcv9AhFJ2EHSY03wH05XdqTC4um87aK6gv/oGoCqTEeomzREbXEnQQP4kfKhhApetuUkrx61pi1PKlGSo9XzBJR6QuxAY/7L2MsplNkAKr0wM+fpMxJd2b+KAYnZqgFZPPzj9V9jdH7QFM/tQASRFkjSB3+Xg3WXh7ZNmWUeLD/x91fm60zwr8LGw+tgmQb7J5b+KR8xLv0Z8ZbrUsEXvzCwjhg5Bphn6orbX152VXqbF940hcTIWufrdnEujkzS47YgTTODKvJhXBeC3kpNkMFOyJ/HL+Pr/WMRb4axO/GPmzPUDg8O8V8K9qGNGVplp0J8N8zQQ95szyCNtSqnI
+... (truncated)

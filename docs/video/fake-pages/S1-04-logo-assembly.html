@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920">
+<title>Scene 1 - Shot 4: Logo Reveal</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'SF Pro Display', -apple-system, 'Helvetica Neue', Arial, sans-serif;
+    background: #000;
+    width: 1920px; height: 1080px;
+    overflow: hidden;
+  }
+
+  /* Full-screen canvas for all effects */
+  canvas { position: absolute; inset: 0; z-index: 1; }
+
+  /* Orbital rings behind logo */
+  .orbital-system {
+    position: absolute;
+    top: 474px; left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 5;
+    width: 700px; height: 700px;
+    opacity: 0;
+    transition: opacity 1.5s ease;
+  }
+  .orbital-system.show { opacity: 1; }
+
+  .orbit-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid transparent;
+    top: 50%; left: 50%;
+  }
+  .orbit-ring.r1 {
+    width: 440px; height: 440px;
+    margin: -220px 0 0 -220px;
+    border-color: rgba(192,228,99,0.08);
+    animation: orbitSpin 25s linear infinite;
+  }
+  .orbit-ring.r2 {
+    width: 560px; height: 560px;
+    margin: -280px 0 0 -280px;
+    border-color: rgba(192,228,99,0.05);
+    animation: orbitSpin 40s linear infinite reverse;
+  }
+  .orbit-ring.r3 {
+    width: 680px; height: 680px;
+    margin: -340px 0 0 -340px;
+    border-color: rgba(192,228,99,0.03);
+    animation: orbitSpin 55s linear infinite;
+  }
+  /* Dots on orbit rings — hidden initially, fade in after logo reveal */
+  .orbit-dot {
+    position: absolute;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #c0e463;
+    box-shadow: 0 0 12px rgba(192,228,99,0.6);
+    opacity: 0;
+    transition: opacity 1s ease 0.5s;
+  }
+  .orbital-system.dots-visible .orbit-dot { opacity: 1; }
+  .orbit-ring.r1 .orbit-dot { top: -3px; left: 50%; margin-left: -3px; }
+  .orbit-ring.r2 .orbit-dot { top: 50%; right: -3px; margin-top: -3px; }
+  .orbit-ring.r3 .orbit-dot { bottom: -3px; left: 30%; margin-left: -3px; }
+
+  /* Center glow */
+  .center-glow {
+    position: absolute;
+    top: 474px; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 700px; height: 700px;
+    border-radius: 50%;
+    background: radial-gradient(circle,
+      rgba(192,228,99,0.10) 0%,
+      rgba(192,228,99,0.03) 35%,
+      transparent 65%
+    );
+    z-index: 4;
+    opacity: 0;
+    transition: opacity 2s ease;
+  }
+  .center-glow.show { opacity: 1; }
+
+  /* Light rays */
+  .light-rays {
+    position: absolute;
+    top: 474px; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 1200px; height: 1200px;
+    z-index: 3;
+    opacity: 0;
+    transition: opacity 2s ease 0.3s;
+  }
+  .light-rays.show { opacity: 1; }
+  .ray {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 2px; height: 600px;
+    transform-origin: bottom center;
+    background: linear-gradient(to top, rgba(192,228,99,0.08), transparent);
+  }
+
+  /* Logo */
+  .logo-wrap {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -52%);
+    z-index: 10;
+    opacity: 0;
+    text-align: center;
+  }
+  .logo-wrap.show {
+    animation: logoIn 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  .logo-icon {
+    width: 180px; height: 180px;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 0 50px rgba(255,255,255,0.15))
+           drop-shadow(0 0 100px rgba(255,255,255,0.05));
+    /* Icon starts tiny at circle center and scales up */
+    transform: scale(0);
+    transform-origin: 50% 50%;
+  }
+  .logo-wrap.show .logo-icon {
+    animation: iconReveal 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+  }
+  /* Text and subtitle fade in after icon */
+  .logo-text, .logo-tagline-sub {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  .logo-wrap.show .logo-text {
+    animation: textFadeUp 0.8s ease 0.6s forwards;
+  }
+  .logo-wrap.show .logo-tagline-sub {
+    animation: textFadeUp 0.8s ease 0.8s forwards;
+  }
+  .logo-text {
+    font-size: 72px;
+    font-weight: 800;
+    letter-spacing: 4px;
+    line-height: 1;
+  }
+  .logo-mo {
+    color: #c0e463;
+    text-shadow: 0 0 40px rgba(192,228,99,0.4);
+  }
+  .logo-boost {
+    color: #ffffff;
+    text-shadow: 0 0 30px rgba(255,255,255,0.15);
+  }
+  .logo-tagline-sub {
+    margin-top: 12px;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 8px;
+    color: rgba(192,228,99,0.5);
+  }
+
+  /* Tagline */
+  .tagline {
+    position: absolute;
+    bottom: 240px; left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    font-size: 34px; font-weight: 400; color: rgba(255,255,255,0);
+    letter-spacing: 6px;
+    transition: color 1.5s ease, letter-spacing 1.5s ease;
+    white-space: nowrap;
+  }
+  .tagline.show {
+    color: rgba(255,255,255,0.9);
+    letter-spacing: 8px;
+  }
+
+  /* Horizontal accent line under tagline */
+  .accent-line {
+    position: absolute;
+    bottom: 225px; left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    width: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(192,228,99,0.5), transparent);
+    transition: width 1.5s ease 0.3s;
+  }
+  .accent-line.show { width: 360px; }
+
+  @keyframes orbitSpin { to { transform: rotate(360deg); } }
+  @keyframes logoIn {
+    0% { opacity: 0; transform: translate(-50%, -52%) scale(1); }
+    15% { opacity: 1; }
+    100% { opacity: 1; transform: translate(-50%, -52%) scale(1); }
+  }
+  @keyframes iconReveal {
+    0% { transform: scale(0); filter: blur(4px) brightness(3); }
+    30% { transform: scale(1.08); filter: blur(0) brightness(1.5); }
+    50% { transform: scale(0.97); filter: blur(0) brightness(1); }
+    70% { transform: scale(1.02); }
+    100% { transform: scale(1); filter: blur(0) brightness(1); }
+  }
+  @keyframes textFadeUp {
+    0% { opacity: 0; transform: translateY(15px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="c" width="1920" height="1080"></canvas>
+
+<div class="light-rays" id="rays"></div>
+<div class="center-glow" id="glow"></div>
+<div class="orbital-system" id="orbits">
+  <div class="orbit-ring r1"><div class="orbit-dot"></div></div>
+  <div class="orbit-ring r2"><div class="orbit-dot"></div></div>
+  <div class="orbit-ring r3"><div class="orbit-dot"></div></div>
+</div>
+
+<div class="logo-wrap" id="logo">
+  <!-- Brand icon: 1:1 contour-traced from official black_icon_white_background.png via OpenCV -->
+  <svg class="logo-icon" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+    <path d="M107.7 65.5 C107.0 65.5 108.0 65.7 107.4 65.8 C106.9 65.8 105.1 65.7 104.6 65.8 C104.1 65.8 104.6 66.0 104.3 66.0 C104.0 66.1 102.9 66.0 102.6 66.0 C102.3 66.1 102.8 66.2 102.3 66.3 C101.8 66.4 100.2 66.5 99.8 66.6 C99.3 66.7 100.0 66.7 99.5 66.9 C98.9 67.0 97.5 67.2 96.6 67.5 C95.7 67.7 94.6 68.4 94.1 68.6 C93.5 68.8 93.7 68.5 93.5 68.6 C93.3 68.7 92.9 69.1 92.6 69.2 C92.4 69.3 92.8 68.8 92.1 69.2 C91.3 69.5 89.6 70.3 88.1 71.2 C86.6 72.0 84.5 73.3 83.3 74.3 C82.0 75.2 80.9 76.4 80.4 76.8 C79.9 77.3 80.7 76.3 80.1 76.8 C79.5 77.4 77.8 79.0 76.7 80.3 C75.6 81.5 74.4 83.2 73.6 84.2 C72.8 85.3 72.2 86.1 71.9 86.8 C71.5 87.5 71.5 87.9 71.3 88.2 C71.1 88.6 71.2 88.0 70.7 88.8 C70.3 89.6 69.1 92.3 68.7 93.1 C68.4 93.9 68.8 93.4 68.7 93.6 C68.6 93.9 68.3 94.3 68.2 94.5 C68.1 94.7 68.3 94.6 68.2 95.1 C68.0 95.5 67.5 96.6 67.3 97.1 C67.2 97.5 67.4 97.6 67.3 97.9 C67.2 98.2 66.8 98.7 66.7 99.0 C66.7 99.4 66.8 99.8 66.7 100.2 C66.7 100.6 66.3 100.8 66.2 101.6 C66.0 102.5 66.0 104.6 65.9 105.3 C65.8 106.0 65.7 104.1 65.6 105.6 C65.6 107.1 65.6 112.9 65.6 114.4 C65.7 115.9 65.8 114.4 65.9 114.7 C65.9 115.0 65.8 116.1 65.9 116.4 C65.9 116.7 66.1 116.2 66.2 116.7 C66.3 117.2 66.4 119.0 66.5 119.5 C66.6 120.1 66.7 119.4 66.7 119.8 C66.8 120.2 66.9 121.3 67.0 121.8 C67.2 122.3 67.5 122.6 67.6 122.9 C67.7 123.3 67.4 123.1 67.6 123.8 C67.8 124.5 68.8 126.3 69.0 126.9 C69.3 127.5 68.6 126.6 69.0 127.5 C69.4 128.4 70.2 130.2 71.3 132.1 C72.4 133.9 74.2 136.6 75.9 138.6 C77.5 140.6 79.3 142.3 81.3 144.0 C83.3 145.7 86.0 147.4 87.8 148.6 C89.7 149.7 91.5 150.5 92.4 150.8 C93.2 151.2 92.7 150.7 92.9 150.8 C93.2 150.9 93.5 151.3 93.8 151.4 C94.0 151.5 93.6 151.2 94.3 151.4 C95.1 151.6 97.3 152.6 98.0 152.8 C98.8 153.1 98.5 152.7 98.9 152.8 C99.3 152.9 99.9 153.3 100.3 153.4 C100.8 153.5 101.2 153.3 101.5 153.4 C101.7 153.4 101.5 153.6 101.7 153.7 C102.0 153.7 102.9 153.6 103.2 153.7 C103.5 153.7 103.1 153.9 103.5 154.0 C103.8 154.0 105.1 153.9 105.4 154.0 C105.8 154.0 104.3 154.2 105.7 154.2 C107.2 154.3 112.6 154.3 114.0 154.2 C115.4 154.2 113.9 154.0 114.3 154.0 C114.6 153.9 115.9 154.0 116.3 154.0 C116.6 153.9 116.3 153.7 116.5 153.7 C116.8 153.6 117.7 153.7 118.0 153.7 C118.3 153.6 118.0 153.4 118.3 153.4 C118.5 153.3 119.2 153.4 119.4 153.4 C119.6 153.3 119.1 153.3 119.7 153.1 C120.2 153.0 122.2 152.7 122.8 152.5 C123.4 152.4 122.7 152.4 123.1 152.3 C123.5 152.1 124.8 151.9 125.4 151.7 C125.9 151.5 126.0 151.2 126.2 151.1 C126.5 151.0 126.5 151.3 126.8 151.1 C127.1 151.0 127.9 150.4 128.2 150.3 C128.5 150.1 128.0 150.6 128.8 150.3 C129.6 149.9 131.8 148.7 133.0 148.0 C134.3 147.2 135.4 146.5 136.5 145.7 C137.5 144.9 138.8 143.6 139.3 143.2 C139.8 142.7 139.0 143.7 139.6 143.2 C140.2 142.6 142.4 140.4 143.0 139.7 C143.6 139.1 142.6 140.0 143.0 139.5 C143.4 138.9 144.7 137.8 145.6 136.6 C146.5 135.4 147.4 134.3 148.4 132.3 C149.5 130.4 151.3 126.3 151.8 124.9 C152.4 123.6 151.7 124.8 151.8 124.4 C152.0 123.9 152.4 123.2 152.7 122.4 C152.9 121.5 153.1 119.8 153.3 119.2 C153.4 118.7 153.5 119.2 153.5 119.0 C153.6 118.7 153.5 117.8 153.5 117.5 C153.6 117.3 153.8 117.5 153.8 117.3 C153.9 117.0 153.8 116.1 153.8 115.8 C153.9 115.5 154.0 116.9 154.1 115.5 C154.2 114.2 154.4 109.0 154.4 107.6 C154.4 106.2 154.2 108.2 154.1 107.3 C154.0 106.4 153.9 103.3 153.8 102.5 C153.7 101.6 153.6 102.4 153.5 102.2 C153.5 101.9 153.6 101.3 153.5 101.0 C153.5 100.8 153.4 101.3 153.3 100.8 C153.1 100.2 152.8 98.2 152.7 97.6 C152.5 97.1 152.6 97.9 152.4 97.3 C152.2 96.8 151.8 94.9 151.5 94.2 C151.3 93.5 151.1 93.6 151.0 93.4 C150.9 93.1 151.1 93.1 151.0 92.8 C150.8 92.5 150.3 91.7 150.1 91.4 C150.0 91.0 150.5 91.5 150.1 90.8 C149.8 90.1 149.0 88.5 148.1 87.1 C147.3 85.7 146.6 84.4 145.0 82.5 C143.4 80.7 140.8 77.8 138.7 76.0 C136.7 74.2 134.8 73.0 132.8 71.7 C130.7 70.5 127.6 69.1 126.5 68.6 C125.4 68.1 126.6 68.8 125.9 68.6 C125.2 68.4 123.0 67.4 122.2 67.2 C121.5 66.9 121.6 67.2 121.4 67.2 C121.2 67.1 121.3 66.9 121.1 66.9 C120.9 66.8 120.6 67.0 120.2 66.9 C119.9 66.8 119.2 66.4 118.8 66.3 C118.4 66.2 117.9 66.4 117.7 66.3 C117.4 66.3 118.3 66.1 117.4 66.0 C116.5 65.9 113.2 65.8 112.3 65.8 C111.4 65.7 112.8 65.5 112.0 65.5 C111.2 65.4 108.5 65.4 107.7 65.5 Z M118.5 40.1 C117.0 40.0 115.4 39.8 114.3 40.1 C113.1 40.5 112.2 41.6 111.7 42.1 C111.2 42.7 111.2 42.7 111.1 43.3 C111.0 43.9 110.8 45.0 111.1 45.8 C111.5 46.7 112.6 47.9 113.1 48.4 C113.7 48.9 113.1 48.7 114.6 49.0 C116.0 49.2 119.5 49.4 121.7 49.8 C123.8 50.2 125.1 50.5 127.4 51.2 C129.6 52.0 132.8 53.1 135.0 54.1 C137.3 55.1 139.4 56.3 141.0 57.2 C142.7 58.2 143.4 58.6 145.0 59.8 C146.6 61.0 148.9 62.8 150.7 64.3 C152.4 65.9 153.9 67.3 155.5 69.2 C157.2 71.1 159.0 73.2 160.7 75.7 C162.3 78.2 164.1 81.1 165.5 84.2 C166.9 87.4 168.3 91.2 169.2 94.5 C170.1 97.8 170.6 101.8 170.9 104.2 C171.2 106.5 171.2 106.8 171.2 108.7 C171.2 110.7 171.3 112.7 170.9 115.8 C170.5 119.0 169.6 124.1 168.6 127.5 C167.7 130.9 166.7 133.3 165.2 136.3 C163.7 139.3 161.5 142.9 159.8 145.4 C158.1 147.9 156.8 149.5 155.0 151.4 C153.2 153.3 150.6 155.7 149.0 157.1 C147.4 158.5 146.8 158.9 145.3 159.9 C143.8 161.0 141.7 162.3 139.9 163.4 C138.0 164.4 136.8 165.2 134.2 166.2 C131.5 167.2 126.7 168.9 123.9 169.6 C121.2 170.4 119.8 170.5 117.7 170.8 C115.5 171.0 112.6 170.8 111.1 171.0 C109.7 171.2 109.5 171.3 108.9 171.9 C108.2 172.5 107.4 173.6 107.2 174.5 C106.9 175.3 107.1 176.1 107.2 176.7 C107.2 177.3 107.4 177.7 107.7 178.2 C108.0 178.6 108.3 179.0 108.9 179.3 C109.4 179.6 109.5 180.0 110.9 180.1 C112.2 180.2 114.6 180.1 116.8 179.9 C119.0 179.6 120.8 179.5 123.9 178.7 C127.1 177.9 132.1 176.5 135.9 175.0 C139.6 173.5 143.7 171.2 146.4 169.6 C149.1 168.0 150.1 167.2 152.1 165.6 C154.1 164.1 156.0 162.7 158.4 160.2 C160.8 157.7 164.7 153.0 166.6 150.5 C168.5 148.1 168.6 147.7 169.8 145.7 C170.9 143.7 172.6 140.4 173.5 138.6 C174.3 136.8 174.2 137.3 174.9 135.2 C175.6 133.0 177.0 129.3 177.7 125.8 C178.5 122.2 179.2 117.8 179.4 113.8 C179.7 109.9 179.6 106.2 179.1 102.2 C178.7 98.1 177.4 92.9 176.6 89.7 C175.7 86.4 174.9 84.7 174.0 82.5 C173.1 80.4 172.5 78.8 171.2 76.6 C169.9 74.3 167.6 70.8 166.3 68.9 C165.1 67.0 165.3 67.2 163.5 65.2 C161.7 63.2 157.8 59.0 155.5 56.9 C153.3 54.8 152.0 54.0 150.1 52.7 C148.3 51.3 146.3 50.1 144.4 49.0 C142.6 47.9 141.0 47.0 139.0 46.1 C137.1 45.2 135.3 44.4 132.8 43.6 C130.2 42.7 126.0 41.6 123.7 41.0 C121.3 40.4 120.1 40.3 118.5 40.1 Z M116.5 22.5 C114.3 22.3 114.8 22.4 114.0 22.8 C113.1 23.2 111.9 24.1 111.4 25.1 C110.9 26.0 110.9 27.5 111.1 28.5 C111.4 29.5 109.7 30.0 113.1 31.0 C116.5 32.0 127.1 33.4 131.6 34.5 C136.2 35.5 137.9 36.5 140.4 37.6 C143.0 38.6 143.7 38.7 147.0 40.7 C150.3 42.8 156.9 47.1 160.4 49.8 C163.9 52.6 166.1 55.1 168.0 57.2 C170.0 59.3 170.4 59.5 172.3 62.3 C174.3 65.1 177.6 69.8 179.7 74.0 C181.8 78.2 183.7 82.8 185.1 87.4 C186.5 91.9 187.4 96.6 188.0 101.3 C188.5 106.0 188.4 111.5 188.3 115.5 C188.1 119.6 187.5 122.5 186.8 125.8 C186.2 129.1 185.6 131.5 184.3 135.2 C182.9 138.9 180.2 144.7 178.6 148.0 C176.9 151.3 176.4 152.0 174.3 154.8 C172.2 157.6 168.8 161.9 166.1 164.8 C163.4 167.6 161.2 169.5 158.1 171.9 C155.0 174.3 150.7 177.1 147.3 179.0 C143.8 180.9 140.7 182.3 137.3 183.6 C133.9 184.8 130.0 185.9 126.8 186.7 C123.6 187.4 121.6 187.8 118.0 188.1 C114.4 188.4 108.9 188.5 105.2 188.4 C101.5 188.3 99.6 188.1 95.8 187.3 C92.0 186.4 86.3 184.9 82.4 183.6 C78.5 182.2 75.5 180.7 72.4 179.0 C69.4 177.3 67.2 176.1 63.9 173.6 C60.6 171.1 54.8 165.8 52.5 164.2 C50.2 162.6 50.8 163.9 50.0 164.2 C49.1 164.5 47.9 165.3 47.4 166.2 C46.9 167.1 46.4 168.4 46.8 169.6 C47.2 170.8 47.6 171.6 49.7 173.6 C51.8 175.6 56.0 179.2 59.3 181.6 C62.7 183.9 66.4 186.1 69.6 187.8 C72.8 189.5 75.7 190.7 78.4 191.8 C81.2 192.9 83.3 193.6 86.1 194.4 C88.8 195.1 91.9 195.8 94.9 196.4 C98.0 196.9 100.8 197.3 104.3 197.5 C107.8 197.7 112.7 197.6 116.0 197.5 C119.2 197.4 121.1 197.1 123.9 196.6 C126.8 196.2 130.4 195.4 133.3 194.7 C136.2 193.9 137.7 193.6 141.3 192.1 C144.9 190.6 150.5 188.3 155.0 185.5 C159.5 182.8 164.8 178.8 168.3 175.9 C171.9 172.9 174.1 170.4 176.3 167.9 C178.5 165.4 180.0 163.5 181.7 161.1 C183.5 158.6 185.3 155.8 186.8 153.1 C188.3 150.5 189.6 147.8 190.8 145.1 C192.0 142.4 193.0 139.7 193.9 136.9 C194.8 134.1 195.6 131.8 196.2 128.4 C196.9 124.9 197.7 121.1 197.9 116.4 C198.2 111.8 198.3 105.9 197.6 100.5 C197.0 95.1 195.4 88.2 194.2 84.0 C193.1 79.7 192.0 77.7 190.8 74.9 C189.6 72.0 188.2 69.4 186.8 66.9 C185.5 64.4 184.3 62.5 182.6 60.1 C180.9 57.6 179.6 55.6 176.6 52.4 C173.6 49.2 167.8 43.7 164.6 41.0 C161.5 38.3 160.5 37.8 157.8 36.2 C155.1 34.5 152.6 32.8 148.7 31.0 C144.8 29.3 138.0 26.8 134.5 25.6 C130.9 24.4 130.3 24.4 127.4 23.9 C124.4 23.4 118.8 22.7 116.5 22.5 Z M117.7 5.1 C113.7 4.6 115.0 5.0 114.0 5.4 C113.0 5.8 112.2 6.6 111.7 7.4 C111.2 8.2 110.9 9.3 111.1 10.3 C111.3 11.3 109.2 12.3 112.8 13.4 C116.5 14.5 127.5 15.5 133.0 16.8 C138.6 18.1 141.6 19.2 146.1 21.1 C150.6 23.0 155.6 25.4 160.1 28.2 C164.6 31.0 169.5 34.8 173.2 37.9 C176.8 40.9 179.1 43.3 182.0 46.7 C184.9 50.1 188.3 54.5 190.8 58.4 C193.3 62.2 195.2 65.7 197.1 69.7 C198.9 73.8 200.6 78.3 201.9 82.5 C203.2 86.8 204.1 90.9 204.8 95.1 C205.4 99.2 205.8 102.6 205.9 107.3 C205.9 111.9 205.7 117.9 205.0 122.9 C204.4 128.0 203.3 132.8 201.9 137.5 C200.5 142.1 198.7 146.7 196.8 150.8 C194.8 155.0 192.8 158.7 190.2 162.5 C187.7 166.3 184.5 170.4 181.7 173.6 C178.9 176.8 176.9 178.9 173.5 181.8 C170.0 184.8 165.1 188.6 160.9 191.2 C156.8 193.9 152.7 196.0 148.7 197.8 C144.7 199.6 140.5 201.0 137.0 202.1 C133.5 203.1 131.1 203.7 127.6 204.3 C124.2 204.9 120.9 205.6 116.3 205.8 C111.7 205.9 104.9 205.9 100.0 205.5 C95.2 205.0 91.3 204.3 87.0 203.2 C82.6 202.1 78.0 200.6 73.9 198.9 C69.7 197.3 65.7 195.2 62.2 193.2 C58.7 191.3 56.0 189.4 53.1 187.3 C50.1 185.1 47.4 182.9 44.6 180.1 C41.7 177.4 38.8 174.6 35.7 170.8 C32.7 166.9 28.9 161.6 26.3 157.1 C23.7 152.6 21.7 148.0 20.1 143.7 C18.4 139.5 17.5 136.8 16.4 131.5 C15.3 126.2 14.3 115.4 13.5 111.8 C12.8 108.3 12.6 110.5 11.8 110.1 C11.1 109.8 9.7 109.6 9.0 109.6 C8.2 109.6 7.9 109.5 7.3 110.1 C6.6 110.8 5.0 109.8 5.0 113.3 C5.0 116.8 5.6 124.8 7.0 131.2 C8.4 137.6 10.7 145.2 13.5 151.7 C16.3 158.1 20.3 164.7 23.8 169.9 C27.3 175.1 30.1 178.6 34.6 183.0 C39.1 187.4 45.2 192.6 50.5 196.4 C55.9 200.1 61.5 203.0 66.7 205.5 C72.0 207.9 76.2 209.4 81.8 210.9 C87.5 212.3 94.0 213.8 100.6 214.3 C107.2 214.8 115.0 214.7 121.7 214.0 C128.4 213.3 135.8 211.3 140.7 210.0 C145.7 208.7 148.1 207.5 151.5 206.0 C155.0 204.6 156.8 204.0 161.2 201.2 C165.7 198.4 173.1 193.7 178.3 189.2 C183.5 184.8 188.2 179.9 192.2 174.7 C196.3 169.6 199.8 164.2 202.8 158.5 C205.8 152.8 208.2 147.3 210.2 140.6 C212.1 133.9 213.8 125.5 214.4 118.4 C215.1 111.3 214.8 104.4 214.1 97.9 C213.5 91.5 212.5 86.1 210.4 79.7 C208.4 73.2 205.3 65.5 201.9 59.2 C198.5 52.9 194.7 47.4 190.2 42.1 C185.7 36.8 180.2 31.6 174.9 27.3 C169.5 23.1 164.3 19.7 158.1 16.5 C151.9 13.4 144.3 10.5 137.6 8.6 C130.9 6.7 121.6 5.7 117.7 5.1 Z" fill="#ffffff" fill-rule="nonzero"/>
+  </svg>
+  <!-- Text logo matching platform navbar style -->
+  <div class="logo-text">
+    <span class="logo-mo">Mo</span><span class="logo-boost">boost</span>
+  </div>
+  <div class="logo-tagline-sub">A COMPANY TO CONNECT</div>
+</div>
+
+<div class="tagline" id="tagline">There's a better way.</div>
+<div class="accent-line" id="accentLine"></div>
+
+<script>
+// Generate light rays
+const raysEl = document.getElementById('rays');
+for (let i = 0; i < 12; i++) {
+  const ray = document.createElement('div');
+  ray.className = 'ray';
+  ray.style.transform = `rotate(${i * 30}deg) translateY(-50%)`;
+  ray.style.opacity = 0.4 + Math.random() * 0.6;
+  raysEl.appendChild(ray);
+}
+
+// Canvas: shatter → data stream → reveal
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const W = 1920, H = 1080, CX = W/2, CY = H/2 - 20;
+// Exact screen position of the logo icon's center circle
+// Calculated from: logo-wrap top:50% translate(-50%,-52%), icon 180x180, circle at SVG (110,110)/220
+const LOGO_CX = 960, LOGO_CY = 474;
+
+// --- Phase 1: Shatter (glitch from previous screen) ---
+const shards = [];
+for (let i = 0; i < 35; i++) {
+  shards.push({
+    x: CX + (Math.random()-0.5)*800,
+    y: CY + (Math.random()-0.5)*500,
+    w: 40 + Math.random()*250,
+    h: 8 + Math.random()*40,
+    vx: (Math.random()-0.5)*20,
+    vy: (Math.random()-0.5)*14,
+    // Use brand palette: muted reds and grays for "pain" shattering
+    color: `rgba(${Math.random()<0.3?'180,40,40':'60,60,80'},${0.06+Math.random()*0.08})`,
+    rot: (Math.random()-0.5)*0.15,
+    angle: 0
+  });
+}
+
+// --- Phase 2: Data stream particles rising ---
+class StreamParticle {
+  constructor() {
+    this.reset();
+    this.y = Math.random() * H; // start scattered
+  }
+  reset() {
+    this.x = Math.random() * W;
+    this.y = H + 20;
+    this.vy = -(1.5 + Math.random() * 3);
+    this.size = Math.random() < 0.15 ? 2.5 : (0.8 + Math.random() * 1.2);
+    this.alpha = 0.15 + Math.random() * 0.35;
+    // Brand green palette
+    const r = Math.random();
+    if (r < 0.4) this.color = '#c0e463';
+    else if (r < 0.65) this.color = '#8aad3a';
+    else if (r < 0.8) this.color = '#d4f08a';
+    else this.color = 'rgba(255,255,255,0.25)';
+  }
+  update() {
+    this.y += this.vy;
+    // Subtle horizontal drift
+    this.x += Math.sin(this.y * 0.008) * 0.3;
+    if (this.y < -10) this.reset();
+  }
+  draw() {
+    ctx.globalAlpha = this.alpha;
+    ctx.fillStyle = this.color;
+    // Elongated vertical shape for "data stream" feel
+    ctx.fillRect(this.x, this.y, this.size * 0.6, this.size * 3);
+  }
+}
+
+const streams = [];
+for (let i = 0; i < 200; i++) streams.push(new StreamParticle());
+
+// --- Phase 3: Converging light particles ---
+class LightParticle {
+  constructor() {
+    const angle = Math.random() * Math.PI * 2;
+    const dist = 500 + Math.random() * 600;
+    this.x = LOGO_CX + Math.cos(angle) * dist;
+    this.y = LOGO_CY + Math.sin(angle) * dist;
+    this.size = 1 + Math.random() * 2;
+    this.alpha = 0;
+    this.color = Math.random() < 0.6 ? '#c0e463' : '#d4f08a';
+    this.converging = false;
+    this.speed = 0.02 + Math.random() * 0.03;
+    this.trail = [];
+  }
+  update() {
+    if (!this.converging) return;
+    this.alpha = Math.min(0.7, this.alpha + 0.015);
+    // Converge to the logo icon's center circle origin point
+    this.x += (LOGO_CX - this.x) * this.speed;
+    this.y += (LOGO_CY - this.y) * this.speed;
+    // Trail
+    this.trail.push({x: this.x, y: this.y, a: this.alpha});
+    if (this.trail.length > 8) this.trail.shift();
+  }
+  draw() {
+    // Trail
+    this.trail.forEach((t, i) => {
+      ctx.globalAlpha = t.a * (i / this.trail.length) * 0.3;
+      ctx.fillStyle = this.color;
+      ctx.beginPath();
+      ctx.arc(t.x, t.y, this.size * 0.5, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    // Main dot
+    ctx.globalAlpha = this.alpha;
+    ctx.fillStyle = this.color;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fill();
+    // Glow
+    ctx.globalAlpha = this.alpha * 0.15;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size * 5, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+const lights = [];
+for (let i = 0; i < 80; i++) lights.push(new LightParticle());
+
+// --- Timeline ---
+let frame = 0;
+const FPS = 60;
+const T = {
+  shatterEnd:    0.8 * FPS,
+  fadeEnd:        1.3 * FPS,
+  streamStart:   1.0 * FPS,
+  convergeStart: 1.5 * FPS,
+  burstFlash:    2.8 * FPS,   // flash burst when particles arrive
+  logoShow:      2.9 * FPS,   // logo icon starts revealing from center
+  dotsShow:      3.8 * FPS,   // orbit dots fade in after logo settles
+  taglineShow:   3.5 * FPS,
+};
+
+// Flash burst state
+let burstAlpha = 0;
+let burstRadius = 0;
+
+function animate() {
+  frame++;
+  ctx.globalAlpha = 1;
+
+  // === Phase 1: Shatter ===
+  if (frame <= T.shatterEnd) {
+    ctx.fillStyle = 'rgba(0,0,0,0.4)';
+    ctx.fillRect(0, 0, W, H);
+
+    const fade = Math.max(0, 1 - frame / T.shatterEnd);
+    shards.forEach(s => {
+      s.x += s.vx; s.y += s.vy;
+      s.vx *= 1.02; s.vy *= 1.02;
+      s.angle += s.rot;
+      ctx.save();
+      ctx.translate(s.x + s.w/2, s.y + s.h/2);
+      ctx.rotate(s.angle);
+      ctx.globalAlpha = fade * 0.8;
+      ctx.fillStyle = s.color;
+      ctx.fillRect(-s.w/2, -s.h/2, s.w, s.h);
+      ctx.restore();
+    });
+
+    // Subtle horizontal glitch lines
+    if (frame % 5 === 0) {
+      ctx.globalAlpha = 0.06;
+      ctx.fillStyle = '#c0e463';
+      ctx.fillRect(0, Math.random() * H, W, 1);
+    }
+  }
+  // === Fade to black ===
+  else if (frame <= T.fadeEnd) {
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, W, H);
+  }
+  // === Phase 2+3: Streams + Convergence ===
+  else {
+    ctx.fillStyle = 'rgba(0,0,0,0.18)';
+    ctx.fillRect(0, 0, W, H);
+
+    // Data streams (subtle background)
+    if (frame > T.streamStart) {
+      streams.forEach(p => {
+        p.update();
+        p.draw();
+      });
+    }
+
+    // Converging light particles — fade out after burst
+    if (frame > T.convergeStart) {
+      const fadeOutAfterBurst = frame > T.burstFlash ? Math.max(0, 1 - (frame - T.burstFlash) / 20) : 1;
+      lights.forEach(p => {
+        if (!p.converging) p.converging = true;
+        p.update();
+        if (fadeOutAfterBurst > 0) {
+          const origAlpha = p.alpha;
+          p.alpha *= fadeOutAfterBurst;
+          p.draw();
+          p.alpha = origAlpha;
+        }
+      });
+    }
+
+    // Growing glow at convergence point — intensifies as particles arrive
+    const glowProgress = Math.min(1, (frame - T.fadeEnd) / (T.burstFlash - T.fadeEnd));
+    if (glowProgress > 0 && frame < T.burstFlash + 30) {
+      const r = 80 + glowProgress * 220;
+      const intensity = glowProgress * 0.12;
+      const grad = ctx.createRadialGradient(LOGO_CX, LOGO_CY, 0, LOGO_CX, LOGO_CY, r);
+      grad.addColorStop(0, `rgba(192,228,99,${intensity})`);
+      grad.addColorStop(0.4, `rgba(192,228,99,${intensity * 0.3})`);
+      grad.addColorStop(1, 'transparent');
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(LOGO_CX, LOGO_CY, r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // === Burst flash — bright white+green flash from center when particles arrive ===
+    if (frame >= T.burstFlash) {
+      const burstAge = (frame - T.burstFlash) / FPS;
+      if (burstAge < 0.6) {
+        // Quick flash: white core expanding outward
+        const flashAlpha = Math.max(0, 1 - burstAge / 0.4);
+        const flashR = 40 + burstAge * 800;
+        // White core
+        const grad1 = ctx.createRadialGradient(LOGO_CX, LOGO_CY, 0, LOGO_CX, LOGO_CY, flashR);
+        grad1.addColorStop(0, `rgba(255,255,255,${flashAlpha * 0.7})`);
+        grad1.addColorStop(0.15, `rgba(192,228,99,${flashAlpha * 0.4})`);
+        grad1.addColorStop(0.5, `rgba(192,228,99,${flashAlpha * 0.08})`);
+        grad1.addColorStop(1, 'transparent');
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = grad1;
+        ctx.beginPath();
+        ctx.arc(LOGO_CX, LOGO_CY, flashR, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+  }
+
+  // === Trigger DOM elements ===
+  if (frame === Math.floor(T.convergeStart)) {
+    document.getElementById('glow').classList.add('show');
+    document.getElementById('rays').classList.add('show');
+  }
+  // Show orbits (without dots) a bit before logo
+  if (frame === Math.floor(T.burstFlash)) {
+    document.getElementById('orbits').classList.add('show');
+  }
+  if (frame === Math.floor(T.logoShow)) {
+    document.getElementById('logo').classList.add('show');
+  }
+  // Orbit dots fade in after logo animation settles
+  if (frame === Math.floor(T.dotsShow)) {
+    document.getElementById('orbits').classList.add('dots-visible');
+  }
+  if (frame === Math.floor(T.taglineShow)) {
+    document.getElementById('tagline').classList.add('show');
+    document.getElementById('accentLine').classList.add('show');
+  }
+
+  ctx.globalAlpha = 1;
+  requestAnimationFrame(animate);
+}
+
+animate();
+</script>
+</body>
+</html>

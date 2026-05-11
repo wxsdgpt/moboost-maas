@@ -9,7 +9,7 @@
  *   4. Filter through ADL (Layer 6)
  *   5. Execute high-value candidates (Layer 3)
  *   6. Merge/prune overlapping capabilities (Layer 4)
- *   7. Log everything (原则2)
+ *   7. Log everything (Principle 2)
  *
  * Trigger: API call from scheduled task or manual admin action.
  * Self-constraint: if 2 consecutive cycles produce nothing, force a structural rethink.
@@ -169,7 +169,7 @@ export async function runPCECCycle(periodDays: number = 7): Promise<PCECResult> 
       consecutiveEmptyCycles++
       lastCycleAt = new Date().toISOString()
 
-      await logChangelog('info', 'pcec', `PCEC Cycle ${cycleId} 无新候选`, {
+      await logChangelog('info', 'pcec', `PCEC Cycle ${cycleId} no new candidates`, {
         consecutiveEmptyCycles,
       })
 
@@ -238,7 +238,7 @@ export async function runPCECCycle(periodDays: number = 7): Promise<PCECResult> 
         const { mutation } = await createMutation({
           mutationType,
           target: candidate.title,
-          description: `[PCEC自动] ${candidate.description}`,
+          description: `[PCEC Auto] ${candidate.description}`,
           changes: {
             before: null,
             after: {
@@ -319,8 +319,8 @@ export async function runPCECCycle(periodDays: number = 7): Promise<PCECResult> 
 
 function inferMutationType(candidate: CapabilityCandidate): string {
   if (candidate.source === 'cross_agent') return 'agent_merge'
-  if (candidate.title.includes('拒绝')) return 'agent_enhance'
-  if (candidate.title.includes('修改')) return 'prompt_update'
+  if (candidate.title.includes('reject')) return 'agent_enhance'
+  if (candidate.title.includes('modify')) return 'prompt_update'
   return 'agent_enhance'
 }
 

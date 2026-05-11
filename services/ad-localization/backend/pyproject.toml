@@ -1,0 +1,83 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ad-localization-backend"
+version = "0.1.0"
+description = "iGaming ad creative localization system — backend"
+requires-python = ">=3.12"
+license = { text = "Proprietary" }
+
+dependencies = [
+  # web
+  "fastapi>=0.115",
+  "uvicorn[standard]>=0.32",
+  "python-multipart>=0.0.17",
+
+  # data / orm
+  "sqlalchemy[asyncio]>=2.0.36",
+  "alembic>=1.14",
+  "psycopg[binary,pool]>=3.2",
+  "pydantic>=2.9",
+  "pydantic-settings>=2.6",
+
+  # auth
+  "python-jose[cryptography]>=3.3",
+  "argon2-cffi>=23.1",
+  "email-validator>=2.2",
+
+  # async tasks (pg-backed, no Redis)
+  "procrastinate>=3.0",
+
+  # storage
+  "boto3>=1.35",
+
+  # utilities
+  "httpx>=0.27",
+  "tenacity>=9.0",
+  "structlog>=24.4",
+  "orjson>=3.10",
+  "python-dotenv>=1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.3",
+  "pytest-asyncio>=0.24",
+  "pytest-cov>=5.0",
+  "ruff>=0.7",
+  "mypy>=1.12",
+  "httpx>=0.27",
+  "faker>=33.0",
+]
+
+# Phase 2+ deps (not installed by default; pulled in once those pipelines land)
+parsing = [
+  "psd-tools>=1.10",
+  "Pillow>=10.4",
+  "moviepy>=2.0",
+  "ffmpeg-python>=0.2",
+  "imagehash>=4.3",
+]
+ai = [
+  "anthropic>=0.40",
+  "openai>=1.54",
+  "google-genai>=0.3",
+  "google-cloud-aiplatform>=1.72",
+]
+
+[tool.setuptools.packages.find]
+include = ["app*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "RUF"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]

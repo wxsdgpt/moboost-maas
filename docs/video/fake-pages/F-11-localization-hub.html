@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920">
+<title>Moboost - Localization Hub</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  /* SF Pro Display - system font, no import needed */
+  :root {
+    --bg-dark: #0a0a0a; --bg-card: rgba(255,255,255,0.04);
+    --brand-purple: #c0e463; --brand-glow: rgba(192,228,99,0.3);
+    --text-white: #fff; --text-gray: #8a8a9a; --text-dim: #555566;
+  }
+  body {
+    font-family: 'SF Pro Display', -apple-system, 'Helvetica Neue', Arial, sans-serif;
+    background: var(--bg-dark); color: var(--text-white);
+    width: 1920px; height: 1080px;
+    overflow: hidden; display: flex; flex-direction: column;
+  }
+  .navbar {
+    height: 56px; background: rgba(10,10,10,0.85); backdrop-filter: saturate(120%) blur(24px);
+    border-bottom: 1px solid rgba(192,228,99,0.15);
+    display: flex; align-items: center; padding: 0 32px;
+  }
+  .logo { font-size: 20px; font-weight: 700; }
+  .logo span { color: var(--brand-purple); }
+
+  .layout { flex: 1; display: flex; overflow: hidden; }
+
+  /* Left - Source Preview */
+  .left-panel {
+    width: 380px; background: var(--bg-card);
+    border-right: 1px solid rgba(192,228,99,0.1);
+    padding: 28px 24px; display: flex; flex-direction: column;
+  }
+  .panel-title { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 16px; font-weight: 600; }
+  .source-preview {
+    display: flex; flex-direction: column; gap: 12px; flex: 1;
+  }
+  .source-card {
+    background: rgba(192,228,99,0.05);
+    border: 1px solid rgba(192,228,99,0.1);
+    border-radius: 12px; overflow: hidden;
+    flex: 1;
+  }
+  .source-visual {
+    height: 60%; display: flex; align-items: center; justify-content: center;
+    font-size: 36px;
+  }
+  .source-label {
+    padding: 8px 14px; font-size: 11px; color: var(--text-gray);
+    border-top: 1px solid rgba(192,228,99,0.08);
+  }
+
+  /* Right - Map area */
+  .right-area { flex: 1; padding: 28px 36px; display: flex; flex-direction: column; }
+  .map-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .map-header h2 { font-size: 22px; font-weight: 600; }
+  .market-counter {
+    background: var(--bg-card);
+    border: 1px solid rgba(192,228,99,0.2);
+    border-radius: 10px; padding: 8px 18px;
+    font-size: 14px; font-weight: 600;
+  }
+  .market-counter span { color: var(--brand-purple); }
+
+  /* SVG World Map */
+  .map-container {
+    flex: 1; position: relative;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .world-map { width: 100%; height: 100%; }
+  .country-shape {
+    fill: rgba(192,228,99,0.06);
+    stroke: rgba(192,228,99,0.15);
+    stroke-width: 0.5;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .country-shape:hover { fill: rgba(192,228,99,0.15); }
+  .country-shape.selected {
+    fill: rgba(192,228,99,0.35);
+    stroke: var(--brand-purple);
+    stroke-width: 1.5;
+    filter: drop-shadow(0 0 8px rgba(192,228,99,0.3));
+  }
+
+  /* Country markers (positioned with CSS) */
+  .country-marker {
+    position: absolute;
+    display: flex; align-items: center; gap: 6px;
+    padding: 4px 10px;
+    background: var(--bg-card);
+    border: 1px solid var(--brand-purple);
+    border-radius: 8px;
+    font-size: 12px; font-weight: 500;
+    opacity: 0; transform: scale(0.7);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 5;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    pointer-events: none;
+  }
+  .country-marker.show { opacity: 1; transform: scale(1); }
+
+  /* Dot pulsing on map */
+  .map-dot {
+    position: absolute;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--brand-purple);
+    opacity: 0;
+    transition: opacity 0.3s;
+    cursor: pointer;
+    z-index: 4;
+  }
+  .map-dot.show {
+    opacity: 1;
+    animation: dotPulse 2s ease-in-out infinite;
+  }
+
+  /* Bottom summary panel */
+  .summary-panel {
+    background: var(--bg-card);
+    border: 1px solid rgba(192,228,99,0.15);
+    border-radius: 14px;
+    padding: 18px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 16px;
+    opacity: 0; transform: translateY(20px);
+    transition: all 0.5s ease;
+  }
+  .summary-panel.show { opacity: 1; transform: translateY(0); }
+  .summary-stat { text-align: center; }
+  .summary-stat .val { font-size: 20px; font-weight: 700; }
+  .summary-stat .label { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+  .summary-stat .val.purple { color: var(--brand-purple); }
+  .summary-stat .val.green { color: #28c840; }
+
+  .localize-btn {
+    background: linear-gradient(135deg, #c0e463, #a8d44a); color: #0a0a0a;
+    border: none; border-radius: 12px;
+    padding: 14px 36px; font-size: 16px; font-weight: 600;
+    font-family: 'SF Pro Display', -apple-system, 'Helvetica Neue', Arial, sans-serif;
+    cursor: pointer;
+    opacity: 0.3; pointer-events: none;
+    transition: all 0.3s;
+  }
+  .localize-btn.ready {
+    opacity: 1; pointer-events: all;
+    animation: ctaPulse 2.5s ease-in-out infinite;
+  }
+
+  @keyframes dotPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(192,228,99,0.5); }
+    50% { box-shadow: 0 0 0 8px rgba(192,228,99,0); }
+  }
+  @keyframes ctaPulse {
+    0%, 100% { box-shadow: 0 4px 16px rgba(192,228,99,0.4); }
+    50% { box-shadow: 0 4px 32px rgba(192,228,99,0.6); }
+  }
+</style>
+</head>
+<body>
+<nav class="navbar"><div class="logo"><span>Mo</span>boost</div></nav>
+<div class="layout">
+  <div class="left-panel">
+    <div class="panel-title">Source Content — Travel Set</div>
+    <div class="source-preview">
+      <div class="source-card">
+        <div class="source-visual" style="background:linear-gradient(135deg,#F48FB1,#F8BBD0);">🌸</div>
+        <div class="source-label">Image · Cherry Blossom Travel Ad</div>
+      </div>
+      <div class="source-card">
+        <div class="source-visual" style="background:linear-gradient(135deg,#E91E63,#F48FB1);">🎬</div>
+        <div class="source-label">Video · Japanese Cuisine Journey</div>
+      </div>
+      <div class="source-card">
+        <div class="source-visual" style="background:linear-gradient(135deg,#111111,#2a2a4e);">🌐</div>
+        <div class="source-label">Landing Page · Tokyo: Beyond the Guidebook</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="right-area">
+    <div class="map-header">
+      <h2>Select Target Markets</h2>
+      <div class="market-counter"><span id="countNum">0</span> Markets Selected</div>
+    </div>
+
+    <div class="map-container" id="mapContainer">
+      <!-- Simplified world map using positioned dots instead of complex SVG paths -->
+      <svg class="world-map" viewBox="0 0 1200 600">
+        <!-- Simplified continents as paths -->
+        <!-- North America -->
+        <path class="country-shape" d="M150,100 L350,80 L380,150 L350,250 L300,300 L250,280 L200,250 L150,200 Z"/>
+        <!-- South America -->
+        <path class="country-shape" d="M280,320 L340,300 L380,350 L370,450 L330,520 L280,500 L260,420 L270,360 Z"/>
+        <!-- Europe -->
+        <path class="country-shape" d="M500,80 L600,70 L640,120 L620,180 L560,200 L500,180 L490,130 Z"/>
+        <!-- Africa -->
+        <path class="country-shape" d="M500,220 L580,200 L620,250 L630,350 L600,430 L540,450 L490,400 L480,300 Z"/>
+        <!-- Asia -->
+        <path class="country-shape" d="M650,70 L900,60 L950,130 L920,200 L850,250 L750,280 L680,250 L640,180 L650,120 Z"/>
+        <!-- India -->
+        <path class="country-shape" d="M740,230 L790,220 L810,280 L790,350 L750,360 L720,310 L730,260 Z"/>
+        <!-- Japan/Korea -->
+        <path class="country-shape" d="M940,120 L970,110 L980,160 L960,190 L940,180 Z"/>
+        <!-- Australia -->
+        <path class="country-shape" d="M880,380 L980,360 L1020,400 L1000,460 L940,470 L880,440 Z"/>
+        <!-- Grid lines -->
+        <line x1="0" y1="300" x2="1200" y2="300" stroke="rgba(192,228,99,0.05)" stroke-dasharray="4"/>
+        <line x1="600" y1="0" x2="600" y2="600" stroke="rgba(192,228,99,0.05)" stroke-dasharray="4"/>
+      </svg>
+
+      <!-- Map dots for each country -->
+      <div class="map-dot" id="dot-us" style="left:22%;top:32%;"></div>
+      <div class="map-dot" id="dot-jp" style="left:80%;top:25%;"></div>
+      <div class="map-dot" id="dot-br" style="left:27%;top:65%;"></div>
+      <div class="map-dot" id="dot-ng" style="left:45%;top:55%;"></div>
+      <div class="map-dot" id="dot-kr" style="left:78%;top:28%;"></div>
+      <div class="map-dot" id="dot-de" style="left:47%;top:22%;"></div>
+      <div class="map-dot" id="dot-in" style="left:63%;top:45%;"></div>
+      <div class="map-dot" id="dot-fr" style="left:44%;top:25%;"></div>
+
+      <!-- Country markers -->
+      <div class="country-marker" id="mk-us" style="left:18%;top:26%;">🇺🇸 United States</div>
+      <div class="country-marker" id="mk-jp" style="left:76%;top:19%;">🇯🇵 Japan</div>
+      <div class="country-marker" id="mk-br" style="left:23%;top:59%;">🇧🇷 Brazil</div>
+      <div class="country-marker" id="mk-ng" style="left:41%;top:49%;">🇳🇬 Nigeria</div>
+      <div class="country-marker" id="mk-kr" style="left:74%;top:22%;">🇰🇷 South Korea</div>
+      <div class="country-marker" id="mk-de" style="left:43%;top:16%;">🇩🇪 Germany</div>
+      <div class="country-marker" id="mk-in" style="left:59%;top:39%;">🇮🇳 India</div>
+      <div class="country-marker" id="mk-fr" style="left:40%;top:19%;">🇫🇷 France</div>
+    </div>
+
+    <div class="summary-panel" id="summaryPanel">
+      <div class="summary-stat">
+        <div class="val purple" id="marketsVal">8</div>
+        <div class="label">Markets</div>
+      </div>
+      <div class="summary-stat">
+        <div class="val">3 &times; 8 =</div>
+        <div class="label">Asset Types &times; Markets</div>
+      </div>
+      <div class="summary-stat">
+        <div class="val purple">24</div>
+        <div class="label">Total Assets</div>
+      </div>
+      <div class="summary-stat">
+        <div class="val green">$2.40</div>
+        <div class="label">Estimated Cost</div>
+      </div>
+      <button class="localize-btn" id="localizeBtn">Localize Now</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const countries = ['us','jp','br','ng','kr','de','in','fr'];
+  let selected = 0;
+
+  // Auto-select countries with delay
+  function selectCountry(idx) {
+    if (idx >= countries.length) {
+      // All selected — show summary & CTA
+      setTimeout(() => {
+        document.getElementById('summaryPanel').classList.add('show');
+        setTimeout(() => {
+          document.getElementById('localizeBtn').classList.add('ready');
+        }, 400);
+      }, 500);
+      return;
+    }
+
+    const code = countries[idx];
+    document.getElementById('dot-' + code).classList.add('show');
+    document.getElementById('mk-' + code).classList.add('show');
+    selected++;
+    document.getElementById('countNum').textContent = selected;
+
+    // Play a "ding" visual flash
+    const dot = document.getElementById('dot-' + code);
+    dot.style.boxShadow = '0 0 20px 8px rgba(192,228,99,0.6)';
+    setTimeout(() => { dot.style.boxShadow = ''; }, 300);
+
+    setTimeout(() => selectCountry(idx + 1), 700);
+  }
+
+  setTimeout(() => selectCountry(0), 1500);
+</script>
+</body>
+</html>

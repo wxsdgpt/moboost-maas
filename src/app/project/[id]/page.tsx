@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation'
 import {
   ArrowUp, Paperclip, ImageIcon, Video, Loader2,
   Trash2, ArrowLeft, Play, CheckCircle2, AlertCircle,
-  ThumbsUp, ThumbsDown, ZoomIn, Download, Pencil
+  ThumbsUp, ThumbsDown, ZoomIn, Download, Pencil, Globe
 } from 'lucide-react'
 import ModelRouter from '@/components/ModelRouter'
 import ThinkingPanel from '@/components/ThinkingPanel'
@@ -382,6 +382,15 @@ export default function ProjectWorkspace() {
               </button>
               <button style={{ color: 'var(--text-3)' }} className="p-2 rounded-lg hover:bg-white/10 transition-colors" title="Download">
                 <Download className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => router.push(`/localization/new?assetId=${selectedAsset.id}&projectId=${projectId}&type=${selectedAsset.type}`)}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
+                style={{ background: 'var(--brand)', color: 'var(--brand-contrast)' }}
+                title="Localize this asset"
+              >
+                <Globe className="w-3.5 h-3.5" />
+                Localize
               </button>
             </div>
             {/* Canvas content */}

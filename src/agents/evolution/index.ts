@@ -14,9 +14,9 @@
  *   L7: Value Function Mutation (value-function.ts)
  *
  * Three Principles:
- *   P1: 所有修改可一键回滚
- *   P2: 修改记录到changelog，随时可查看
- *   P3: 新修改admin登录时提示，确认后删除backup
+ *   P1: All changes can be rolled back with one click
+ *   P2: All changes are logged to the changelog and can be reviewed at any time
+ *   P3: New changes prompt admin on login; backup is deleted after confirmation
  */
 
 import { AgentContext } from '../types'
@@ -153,19 +153,19 @@ export const evolution = {
   /** Execute agent tuning mutation */
   executeAgentTune,
 
-  /** Rollback a mutation (原则1: 一键回滚) */
+  /** Rollback a mutation (Principle 1: one-click rollback) */
   rollbackMutation,
 
-  /** Admin confirms a mutation (原则3: 确认后删除backup) */
+  /** Admin confirms a mutation (Principle 3: delete backup after confirmation) */
   confirmMutation,
 
-  /** Get all pending mutations awaiting admin review (原则3) */
+  /** Get all pending mutations awaiting admin review (Principle 3) */
   getPendingMutations,
 
-  /** Get mutation history (原则2: 随时可查看) */
+  /** Get mutation history (Principle 2: reviewable at any time) */
   getMutationHistory,
 
-  /** Get evolution changelog (原则2) */
+  /** Get evolution changelog (Principle 2) */
   getChangelog,
 
   /** Write to evolution changelog */

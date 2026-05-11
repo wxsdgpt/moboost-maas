@@ -6,7 +6,7 @@
  * but FAKE — don't mix it into any user-facing claim without the
  * `mock` source tag.
  *
- * The data is hand-picked to reflect what the iGaming verticals
+ * The data is hand-picked to reflect what general Martech verticals
  * actually look like in the wild (top brands, common creative hooks,
  * typical CTA patterns), not random nonsense — this makes end-to-end
  * testing of the recommendation pipeline meaningful.
@@ -29,356 +29,459 @@ type Fixture = {
 }
 
 const FIXTURES: Record<Vertical, Fixture> = {
-  'Sports Betting': {
+  'E-commerce': {
     topAdvertisers: [
       {
-        name: 'Bet365',
-        topChannels: ['Meta', 'YouTube', 'Google Search'],
-        shareOfVoice: 24,
-        topGeos: ['GB', 'DE', 'BR', 'AU'],
+        name: 'Shopify',
+        topChannels: ['Meta', 'Google Search', 'YouTube'],
+        shareOfVoice: 26,
+        topGeos: ['US', 'GB', 'CA', 'AU'],
       },
       {
-        name: 'DraftKings',
-        topChannels: ['Meta', 'TikTok', 'ESPN Network'],
-        shareOfVoice: 18,
-        topGeos: ['US', 'CA'],
+        name: 'Amazon',
+        topChannels: ['Google Search', 'Meta', 'TikTok'],
+        shareOfVoice: 22,
+        topGeos: ['US', 'DE', 'JP', 'GB'],
       },
       {
-        name: 'FanDuel',
-        topChannels: ['Meta', 'YouTube', 'Twitter/X'],
-        shareOfVoice: 17,
-        topGeos: ['US'],
+        name: 'Shein',
+        topChannels: ['TikTok', 'Meta', 'Instagram'],
+        shareOfVoice: 15,
+        topGeos: ['US', 'BR', 'MX', 'FR'],
       },
       {
-        name: 'Bwin',
-        topChannels: ['Meta', 'Google Display'],
-        shareOfVoice: 9,
-        topGeos: ['DE', 'AT', 'IT', 'ES'],
+        name: 'Temu',
+        topChannels: ['Meta', 'Google Display', 'TikTok'],
+        shareOfVoice: 12,
+        topGeos: ['US', 'GB', 'DE', 'AU'],
       },
     ],
     creativePatterns: [
       {
-        label: 'Live odds countdown hook',
+        label: 'Flash sale countdown',
+        format: 'video',
+        frequency: 35,
+        hookPattern:
+          'Opens with ticking clock animation, product grid with slashed prices, urgent voiceover "Only 3 hours left", ends on shop-now button',
+        ctas: ['Shop Now', 'Grab the Deal'],
+      },
+      {
+        label: 'Unboxing UGC',
+        format: 'video',
+        frequency: 28,
+        hookPattern:
+          'Creator opens package on camera, genuine reaction shot, product close-up with overlay showing price and rating, swipe-up CTA',
+        ctas: ['Order Yours', 'See Reviews'],
+      },
+      {
+        label: 'Free shipping threshold banner',
+        format: 'static',
+        frequency: 19,
+        hookPattern:
+          'Bold "Free Shipping on Orders $50+" headline, curated product collage, progress bar showing cart value, brand logo corner',
+        ctas: ['Shop Now', 'Complete Your Cart'],
+      },
+    ],
+    trendingFeatures: [
+      'AI-powered product recommendations',
+      'Buy now, pay later integration',
+      'Shoppable livestreams',
+      'Same-day delivery guarantees',
+      'AR try-on for fashion and beauty',
+    ],
+    ctaPatterns: ['Shop Now', 'Add to Cart', 'Get Free Shipping', 'See Today\'s Deals'],
+    geoHotspots: [
+      { country: 'US', reason: 'Largest e-commerce market globally', weight: 95 },
+      { country: 'BR', reason: 'Fastest-growing LATAM e-commerce market', weight: 78 },
+      { country: 'IN', reason: 'Rapid digital commerce adoption', weight: 72 },
+    ],
+  },
+  SaaS: {
+    topAdvertisers: [
+      {
+        name: 'HubSpot',
+        topChannels: ['Google Search', 'LinkedIn', 'YouTube'],
+        shareOfVoice: 21,
+        topGeos: ['US', 'GB', 'DE', 'AU'],
+      },
+      {
+        name: 'Salesforce',
+        topChannels: ['LinkedIn', 'Google Search', 'Meta'],
+        shareOfVoice: 19,
+        topGeos: ['US', 'GB', 'JP'],
+      },
+      {
+        name: 'Notion',
+        topChannels: ['YouTube', 'TikTok', 'Meta'],
+        shareOfVoice: 14,
+        topGeos: ['US', 'KR', 'JP', 'DE'],
+      },
+    ],
+    creativePatterns: [
+      {
+        label: 'Before/after workflow demo',
         format: 'video',
         frequency: 38,
         hookPattern:
-          'Opens on fast-cut sports footage, odds tile slams in with a ticking countdown, voiceover promises "live in 30 seconds"',
-        ctas: ['Bet Now', 'See Live Odds'],
+          'Split screen showing cluttered spreadsheet vs clean dashboard, timer shows "5 min setup", ends on free trial CTA',
+        ctas: ['Start Free Trial', 'See It in Action'],
       },
       {
-        label: 'Welcome bonus stacker',
+        label: 'ROI calculator teaser',
         format: 'static',
-        frequency: 27,
+        frequency: 24,
         hookPattern:
-          'Large "Up to $1,000" headline with stacked chip/coin imagery, logo tight in corner, legal disclaimer bottom bar',
-        ctas: ['Claim Bonus', 'Sign Up'],
-      },
-      {
-        label: 'Same-game parlay builder demo',
-        format: 'video',
-        frequency: 15,
-        hookPattern:
-          'Screencap of parlay builder UI with 3 picks clicked in sequence, odds update on each click, ends on potential payout',
-        ctas: ['Build Your Parlay', 'Try It Free'],
+          '"Save 10+ hours per week" headline with calculator graphic, customer logos for social proof, CTA button below',
+        ctas: ['Calculate Your ROI', 'Try Free'],
       },
     ],
     trendingFeatures: [
-      'Same-game parlays',
-      'Early cash out',
-      'Live streaming built-in',
-      'Boosted odds of the day',
-      'Micro-betting (next play / next pitch)',
+      'AI copilot built into workflows',
+      'No-code automation builder',
+      'Native integrations marketplace',
+      'Usage-based pricing tiers',
     ],
-    ctaPatterns: ['Bet Now', 'Claim Your Bonus', 'Sign Up & Get $X', 'See Live Odds'],
+    ctaPatterns: ['Start Free Trial', 'Book a Demo', 'Try Free', 'See Pricing'],
     geoHotspots: [
-      { country: 'US', reason: 'State-by-state legalization wave', weight: 95 },
-      { country: 'BR', reason: 'Newly regulated market 2025', weight: 82 },
-      { country: 'CA', reason: 'Ontario iGaming expansion', weight: 61 },
+      { country: 'US', reason: 'Dominant SaaS market with highest spend', weight: 92 },
+      { country: 'DE', reason: 'Largest European B2B SaaS market', weight: 65 },
     ],
   },
-  Casino: {
+  'Mobile Apps': {
     topAdvertisers: [
       {
-        name: 'LeoVegas',
-        topChannels: ['Meta', 'Google Display'],
-        shareOfVoice: 14,
-        topGeos: ['SE', 'DE', 'IT', 'CA'],
+        name: 'Canva',
+        topChannels: ['Meta', 'TikTok', 'YouTube'],
+        shareOfVoice: 18,
+        topGeos: ['US', 'AU', 'BR', 'IN'],
       },
       {
-        name: 'Casumo',
-        topChannels: ['Meta', 'YouTube'],
+        name: 'Duolingo',
+        topChannels: ['TikTok', 'Meta', 'YouTube'],
+        shareOfVoice: 16,
+        topGeos: ['US', 'BR', 'MX', 'JP'],
+      },
+      {
+        name: 'Calm',
+        topChannels: ['Meta', 'YouTube', 'Podcast'],
         shareOfVoice: 11,
-        topGeos: ['GB', 'DE', 'FI'],
-      },
-      {
-        name: '888 Casino',
-        topChannels: ['Google Search', 'Meta'],
-        shareOfVoice: 10,
-        topGeos: ['GB', 'ES', 'IT'],
+        topGeos: ['US', 'GB', 'CA'],
       },
     ],
     creativePatterns: [
       {
-        label: 'Big-win reel montage',
+        label: 'App screen recording walkthrough',
         format: 'video',
-        frequency: 41,
+        frequency: 42,
         hookPattern:
-          'Rapid cut between slot reels hitting, coin shower, player reaction shot, ends with branded logo + bonus stack',
-        ctas: ['Play Now', 'Spin & Win'],
+          'Phone mockup with finger tapping through app flow, quick cuts showing key features, "Download free" end card',
+        ctas: ['Download Free', 'Install Now'],
       },
       {
-        label: 'Deposit match headline',
+        label: 'Social proof carousel',
         format: 'static',
-        frequency: 29,
+        frequency: 22,
         hookPattern:
-          '"100% up to €500" center text on dark gradient background, subtle game icons floating behind',
-        ctas: ['Claim 100% Match', 'Get Bonus'],
+          'App Store 4.8-star rating badge, "10M+ downloads" headline, 3 user review quotes, gradient background',
+        ctas: ['Get the App', 'Try It Free'],
       },
     ],
     trendingFeatures: [
-      'Cashback on losses',
-      'Loyalty tiers with physical rewards',
-      'Pragmatic Play live casino integration',
-      'Crypto deposits',
+      'Personalized onboarding flows',
+      'Push notification drip campaigns',
+      'In-app referral rewards',
+      'Subscription trial with paywall optimization',
     ],
-    ctaPatterns: ['Play Now', 'Claim Bonus', 'Spin for Real', 'Join the Club'],
+    ctaPatterns: ['Download Free', 'Install Now', 'Get the App', 'Start Your Trial'],
     geoHotspots: [
-      { country: 'DE', reason: 'Post-GlüStV market normalization', weight: 71 },
-      { country: 'BR', reason: 'Newly regulated market 2025', weight: 68 },
+      { country: 'US', reason: 'Highest mobile app revenue market', weight: 90 },
+      { country: 'IN', reason: 'Fastest-growing mobile-first user base', weight: 85 },
     ],
   },
-  Slots: {
+  Gaming: {
     topAdvertisers: [
       {
-        name: 'Jackpot.com',
-        topChannels: ['Meta', 'TikTok'],
-        shareOfVoice: 13,
-        topGeos: ['GB', 'US'],
+        name: 'Supercell',
+        topChannels: ['YouTube', 'TikTok', 'Meta'],
+        shareOfVoice: 20,
+        topGeos: ['US', 'JP', 'KR', 'DE'],
       },
       {
-        name: 'Slotomania',
-        topChannels: ['Meta', 'App Store Search Ads'],
-        shareOfVoice: 22,
+        name: 'miHoYo',
+        topChannels: ['YouTube', 'Twitter/X', 'TikTok'],
+        shareOfVoice: 17,
+        topGeos: ['CN', 'JP', 'US', 'KR'],
+      },
+      {
+        name: 'King',
+        topChannels: ['Meta', 'Google Display', 'TikTok'],
+        shareOfVoice: 14,
         topGeos: ['US', 'GB', 'DE'],
       },
     ],
     creativePatterns: [
       {
-        label: 'Near-miss jackpot tease',
+        label: 'Gameplay highlight reel',
         format: 'video',
         frequency: 44,
         hookPattern:
-          'Reel stops 1 symbol short of jackpot, voice "SO CLOSE!", cut to branded slot game, ends on "3M free coins"',
-        ctas: ['Play Free', 'Install Now'],
-      },
-    ],
-    trendingFeatures: ['Daily free spins', 'Tournament leaderboards', 'Megaways mechanics'],
-    ctaPatterns: ['Play Free', 'Install Now', 'Claim Free Coins'],
-    geoHotspots: [
-      { country: 'US', reason: 'Social casino dominant vertical', weight: 90 },
-    ],
-  },
-  Poker: {
-    topAdvertisers: [
-      {
-        name: 'PokerStars',
-        topChannels: ['YouTube', 'Twitch', 'Meta'],
-        shareOfVoice: 38,
-        topGeos: ['GB', 'DE', 'BR', 'ES'],
+          'Fast-cut gameplay footage, boss fight or big win moment, explosion of effects, "Play Free" end card with app icon',
+        ctas: ['Play Free', 'Download Now'],
       },
       {
-        name: 'GGPoker',
-        topChannels: ['Twitch', 'YouTube'],
-        shareOfVoice: 24,
-        topGeos: ['GB', 'DE', 'BR'],
-      },
-    ],
-    creativePatterns: [
-      {
-        label: 'Pro player POV hand',
+        label: 'New character/update reveal',
         format: 'video',
-        frequency: 33,
+        frequency: 26,
         hookPattern:
-          'Over-the-shoulder pro player holding pocket aces, tension music, reveal on river, branded hand history overlay',
-        ctas: ['Play Poker', 'Join a Table'],
+          'Cinematic character intro, special ability showcase, limited-time event banner, countdown timer',
+        ctas: ['Play Now', 'Join the Event'],
       },
     ],
     trendingFeatures: [
-      'Daily freeroll tournaments',
-      'Spin & Go lottery-style SNGs',
-      'Hand replay / HUD tools',
+      'Season pass and battle pass systems',
+      'Cross-platform progression',
+      'Community events with real-world rewards',
+      'AI-generated content and NPCs',
     ],
-    ctaPatterns: ['Play Poker', 'Join a Table', 'Download Now'],
+    ctaPatterns: ['Play Free', 'Download Now', 'Join the Battle', 'Play Now'],
     geoHotspots: [
-      { country: 'BR', reason: 'Fastest-growing poker market 2025', weight: 78 },
+      { country: 'US', reason: 'Largest mobile gaming revenue market', weight: 88 },
+      { country: 'JP', reason: 'High ARPU gacha market', weight: 84 },
+      { country: 'KR', reason: 'Competitive gaming culture drives installs', weight: 72 },
     ],
   },
-  Lottery: {
+  Fintech: {
     topAdvertisers: [
       {
-        name: 'Lottoland',
-        topChannels: ['Meta', 'Google Display'],
-        shareOfVoice: 31,
-        topGeos: ['GB', 'DE', 'AU'],
-      },
-    ],
-    creativePatterns: [
-      {
-        label: 'Jackpot size shock',
-        format: 'static',
-        frequency: 52,
-        hookPattern:
-          'Massive "$412,000,000" headline on dark background, ticket graphic, "Draws tonight" timer',
-        ctas: ['Buy Ticket', 'Play Now'],
-      },
-    ],
-    trendingFeatures: ['Syndicate play', 'Auto-play subscriptions', 'Instant win scratchcards'],
-    ctaPatterns: ['Buy Ticket', 'Play Now', 'Join Syndicate'],
-    geoHotspots: [
-      { country: 'DE', reason: 'Eurojackpot expansion', weight: 64 },
-    ],
-  },
-  Esports: {
-    topAdvertisers: [
-      {
-        name: 'Rivalry',
-        topChannels: ['Twitch', 'Twitter/X', 'Discord'],
-        shareOfVoice: 19,
-        topGeos: ['CA', 'DE', 'BR'],
-      },
-      {
-        name: 'Thunderpick',
-        topChannels: ['Twitch', 'Reddit'],
-        shareOfVoice: 14,
-        topGeos: ['DE', 'NL', 'BR'],
-      },
-    ],
-    creativePatterns: [
-      {
-        label: 'Match odds with hero/agent art',
-        format: 'static',
-        frequency: 47,
-        hookPattern:
-          'Team logos left/right, official hero art behind, live odds bar center, "Bet now" chip bottom',
-        ctas: ['Bet the Match', 'See Odds'],
-      },
-    ],
-    trendingFeatures: ['In-match live betting', 'CS2 round-by-round markets', 'Crypto-native deposits'],
-    ctaPatterns: ['Bet the Match', 'See Live Odds', 'Sign Up'],
-    geoHotspots: [
-      { country: 'BR', reason: 'Huge CS2 viewership base', weight: 82 },
-    ],
-  },
-  'Fantasy Sports': {
-    topAdvertisers: [
-      {
-        name: 'DraftKings DFS',
-        topChannels: ['Meta', 'YouTube'],
-        shareOfVoice: 41,
-        topGeos: ['US', 'CA'],
-      },
-      {
-        name: 'Underdog Fantasy',
-        topChannels: ['Meta', 'TikTok', 'Reddit'],
+        name: 'Revolut',
+        topChannels: ['Meta', 'Google Search', 'YouTube'],
         shareOfVoice: 22,
-        topGeos: ['US'],
+        topGeos: ['GB', 'DE', 'FR', 'PL'],
+      },
+      {
+        name: 'Cash App',
+        topChannels: ['TikTok', 'Meta', 'Twitter/X'],
+        shareOfVoice: 18,
+        topGeos: ['US', 'GB'],
+      },
+      {
+        name: 'Wise',
+        topChannels: ['Google Search', 'YouTube', 'Meta'],
+        shareOfVoice: 12,
+        topGeos: ['GB', 'US', 'AU', 'SG'],
       },
     ],
     creativePatterns: [
       {
-        label: 'Lineup builder speedrun',
-        format: 'video',
+        label: 'Fee comparison breakdown',
+        format: 'static',
         frequency: 36,
         hookPattern:
-          'Phone screen recording: user drafts 6 players in under 15 seconds, confetti on submit',
-        ctas: ['Draft Your Team', 'Play For Free'],
+          'Side-by-side comparison: bank fee vs app fee, large savings number highlighted, trust badges, "Switch now" CTA',
+        ctas: ['Switch Now', 'Save More'],
+      },
+      {
+        label: 'Instant transfer demo',
+        format: 'video',
+        frequency: 30,
+        hookPattern:
+          'Phone screen showing money sent in 3 taps, confetti animation on success, recipient notification preview, speed metric overlay',
+        ctas: ['Send Money Free', 'Get Started'],
       },
     ],
-    trendingFeatures: ['Pick\'em contests (vs survivor pools)', 'Same-game pick bundles', 'Instant payouts'],
-    ctaPatterns: ['Draft Now', 'Play Free Contest', 'Enter Lineup'],
+    trendingFeatures: [
+      'Instant cross-border transfers',
+      'Multi-currency accounts',
+      'Budgeting and savings vaults',
+      'Crypto trading integration',
+    ],
+    ctaPatterns: ['Get Started', 'Open Free Account', 'Switch Now', 'Send Money Free'],
     geoHotspots: [
-      { country: 'US', reason: 'Pick\'em legal workaround rollout', weight: 88 },
+      { country: 'GB', reason: 'Open banking regulation drives fintech adoption', weight: 85 },
+      { country: 'BR', reason: 'PIX and fintech-friendly regulation', weight: 78 },
     ],
   },
-  Bingo: {
+  'Health & Wellness': {
     topAdvertisers: [
       {
-        name: 'Tombola',
-        topChannels: ['TV', 'Meta', 'YouTube'],
-        shareOfVoice: 36,
-        topGeos: ['GB', 'IT', 'ES'],
+        name: 'Peloton',
+        topChannels: ['Meta', 'YouTube', 'Google Search'],
+        shareOfVoice: 19,
+        topGeos: ['US', 'GB', 'CA', 'DE'],
+      },
+      {
+        name: 'Noom',
+        topChannels: ['Meta', 'Google Search', 'YouTube'],
+        shareOfVoice: 15,
+        topGeos: ['US', 'GB', 'AU'],
       },
     ],
     creativePatterns: [
       {
-        label: 'Community chat highlight',
+        label: 'Transformation story testimonial',
         format: 'video',
-        frequency: 29,
+        frequency: 39,
         hookPattern:
-          'Players chatting in-app while numbers are called, warm lo-fi music, ends on "Come join us tonight"',
-        ctas: ['Play Bingo', 'Join the Room'],
+          'Real user telling their journey, before/after photos, emotional music, coach interaction clip, "Start today" end card',
+        ctas: ['Start Your Journey', 'Take the Quiz'],
       },
     ],
-    trendingFeatures: ['Themed bingo rooms', 'Chat host hosts', '90-ball + 75-ball hybrid rooms'],
-    ctaPatterns: ['Play Bingo', 'Join the Room', 'Claim Free Tickets'],
+    trendingFeatures: [
+      'AI-personalized meal and workout plans',
+      'Wearable device integration',
+      'Community challenges and leaderboards',
+      'Telehealth consultations',
+    ],
+    ctaPatterns: ['Start Your Journey', 'Take the Quiz', 'Try Free for 7 Days', 'Join Now'],
     geoHotspots: [
-      { country: 'GB', reason: 'Core bingo audience', weight: 90 },
+      { country: 'US', reason: 'Largest health and wellness app market', weight: 88 },
     ],
   },
-  'Live Dealer': {
+  EdTech: {
     topAdvertisers: [
       {
-        name: 'Evolution Gaming (operators)',
-        topChannels: ['Meta', 'YouTube'],
+        name: 'Coursera',
+        topChannels: ['Google Search', 'YouTube', 'LinkedIn'],
+        shareOfVoice: 23,
+        topGeos: ['US', 'IN', 'BR', 'GB'],
+      },
+      {
+        name: 'MasterClass',
+        topChannels: ['YouTube', 'Meta', 'Podcast'],
+        shareOfVoice: 16,
+        topGeos: ['US', 'GB', 'CA'],
+      },
+    ],
+    creativePatterns: [
+      {
+        label: 'Instructor spotlight clip',
+        format: 'video',
+        frequency: 34,
+        hookPattern:
+          'Famous instructor speaking to camera, quick cuts of course content, student success metrics overlay, enrollment CTA',
+        ctas: ['Enroll Free', 'Start Learning'],
+      },
+    ],
+    trendingFeatures: [
+      'AI-powered adaptive learning paths',
+      'Micro-credentials and digital badges',
+      'Cohort-based live courses',
+      'Enterprise team licensing',
+    ],
+    ctaPatterns: ['Enroll Free', 'Start Learning', 'Explore Courses', 'Get Certified'],
+    geoHotspots: [
+      { country: 'IN', reason: 'Massive demand for online upskilling', weight: 90 },
+      { country: 'US', reason: 'Corporate learning budget expansion', weight: 82 },
+    ],
+  },
+  'Food & Delivery': {
+    topAdvertisers: [
+      {
+        name: 'DoorDash',
+        topChannels: ['Meta', 'TikTok', 'Google Search'],
+        shareOfVoice: 24,
+        topGeos: ['US', 'CA', 'AU', 'JP'],
+      },
+      {
+        name: 'Uber Eats',
+        topChannels: ['Meta', 'YouTube', 'TikTok'],
+        shareOfVoice: 20,
+        topGeos: ['US', 'GB', 'MX', 'JP'],
+      },
+    ],
+    creativePatterns: [
+      {
+        label: 'Craving trigger close-up',
+        format: 'video',
+        frequency: 45,
+        hookPattern:
+          'Extreme close-up of food being prepared, steam and sizzle sounds, delivery countdown overlay, "Order now" CTA card',
+        ctas: ['Order Now', 'Get $10 Off'],
+      },
+    ],
+    trendingFeatures: [
+      'Subscription-based free delivery',
+      'Real-time driver tracking',
+      'Group ordering and split payments',
+      'AI-curated restaurant recommendations',
+    ],
+    ctaPatterns: ['Order Now', 'Get $10 Off', 'Free Delivery Today', 'Try DashPass Free'],
+    geoHotspots: [
+      { country: 'US', reason: 'Largest food delivery market by revenue', weight: 92 },
+    ],
+  },
+  'Travel & Hospitality': {
+    topAdvertisers: [
+      {
+        name: 'Booking.com',
+        topChannels: ['Google Search', 'Meta', 'YouTube'],
         shareOfVoice: 28,
-        topGeos: ['GB', 'DE', 'CA'],
+        topGeos: ['US', 'GB', 'DE', 'FR'],
+      },
+      {
+        name: 'Airbnb',
+        topChannels: ['Meta', 'YouTube', 'TikTok'],
+        shareOfVoice: 21,
+        topGeos: ['US', 'FR', 'IT', 'ES'],
       },
     ],
     creativePatterns: [
       {
-        label: 'Dealer ASMR intro',
+        label: 'Dream destination reveal',
         format: 'video',
-        frequency: 31,
+        frequency: 37,
         hookPattern:
-          'Close-up of dealer shuffling cards, warm lighting, invites viewer directly to camera, card flip on CTA',
-        ctas: ['Play Live', 'Take a Seat'],
+          'Drone footage of stunning destination, price overlay animation, calendar showing availability, "Book now" button pulse',
+        ctas: ['Book Now', 'Explore Deals'],
       },
     ],
-    trendingFeatures: ['Crazy Time game show', 'Lightning Roulette multipliers', 'Dual-camera tables'],
-    ctaPatterns: ['Play Live', 'Take a Seat', 'Join the Table'],
+    trendingFeatures: [
+      'Flexible cancellation policies',
+      'AI trip planning assistants',
+      'Price match guarantees',
+      'Loyalty points and tier rewards',
+    ],
+    ctaPatterns: ['Book Now', 'Explore Deals', 'Find Your Stay', 'Check Availability'],
     geoHotspots: [
-      { country: 'DE', reason: 'Live dealer remains legal under new framework', weight: 66 },
+      { country: 'US', reason: 'Largest outbound travel market', weight: 88 },
+      { country: 'DE', reason: 'Highest travel spend per capita in Europe', weight: 71 },
     ],
   },
-  'Crash Games': {
+  'Media & Entertainment': {
     topAdvertisers: [
       {
-        name: 'Stake',
-        topChannels: ['Twitch', 'YouTube', 'Twitter/X'],
-        shareOfVoice: 44,
-        topGeos: ['BR', 'CA', 'DE'],
+        name: 'Spotify',
+        topChannels: ['Meta', 'TikTok', 'YouTube'],
+        shareOfVoice: 25,
+        topGeos: ['US', 'GB', 'BR', 'DE'],
       },
       {
-        name: 'Roobet',
-        topChannels: ['Twitch', 'Kick'],
-        shareOfVoice: 21,
-        topGeos: ['CA', 'BR'],
+        name: 'Netflix',
+        topChannels: ['YouTube', 'Meta', 'Twitter/X'],
+        shareOfVoice: 20,
+        topGeos: ['US', 'GB', 'BR', 'IN'],
       },
     ],
     creativePatterns: [
       {
-        label: 'Multiplier climb screenshot',
-        format: 'static',
-        frequency: 49,
+        label: 'Exclusive content teaser',
+        format: 'video',
+        frequency: 41,
         hookPattern:
-          'Game UI at 127.45x multiplier, "cashed out" tag, side panel showing +$12,745, bright colors',
-        ctas: ['Play Crash', 'Sign Up & Play'],
+          'Quick-cut montage of original content, dramatic music, "Only on [Platform]" branding, release date countdown',
+        ctas: ['Watch Now', 'Start Free Trial'],
       },
     ],
-    trendingFeatures: ['Auto cashout rules', 'Bankroll streaming on Twitch', 'Multi-bet strategies'],
-    ctaPatterns: ['Play Crash', 'Join the Game', 'Sign Up & Play'],
+    trendingFeatures: [
+      'Ad-supported free tiers',
+      'Personalized content recommendations',
+      'Offline download capabilities',
+      'Social sharing and watch parties',
+    ],
+    ctaPatterns: ['Watch Now', 'Start Free Trial', 'Subscribe', 'Explore Content'],
     geoHotspots: [
-      { country: 'BR', reason: 'Crash is the top Brazilian iGaming category', weight: 93 },
+      { country: 'US', reason: 'Streaming wars drive aggressive UA spend', weight: 90 },
+      { country: 'IN', reason: 'Fastest-growing streaming subscriber base', weight: 82 },
     ],
   },
 }

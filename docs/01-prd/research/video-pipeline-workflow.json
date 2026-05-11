@@ -1,0 +1,426 @@
+{
+  "name": "moboost-video-pipeline-v1",
+  "nodes": [
+    {
+      "id": "1a2b3c4d-0001-0000-0000-000000000001",
+      "name": "Webhook 入口",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "video-pipeline",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "notes": "接收 moboost 后端 POST: { jobId, script, language, scene_count_hint, budget_mode, voice_persona, role_id }"
+    },
+    {
+      "id": "1a2b3c4d-0002-0000-0000-000000000002",
+      "name": "LLM 拆分镜 (OpenRouter)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [480, 300],
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "=Bearer {{$env.OPENROUTER_API_KEY}}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "bodyContentType": "json",
+        "jsonBody": "={\n  \"model\": \"anthropic/claude-sonnet-4.6\",\n  \"messages\": [\n    {\"role\": \"system\", \"content\": \"你是视频分镜规划师。把用户脚本拆成 6-10 个 5-8s 的分镜。严格输出 JSON 数组,每个 scene 含字段:scene_id,prompt(英文,描述画面),motion_prompt(英文,描述运动),duration_sec,transition_type(cut|fade|start_end),role_id,voiceover_text(原语种,留空表示无口播)。\"},\n    {\"role\": \"user\", \"content\": $json.script}\n  ],\n  \"response_format\": {\"type\": \"json_object\"}\n}"
+      },
+      "notes": "输出 JSON: {scenes:[{scene_id,prompt,motion_prompt,duration_sec,transition_type,role_id,voiceover_text}]}"
+    },
+    {
+      "id": "1a2b3c4d-0003-0000-0000-000000000003",
+      "name": "解析分镜",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [720, 300],
+      "parameters": {
+        "jsCode": "// 从 LLM 回包提取 scenes 数组\nconst raw = $input.first().json.choices[0].message.content;\nlet parsed;\ntry { parsed = JSON.parse(raw); } catch(e) { throw new Error('SCENE_PARSE_FAIL: ' + e.message); }\nconst scenes = parsed.scenes || [];\nif (!scenes.length) throw new Error('NO_SCENES');\n// 注入 jobId、retry 计数、基准帧占位\nreturn scenes.map((s, idx) => ({\n  json: {\n    ...s,\n    jobId: $('Webhook 入口').first().json.body.jobId,\n    sceneIndex: idx,\n    keyframeRetry: 0,\n    videoRetry: 0,\n    videoProvider: 'kling'\n  }\n}));"
+      }
+    },
+    {
+      "id": "1a2b3c4d-0004-0000-0000-000000000004",
+      "name": "按分镜循环",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [960, 300],
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      }
+    },
+    {
+      "id": "1a2b3c4d-0005-0000-0000-000000000005",
+      "name": "Nano Banana 出关键帧",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1200, 200],
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "x-goog-api-key", "value": "={{$env.GOOGLE_AI_KEY}}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "bodyContentType": "json",
+        "jsonBody": "={\n  \"contents\": [{\n    \"parts\": [\n      {\"text\": \"Generate two reference frames (start frame and end frame) for a 6-second video shot. \" + $json.prompt + \" Motion: \" + $json.motion_prompt + \". Maintain character consistency with role_id=\" + $json.role_id + \". Output 1024x1024.\"}\n    ]\n  }],\n  \"generationConfig\": {\"responseModalities\": [\"IMAGE\"]}\n}",
+        "options": { "timeout": 60000 }
+      },
+      "notes": "出 start_frame + end_frame。中文 prompt 场景可路由到 Seedream(火山引擎 OpenAPI)。"
+    },
+    {
+      "id": "1a2b3c4d-0006-0000-0000-000000000006",
+      "name": "CLIP 一致性质检",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1440, 200],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.replicate.com/v1/predictions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "=Token {{$env.REPLICATE_API_KEY}}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "bodyContentType": "json",
+        "jsonBody": "={\n  \"version\": \"openclip-vit-l-14\",\n  \"input\": {\n    \"image_a\": $json.start_frame_url,\n    \"image_b\": $json.baseline_frame_url\n  }\n}"
+      },
+      "notes": "返回 similarity ∈ [0,1]。阈值 0.75。"
+    },
+    {
+      "id": "1a2b3c4d-0007-0000-0000-000000000007",
+      "name": "关键帧合格?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1680, 200],
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{$json.similarity}}",
+              "rightValue": 0.75,
+              "operator": { "type": "number", "operation": "gte" }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "1a2b3c4d-0008-0000-0000-000000000008",
+      "name": "重抽关键帧?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1680, 380],
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{$json.keyframeRetry}}",
+              "rightValue": 3,
+              "operator": { "type": "number", "operation": "lt" }
+            }
+          ]
+        }
+      },
+      "notes": "<3 走 true(重抽), >=3 走 false(直接放过 + 标记降级)"
+    },
+    {
+      "id": "1a2b3c4d-0009-0000-0000-000000000009",
+      "name": "Kling 图生视频 (主)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1920, 200],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.klingai.com/v1/videos/image2video",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "=Bearer {{$env.KLING_API_KEY}}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "bodyContentType": "json",
+        "jsonBody": "={\n  \"model_name\": \"kling-v2-6-pro\",\n  \"image\": $json.start_frame_url,\n  \"image_tail\": $json.transition_type === 'start_end' ? $json.end_frame_url : null,\n  \"prompt\": $json.motion_prompt,\n  \"duration\": $json.duration_sec || 6,\n  \"cfg_scale\": 0.5,\n  \"aspect_ratio\": \"16:9\"\n}",
+        "options": { "timeout": 30000 }
+      }
+    },
+    {
+      "id": "1a2b3c4d-000a-0000-0000-00000000000a",
+      "name": "轮询 Kling 任务",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [2160, 200],
+      "parameters": {
+        "method": "GET",
+        "url": "=https://api.klingai.com/v1/videos/image2video/{{$json.task_id}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "=Bearer {{$env.KLING_API_KEY}}" }
+          ]
+        },
+        "options": { "timeout": 30000 }
+      },
+      "notes": "实际部署需配 wait + loop until status=succeed,这里展示骨架"
+    },
+    {
+      "id": "1a2b3c4d-000b-0000-0000-00000000000b",
+      "name": "VLM 视频质检 (Gemini Flash)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [2400, 200],
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "=Bearer {{$env.OPENROUTER_API_KEY}}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "bodyContentType": "json",
+        "jsonBody": "={\n  \"model\": \"google/gemini-2.5-flash\",\n  \"messages\": [\n    {\"role\": \"user\", \"content\": [\n      {\"type\": \"text\", \"text\": \"判断下面 4 帧是否符合分镜描述。描述: \" + $json.prompt + \"。运动: \" + $json.motion_prompt + \"。只输出 JSON {pass:bool, reason:string}。\"},\n      {\"type\": \"image_url\", \"image_url\": {\"url\": $json.frame_0}},\n      {\"type\": \"image_url\", \"image_url\": {\"url\": $json.frame_1}},\n      {\"type\": \"image_url\", \"image_url\": {\"url\": $json.frame_2}},\n      {\"type\": \"image_url\", \"image_url\": {\"url\": $json.frame_3}}\n    ]}\n  ],\n  \"response_format\": {\"type\": \"json_object\"}\n}"
+      },
+      "notes": "前置:Code 节点跑 ffmpeg 抽 4 帧上传 Supabase 拿 url。"
+    },
+    {
+      "id": "1a2b3c4d-000c-0000-0000-00000000000c",
+      "name": "视频合格?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [2640, 200],
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{$json.vlm_pass}}",
+              "rightValue": true,
+              "operator": { "type": "boolean", "operation": "equals" }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "1a2b3c4d-000d-0000-0000-00000000000d",
+      "name": "切换到 Seedance 重抽",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2640, 380],
+      "parameters": {
+        "jsCode": "// 视频质检失败 → 切下一备选模型重抽\nconst providers = ['kling', 'seedance', 'wan'];\nconst current = $json.videoProvider;\nconst nextIdx = providers.indexOf(current) + 1;\nif (nextIdx >= providers.length || $json.videoRetry >= 2) {\n  // 兜底失败,标记降级\n  return [{json: {...$json, videoFallbackExhausted: true}}];\n}\nreturn [{json: {...$json, videoProvider: providers[nextIdx], videoRetry: $json.videoRetry + 1}}];"
+      },
+      "notes": "失败后切换到 Seedance 2.0 → Wan 2.6 兜底。具体 HTTP Request 在生产 workflow 中按 videoProvider 路由。"
+    },
+    {
+      "id": "1a2b3c4d-000e-0000-0000-00000000000e",
+      "name": "聚合所有分镜",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [2880, 300],
+      "parameters": {
+        "mode": "combine",
+        "combinationMode": "mergeByIndex"
+      }
+    },
+    {
+      "id": "1a2b3c4d-000f-0000-0000-00000000000f",
+      "name": "MiniMax TTS (中文)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [3120, 200],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.minimax.chat/v1/t2a_v2",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "=Bearer {{$env.MINIMAX_API_KEY}}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "bodyContentType": "json",
+        "jsonBody": "={\n  \"model\": \"speech-02-hd\",\n  \"text\": $json.fullVoiceoverText,\n  \"voice_setting\": {\"voice_id\": $json.voice_persona || \"female-shaonv\", \"speed\": 1.0},\n  \"audio_setting\": {\"sample_rate\": 32000, \"bitrate\": 128000, \"format\": \"mp3\"}\n}"
+      },
+      "notes": "英文场景路由到 ElevenLabs。判断条件用前置 IF 节点。"
+    },
+    {
+      "id": "1a2b3c4d-0010-0000-0000-000000000010",
+      "name": "FFmpeg 拼接",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [3360, 300],
+      "parameters": {
+        "command": "=ffmpeg -y -f concat -safe 0 -i {{$json.scene_list_txt}} -i {{$json.tts_audio_path}} -c:v libx264 -pix_fmt yuv420p -c:a aac -shortest -movflags +faststart /tmp/{{$json.jobId}}.mp4 && echo /tmp/{{$json.jobId}}.mp4"
+      },
+      "notes": "n8n self-host 节点机器需装 ffmpeg。或通过 Code 节点 spawn child_process。"
+    },
+    {
+      "id": "1a2b3c4d-0011-0000-0000-000000000011",
+      "name": "上传 Supabase Storage",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [3600, 300],
+      "parameters": {
+        "method": "POST",
+        "url": "=https://{{$env.SUPABASE_PROJECT}}.supabase.co/storage/v1/object/video-pipeline/{{$json.jobId}}.mp4",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "=Bearer {{$env.SUPABASE_SERVICE_KEY}}" },
+            { "name": "Content-Type", "value": "video/mp4" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "binaryData",
+        "binaryPropertyName": "data"
+      }
+    },
+    {
+      "id": "1a2b3c4d-0012-0000-0000-000000000012",
+      "name": "回调 moboost 后端",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [3840, 300],
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.MOBOOST_CALLBACK_URL}}/api/video-pipeline/callback",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "=Bearer {{$env.MOBOOST_CALLBACK_TOKEN}}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "bodyContentType": "json",
+        "jsonBody": "={\n  \"jobId\": $json.jobId,\n  \"status\": \"completed\",\n  \"video_url\": $json.public_url,\n  \"sceneStatuses\": $json.sceneStatuses,\n  \"cost_usd\": $json.cost_usd,\n  \"duration_sec\": $json.duration_sec\n}"
+      }
+    },
+    {
+      "id": "1a2b3c4d-0013-0000-0000-000000000013",
+      "name": "Webhook 同步响应",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [480, 540],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"jobId\": $('Webhook 入口').first().json.body.jobId,\n  \"status\": \"accepted\",\n  \"message\": \"video-pipeline started\"\n}"
+      },
+      "notes": "Webhook 接收后立刻 ACK,后续走异步回调,避免长连接超时。"
+    }
+  ],
+  "connections": {
+    "Webhook 入口": {
+      "main": [
+        [
+          { "node": "Webhook 同步响应", "type": "main", "index": 0 },
+          { "node": "LLM 拆分镜 (OpenRouter)", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "LLM 拆分镜 (OpenRouter)": {
+      "main": [[{ "node": "解析分镜", "type": "main", "index": 0 }]]
+    },
+    "解析分镜": {
+      "main": [[{ "node": "按分镜循环", "type": "main", "index": 0 }]]
+    },
+    "按分镜循环": {
+      "main": [
+        [{ "node": "Nano Banana 出关键帧", "type": "main", "index": 0 }],
+        [{ "node": "聚合所有分镜", "type": "main", "index": 0 }]
+      ]
+    },
+    "Nano Banana 出关键帧": {
+      "main": [[{ "node": "CLIP 一致性质检", "type": "main", "index": 0 }]]
+    },
+    "CLIP 一致性质检": {
+      "main": [[{ "node": "关键帧合格?", "type": "main", "index": 0 }]]
+    },
+    "关键帧合格?": {
+      "main": [
+        [{ "node": "Kling 图生视频 (主)", "type": "main", "index": 0 }],
+        [{ "node": "重抽关键帧?", "type": "main", "index": 0 }]
+      ]
+    },
+    "重抽关键帧?": {
+      "main": [
+        [{ "node": "Nano Banana 出关键帧", "type": "main", "index": 0 }],
+        [{ "node": "Kling 图生视频 (主)", "type": "main", "index": 0 }]
+      ]
+    },
+    "Kling 图生视频 (主)": {
+      "main": [[{ "node": "轮询 Kling 任务", "type": "main", "index": 0 }]]
+    },
+    "轮询 Kling 任务": {
+      "main": [[{ "node": "VLM 视频质检 (Gemini Flash)", "type": "main", "index": 0 }]]
+    },
+    "VLM 视频质检 (Gemini Flash)": {
+      "main": [[{ "node": "视频合格?", "type": "main", "index": 0 }]]
+    },
+    "视频合格?": {
+      "main": [
+        [{ "node": "按分镜循环", "type": "main", "index": 0 }],
+        [{ "node": "切换到 Seedance 重抽", "type": "main", "index": 0 }]
+      ]
+    },
+    "切换到 Seedance 重抽": {
+      "main": [[{ "node": "Kling 图生视频 (主)", "type": "main", "index": 0 }]]
+    },
+    "聚合所有分镜": {
+      "main": [[{ "node": "MiniMax TTS (中文)", "type": "main", "index": 0 }]]
+    },
+    "MiniMax TTS (中文)": {
+      "main": [[{ "node": "FFmpeg 拼接", "type": "main", "index": 0 }]]
+    },
+    "FFmpeg 拼接": {
+      "main": [[{ "node": "上传 Supabase Storage", "type": "main", "index": 0 }]]
+    },
+    "上传 Supabase Storage": {
+      "main": [[{ "node": "回调 moboost 后端", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveExecutionProgress": true,
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "staticData": null,
+  "tags": [
+    { "name": "moboost-maas" },
+    { "name": "video-pipeline" },
+    { "name": "v1.0" }
+  ],
+  "pinData": {},
+  "versionId": "moboost-vp-2026-04-27-v1",
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "description": "moboost-maas video-pipeline v1.0 原型。涵盖:LLM 拆分镜 → Nano Banana 关键帧 → CLIP 质检 → Kling 图生视频 → VLM 抽帧质检 → 失败兜底 Seedance/Wan → MiniMax TTS → FFmpeg 拼接 → Supabase 上传 → 回调。需要的环境变量见 PRD docs/01-prd/video-pipeline.md §7。生产前必须:1) 把轮询 Kling 任务节点用 Wait+Loop 包成等到 status=succeed;2) 增加 cost 累计与 MAX_COST_USD 熔断;3) 增加 NSFW 检测节点;4) 把 Seedance/Wan 真实 HTTP Request 节点按 videoProvider 字段路由生成。"
+  }
+}

@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paws Delight — Premium Cat Nutrition</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #FFF9F5;
+    color: #2D2D2D;
+    max-width: 390px;
+    margin: 0 auto;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Hero Banner */
+  .hero {
+    position: relative;
+    width: 100%;
+    height: 420px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #FF6B35 0%, #FF8F5E 50%, #FFA87A 100%);
+  }
+  .hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.92;
+  }
+  .hero-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 30px 20px 20px;
+    background: linear-gradient(transparent, rgba(0,0,0,0.65));
+  }
+  .hero-badge {
+    display: inline-block;
+    background: #FF6B35;
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+  .hero-title {
+    font-size: 26px;
+    font-weight: 800;
+    color: white;
+    line-height: 1.15;
+    margin-bottom: 6px;
+  }
+  .hero-subtitle {
+    font-size: 14px;
+    color: rgba(255,255,255,0.85);
+    font-weight: 400;
+  }
+
+  /* Brand Bar */
+  .brand-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 20px;
+    background: white;
+    border-bottom: 1px solid #F0E8E3;
+  }
+  .brand-logo {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #FF6B35, #2D5016);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  .brand-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: #2D2D2D;
+  }
+  .brand-tag {
+    font-size: 11px;
+    color: #888;
+  }
+  .brand-follow {
+    margin-left: auto;
+    background: #FF6B35;
+    color: white;
+    border: none;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  /* Section */
+  .section {
+    padding: 24px 20px;
+  }
+  .section-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #2D2D2D;
+    margin-bottom: 4px;
+  }
+  .section-desc {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+
+  /* Product Cards */
+  .products {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .product-card {
+    display: flex;
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    border: 1px solid #F0E8E3;
+  }
+  .product-img {
+    width: 110px;
+    min-height: 110px;
+    background: linear-gradient(135deg, #FFE0CC, #FFF0E6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 42px;
+    flex-shrink: 0;
+  }
+  .product-info {
+    flex: 1;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .product-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: #2D2D2D;
+    margin-bottom: 4px;
+  }
+  .product-detail {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 8px;
+    line-height: 1.4;
+  }
+  .product-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .product-price {
+    font-size: 18px;
+    font-weight: 800;
+    color: #FF6B35;
+  }
+  .product-price span {
+    font-size: 12px;
+    color: #AAA;
+    font-weight: 400;
+    text-decoration: line-through;
+    margin-left: 6px;
+  }
+  .product-add {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #FF6B35;
+    color: white;
+    border: none;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  /* Benefits */
+  .benefits {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 0 20px 24px;
+  }
+  .benefit {
+    background: white;
+    border-radius: 14px;
+    padding: 16px;
+    text-align: center;
+    border: 1px solid #F0E8E3;
+  }
+  .benefit-icon {
+    font-size: 28px;
+    margin-bottom: 8px;
+  }
+  .benefit-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #2D2D2D;
+    line-height: 1.3;
+  }
+
+  /* Review */
+  .review {
+    margin: 0 20px 20px;
+    background: white;
+    border-radius: 16px;
+    padding: 18px;
+    border: 1px solid #F0E8E3;
+  }
+  .review-stars {
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+  .review-text {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.5;
+    font-style: italic;
+    margin-bottom: 8px;
+  }
+  .review-author {
+    font-size: 12px;
+    color: #999;
+    font-weight: 500;
+  }
+
+  /* CTA */
+  .cta-bar {
+    position: sticky;
+    bottom: 0;
+    background: white;
+    padding: 14px 20px;
+    border-top: 1px solid #F0E8E3;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
+  }
+  .cta-btn {
+    display: block;
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #FF6B35, #E85A25);
+    color: white;
+    border: none;
+    border-radius: 14px;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    letter-spacing: 0.3px;
+  }
+  .cta-sub {
+    text-align: center;
+    font-size: 11px;
+    color: #999;
+    margin-top: 6px;
+  }
+
+  /* Placeholder image patterns */
+  .hero-placeholder {
+    width: 100%;
+    height: 100%;
+    background:
+      radial-gradient(ellipse at 30% 60%, rgba(255,107,53,0.3) 0%, transparent 60%),
+      radial-gradient(ellipse at 70% 40%, rgba(45,80,22,0.2) 0%, transparent 50%),
+      linear-gradient(180deg, #FFE8D6 0%, #FFF5ED 50%, #FFE0CC 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .hero-cat {
+    font-size: 80px;
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.15));
+  }
+  .hero-bowl {
+    font-size: 36px;
+    margin-top: -10px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-placeholder">
+    <div class="hero-cat">🐱</div>
+    <div class="hero-bowl">🍣🐟</div>
+  </div>
+  <div class="hero-overlay">
+    <div class="hero-badge">New Collection</div>
+    <h1 class="hero-title">Premium Cat<br>Nutrition Plan</h1>
+    <p class="hero-subtitle">Tailored meals for your Siamese's unique needs</p>
+  </div>
+</div>
+
+<!-- Brand Bar -->
+<div class="brand-bar">
+  <div class="brand-logo">🐾</div>
+  <div>
+    <div class="brand-name">Paws Delight</div>
+    <div class="brand-tag">Official Store</div>
+  </div>
+  <button class="brand-follow">Follow</button>
+</div>
+
+<!-- Products Section -->
+<div class="section">
+  <h2 class="section-title">Curated for Siamese Cats</h2>
+  <p class="section-desc">Vet-approved nutrition plans designed specifically for your cat's breed, age, and preferences.</p>
+
+  <div class="products">
+    <div class="product-card">
+      <div class="product-img">🐟</div>
+      <div class="product-info">
+        <div class="product-name">Ocean Fish Feast</div>
+        <div class="product-detail">Wild-caught tuna & salmon blend. Rich in Omega-3 for coat health.</div>
+        <div class="product-bottom">
+          <div class="product-price">$24.99 <span>$34.99</span></div>
+          <button class="product-add">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img">🍗</div>
+      <div class="product-info">
+        <div class="product-name">Chicken & Rice Bowl</div>
+        <div class="product-detail">Free-range chicken with brown rice. Gentle on sensitive stomachs.</div>
+        <div class="product-bottom">
+          <div class="product-price">$19.99 <span>$28.99</span></div>
+          <button class="product-add">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img">🥩</div>
+      <div class="product-info">
+        <div class="product-name">Grain-Free Venison</div>
+        <div class="product-detail">Premium venison pate. Zero grains, zero fillers. Pure protein.</div>
+        <div class="product-bottom">
+          <div class="product-price">$29.99 <span>$39.99</span></div>
+          <button class="product-add">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Benefits -->
+<div class="benefits">
+  <div class="benefit">
+    <div class="benefit-icon">🩺</div>
+    <div class="benefit-label">Vet<br>Approved</div>
+  </div>
+  <div class="benefit">
+    <div class="benefit-icon">🌿</div>
+    <div class="benefit-label">100%<br>Natural</div>
+  </div>
+  <div class="benefit">
+    <div class="benefit-icon">📦</div>
+    <div class="benefit-label">Free<br>Delivery</div>
+  </div>
+  <div class="benefit">
+    <div class="benefit-icon">💰</div>
+    <div class="benefit-label">Subscribe<br>& Save 30%</div>
+  </div>
+</div>
+
+<!-- Review -->
+<div class="review">
+  <div class="review-stars">⭐⭐⭐⭐⭐</div>
+  <div class="review-text">"My Siamese Mochi has never been this excited about mealtime! The Ocean Fish Feast is his absolute favorite."</div>
+  <div class="review-author">— Emily T., verified buyer</div>
+</div>
+
+<!-- CTA -->
+<div class="cta-bar">
+  <button class="cta-btn">Shop Now</button>
+  <div class="cta-sub">Free shipping on orders over $35 · 30-day guarantee</div>
+</div>
+
+</body>
+</html>

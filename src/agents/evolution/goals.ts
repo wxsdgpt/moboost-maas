@@ -2,31 +2,31 @@
  * Evolution Goals Framework — WHY / HOW / WHAT
  * ===============================================
  *
- * 核心目标: 在MarTech市场上生成效果最符合客户预期的产品，
- *           能够伴随每个客户不断成长的系统。
+ * Core objective: Generate products in the MarTech market that best match
+ *                 client expectations — a system that grows with each client.
  *
- * 三层模型:
+ * Three-layer model:
  *
- *   WHY（为什么用我们）
- *   └── 用户选择Moboost而不是其他工具的根本原因
- *       - 理解客户意图的准确度
- *       - 生成结果与客户期望的匹配度
- *       - 随使用次数增长的个性化程度
+ *   WHY (why choose us)
+ *   └── The fundamental reason users choose Moboost over other tools
+ *       - Accuracy of understanding client intent
+ *       - Match between generated results and client expectations
+ *       - Degree of personalization that grows with usage
  *
- *   HOW（怎么用我们）
- *   └── 用户与平台交互的体验质量
- *       - 从brief到产出的速度
- *       - 交互轮次的简洁度（越少越好）
- *       - 修改成本（用户需要改多少才满意）
+ *   HOW (how to use us)
+ *   └── Quality of user interaction with the platform
+ *       - Speed from brief to output
+ *       - Conciseness of interaction rounds (fewer is better)
+ *       - Modification cost (how much the user needs to change to be satisfied)
  *
- *   WHAT（用哪些功能）
- *   └── 具体功能的业务成功率和能力覆盖
- *       - 各Agent的accept rate
- *       - 信息准确性（合规、市场数据、本地化）
- *       - 能力覆盖面（支持的市场/语言/素材类型）
+ *   WHAT (which features to use)
+ *   └── Business success rate and capability coverage of specific features
+ *       - Accept rate of each Agent
+ *       - Information accuracy (compliance, market data, localization)
+ *       - Capability coverage (supported markets / languages / asset types)
  *
- * 注意：系统内部成本（token数、LLM调用数）不是进化目标。
- * 用户可感知的：更高质量、更准信息、更快速度——这些才是。
+ * Note: Internal system costs (token count, LLM call count) are NOT evolution goals.
+ * What users can perceive — higher quality, more accurate information, faster speed — those are.
  */
 
 import { supabaseService } from '@/lib/db'
@@ -76,11 +76,11 @@ export interface GoalVerification {
 // ─── Default Goals ───────────────────────────────────────────────────
 
 export const DEFAULT_GOALS: Omit<EvolutionGoal, 'id' | 'currentValue' | 'updatedAt'>[] = [
-  // WHY — 为什么用我们
+  // WHY — why choose us
   {
     layer: 'why',
-    name: '意图理解准确度',
-    description: '用户brief被正确理解的比例。以首次生成不需要重新解释brief来衡量。',
+    name: 'Intent Understanding Accuracy',
+    description: 'Proportion of user briefs correctly understood. Measured by whether the first generation requires re-explanation of the brief.',
     metric: 'intent_accuracy',
     targetValue: 0.9,
     unit: 'rate',
@@ -90,8 +90,8 @@ export const DEFAULT_GOALS: Omit<EvolutionGoal, 'id' | 'currentValue' | 'updated
   },
   {
     layer: 'why',
-    name: '期望匹配度',
-    description: '生成结果与客户预期的匹配度。以accept+轻微modify（非重写）来衡量。',
+    name: 'Expectation Match Rate',
+    description: 'Match between generated results and client expectations. Measured by accept + light modify (not rewrite).',
     metric: 'expectation_match',
     targetValue: 0.85,
     unit: 'rate',
@@ -101,8 +101,8 @@ export const DEFAULT_GOALS: Omit<EvolutionGoal, 'id' | 'currentValue' | 'updated
   },
   {
     layer: 'why',
-    name: '客户成长性',
-    description: '同一客户随使用次数增长，accept rate是否上升。衡量系统是否在学习客户偏好。',
+    name: 'Client Growth',
+    description: 'Whether a client\'s accept rate increases with usage over time. Measures if the system is learning client preferences.',
     metric: 'client_growth_slope',
     targetValue: 0.05,
     unit: 'slope',
@@ -111,11 +111,11 @@ export const DEFAULT_GOALS: Omit<EvolutionGoal, 'id' | 'currentValue' | 'updated
     active: true,
   },
 
-  // HOW — 怎么用我们
+  // HOW — how to use us
   {
     layer: 'how',
-    name: '生成速度',
-    description: '从提交brief到产出结果的平均耗时。',
+    name: 'Generation Speed',
+    description: 'Average time from brief submission to result output.',
     metric: 'avg_generation_seconds',
     targetValue: 30,
     unit: 'seconds',
@@ -125,8 +125,8 @@ export const DEFAULT_GOALS: Omit<EvolutionGoal, 'id' | 'currentValue' | 'updated
   },
   {
     layer: 'how',
-    name: '交互轮次',
-    description: '用户从开始到满意所需的平均交互轮次（clarify+modify）。',
+    name: 'Interaction Rounds',
+    description: 'Average number of interaction rounds (clarify + modify) needed from start to user satisfaction.',
     metric: 'avg_interaction_rounds',
     targetValue: 1.5,
     unit: 'rounds',
@@ -136,8 +136,8 @@ export const DEFAULT_GOALS: Omit<EvolutionGoal, 'id' | 'currentValue' | 'updated
   },
   {
     layer: 'how',
-    name: '修改幅度',
-    description: '用户修改输出时的平均改动量。越小说明越接近预期。',
+    name: 'Modification Extent',
+    description: 'Average amount of changes when users modify output. Smaller means closer to expectations.',
     metric: 'avg_modification_extent',
     targetValue: 0.15,
     unit: 'rate',
@@ -146,11 +146,11 @@ export const DEFAULT_GOALS: Omit<EvolutionGoal, 'id' | 'currentValue' | 'updated
     active: true,
   },
 
-  // WHAT — 用哪些功能
+  // WHAT — which features to use
   {
     layer: 'what',
-    name: '业务成功率',
-    description: '所有Agent的加权平均accept rate。',
+    name: 'Business Success Rate',
+    description: 'Weighted average accept rate across all Agents.',
     metric: 'overall_accept_rate',
     targetValue: 0.8,
     unit: 'rate',
@@ -160,8 +160,8 @@ export const DEFAULT_GOALS: Omit<EvolutionGoal, 'id' | 'currentValue' | 'updated
   },
   {
     layer: 'what',
-    name: '信息准确性',
-    description: '合规检查通过率 + 市场数据引用准确率。',
+    name: 'Information Accuracy',
+    description: 'Compliance check pass rate + market data citation accuracy rate.',
     metric: 'info_accuracy',
     targetValue: 0.95,
     unit: 'rate',
@@ -171,8 +171,8 @@ export const DEFAULT_GOALS: Omit<EvolutionGoal, 'id' | 'currentValue' | 'updated
   },
   {
     layer: 'what',
-    name: '能力覆盖面',
-    description: '支持的市场数×语言数×素材类型数 / 目标覆盖总数。',
+    name: 'Capability Coverage',
+    description: 'Supported markets x languages x asset types / total target coverage.',
     metric: 'capability_coverage',
     targetValue: 0.7,
     unit: 'rate',
@@ -385,7 +385,7 @@ export async function completeVerification(
       improved++
     } else if (isDegradation) {
       dominated++
-      reasons.push(`${goal.name}: ${pre.toFixed(3)} → ${post.toFixed(3)} (${goal.direction === 'higher_better' ? '下降' : '上升'})`)
+      reasons.push(`${goal.name}: ${pre.toFixed(3)} → ${post.toFixed(3)} (${goal.direction === 'higher_better' ? 'decreased' : 'increased'})`)
     }
   }
 
@@ -408,10 +408,10 @@ export async function completeVerification(
   }
 
   const verdictReason = verdict === 'improved'
-    ? `${improved}/${total} 项指标提升`
+    ? `${improved}/${total} metrics improved`
     : verdict === 'neutral'
-    ? '指标无显著变化'
-    : `${dominated}/${total} 项指标退化: ${reasons.join('; ')}`
+    ? 'No significant change in metrics'
+    : `${dominated}/${total} metrics degraded: ${reasons.join('; ')}`
 
   const { error } = await sb
     .from('evolution_verifications')

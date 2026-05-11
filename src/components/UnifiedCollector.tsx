@@ -306,11 +306,13 @@ export default function UnifiedCollector({
               : t('collector.placeholder.default')
           }
           disabled={processing}
-          className="w-full resize-none border-0 bg-transparent px-4 pt-4 pb-12 text-[15px] focus:outline-none disabled:opacity-50 placeholder:text-white/30"
+          className="w-full resize-none border-0 bg-transparent px-4 pt-4 pb-12 text-base focus:outline-none disabled:opacity-50 placeholder:text-white/30"
           style={{
             color: 'var(--text-1)',
             fontFamily: 'inherit',
-            minHeight: compact ? '60px' : '80px',
+            minHeight: compact ? '60px' : '120px',
+            fontSize: '16px',
+            lineHeight: '1.6',
           }}
           rows={1}
         />

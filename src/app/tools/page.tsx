@@ -36,7 +36,7 @@ const TOOLS: Tool[] = [
     icon: BarChart3,
     category: 'intel',
     status: 'available',
-    features: ['iGaming news aggregation', 'Regulatory change tracking', 'Market size estimation', 'Trend reports'],
+    features: ['Industry news aggregation', 'Regulatory change tracking', 'Market size estimation', 'Trend reports'],
   },
   // Creative
   {
@@ -74,7 +74,7 @@ const TOOLS: Tool[] = [
     icon: FileText,
     category: 'landing',
     status: 'available',
-    features: ['Template library (Sports/Casino/Esports)', 'Harness: MUST / MUST NOT / CREATIVE zones', 'Error fallback handling', 'Responsive output'],
+    features: ['Template library (E-commerce/App/SaaS)', 'Harness: MUST / MUST NOT / CREATIVE zones', 'Error fallback handling', 'Responsive output'],
   },
   {
     id: 'ab-testing',
@@ -98,11 +98,11 @@ const TOOLS: Tool[] = [
   {
     id: 'compliance-checker',
     name: 'Compliance Checker',
-    desc: 'Automated compliance review against iGaming advertising regulations by jurisdiction',
+    desc: 'Automated compliance review against advertising regulations by jurisdiction',
     icon: Shield,
     category: 'management',
     status: 'coming_soon',
-    features: ['UKGC / MGA rule sets', 'Responsible gambling checks', 'Age gate verification', 'License info injection'],
+    features: ['Regional ad policy rule sets', 'Content compliance checks', 'Age gate verification', 'Disclaimer injection'],
   },
 ]
 
@@ -130,7 +130,7 @@ export default function ToolsPage() {
           </span>
         </div>
         <p className="text-sm" style={{ color: 'var(--text-3)' }}>
-          Professional marketing technology toolkit built for iGaming
+          Professional marketing technology toolkit built for modern marketers
         </p>
       </div>
 

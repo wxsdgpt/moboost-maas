@@ -57,35 +57,35 @@ export default function AdminDashboard() {
     <div className="p-8 max-w-[1200px] mx-auto">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-bold tracking-tight" style={{ color: 'var(--text-1)' }}>管理员控制台</h1>
+        <h1 className="text-2xl font-bold tracking-tight" style={{ color: 'var(--text-1)' }}>Admin Console</h1>
         <p className="text-sm mt-1" style={{ color: 'var(--text-2)' }}>
-          Moboost AI MaaS · Agent生态系统管理
+          Moboost AI MaaS · Agent Ecosystem Management
         </p>
       </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-4 gap-4 mb-8">
         <AdminStatCard
-          label="系统健康度"
+          label="System Health"
           value={report ? `${report.systemHealthScore}` : '--'}
           unit="/100"
           icon={Shield}
           color={report && report.systemHealthScore >= 80 ? '#34c759' : '#ff9500'}
         />
         <AdminStatCard
-          label="注册Agent"
+          label="Registered Agents"
           value={registry?.totalAgents?.toString() || '0'}
           icon={Brain}
           color="var(--brand)"
         />
         <AdminStatCard
-          label="待处理决策"
+          label="Pending Decisions"
           value={pending.length.toString()}
           icon={Zap}
           color={pending.length > 0 ? '#e94560' : '#34c759'}
         />
         <AdminStatCard
-          label="活跃Agent"
+          label="Active Agents"
           value={registry?.byStatus?.active?.toString() || '0'}
           icon={Activity}
           color="#5e5ce6"
@@ -98,28 +98,28 @@ export default function AdminDashboard() {
           href="/admin/evolution"
           icon={Dna}
           title="Evolution Agent"
-          description="运行诊断、查看健康报告、管理进化决策"
+          description="Run diagnostics, view health reports, manage evolution decisions"
           color="#e94560"
         />
         <QuickActionCard
           href="/admin/meta"
           icon={Brain}
-          title="Meta-Agent 工厂"
-          description="创建新Agent、设计数据/引擎/前端架构"
+          title="Meta-Agent Factory"
+          description="Create new Agents, design data/engine/frontend architecture"
           color="var(--brand)"
         />
         <QuickActionCard
           href="/admin/agents"
           icon={Database}
-          title="Agent 注册表"
-          description="查看所有Agent状态、版本、能力、依赖关系"
+          title="Agent Registry"
+          description="View all Agent statuses, versions, capabilities, and dependencies"
           color="#5e5ce6"
         />
         <QuickActionCard
           href="/admin/data"
           icon={Users}
-          title="数据管理"
-          description="用户数据、报告、Agent执行日志"
+          title="Data Management"
+          description="User data, reports, Agent execution logs"
           color="#ff9500"
         />
       </div>
@@ -135,15 +135,15 @@ export default function AdminDashboard() {
         >
           <h3 className="text-sm font-semibold text-[color:var(--text-1)] mb-4 flex items-center gap-2">
             <Brain className="w-4 h-4" style={{ color: '#e94560' }} />
-            Agent分布
+            Agent Distribution
           </h3>
           <div className="grid grid-cols-4 gap-4">
             {Object.entries(registry.byCategory).map(([cat, count]) => {
               const labels: Record<string, string> = {
-                business: '业务Agent',
-                meta: '元Agent',
-                evolution: '进化Agent',
-                orchestrator: '编排器',
+                business: 'Business Agent',
+                meta: 'Meta Agent',
+                evolution: 'Evolution Agent',
+                orchestrator: 'Orchestrator',
               }
               return (
                 <div key={cat} className="text-center">
@@ -169,13 +169,13 @@ export default function AdminDashboard() {
         >
           <h3 className="text-sm font-semibold text-[color:var(--text-1)] mb-3 flex items-center gap-2">
             <TrendingUp className="w-4 h-4" style={{ color: '#e94560' }} />
-            最近诊断报告
+            Latest Diagnostic Report
           </h3>
           <p className="text-sm leading-relaxed" style={{ color: 'var(--text-2)' }}>
             {report.executiveSummary}
           </p>
           <p className="text-[10px] mt-3" style={{ color: 'var(--text-3)' }}>
-            生成于 {new Date(report.generatedAt).toLocaleString('zh-CN')}
+            Generated at {new Date(report.generatedAt).toLocaleString('en-US')}
           </p>
         </div>
       )}

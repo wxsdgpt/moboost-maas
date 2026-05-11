@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920">
+<title>Moboost - Compliance Check</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  /* SF Pro Display - system font, no import needed */
+  :root {
+    --bg-dark: #0a0a0a; --bg-card: rgba(255,255,255,0.04);
+    --brand-purple: #c0e463;
+    --text-white: #fff; --text-gray: #8a8a9a; --text-dim: #555566;
+    --green: #28c840;
+  }
+  body {
+    font-family: 'SF Pro Display', -apple-system, 'Helvetica Neue', Arial, sans-serif;
+    background: var(--bg-dark); color: var(--text-white);
+    width: 1920px; height: 1080px;
+    overflow: hidden; display: flex; flex-direction: column;
+  }
+  .navbar {
+    height: 56px; background: rgba(10,10,10,0.85); backdrop-filter: saturate(120%) blur(24px);
+    border-bottom: 1px solid rgba(192,228,99,0.15);
+    display: flex; align-items: center; padding: 0 32px;
+  }
+  .logo { font-size: 20px; font-weight: 700; }
+  .logo span { color: var(--brand-purple); }
+
+  .content { flex: 1; padding: 36px 160px; display: flex; flex-direction: column; }
+
+  .page-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 28px;
+    opacity: 0; animation: fadeUp 0.5s ease forwards 0.2s;
+  }
+  .page-header h1 { font-size: 24px; font-weight: 600; }
+  .all-pass {
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(40,200,64,0.1);
+    border: 1px solid rgba(40,200,64,0.2);
+    border-radius: 10px; padding: 8px 18px;
+    font-size: 13px; font-weight: 600; color: var(--green);
+  }
+
+  .compliance-list { display: flex; flex-direction: column; gap: 8px; }
+
+  .compliance-row {
+    background: var(--bg-card);
+    border: 1px solid rgba(192,228,99,0.08);
+    border-radius: 12px;
+    overflow: hidden;
+    opacity: 0; transform: translateY(10px);
+  }
+
+  .compliance-header {
+    display: flex; align-items: center; gap: 16px;
+    padding: 14px 20px; cursor: pointer;
+    transition: background 0.2s;
+  }
+  .compliance-header:hover { background: rgba(192,228,99,0.03); }
+
+  .c-flag { font-size: 24px; width: 32px; text-align: center; }
+  .c-name { font-size: 14px; font-weight: 500; width: 140px; }
+  .c-lang { font-size: 12px; color: var(--text-dim); width: 120px; }
+  .c-checks { display: flex; gap: 4px; flex: 1; }
+  .c-check-dot {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: rgba(40,200,64,0.12); color: var(--green);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .c-status {
+    font-size: 12px; font-weight: 600; color: var(--green);
+    display: flex; align-items: center; gap: 6px;
+    width: 120px; justify-content: flex-end;
+  }
+  .c-expand {
+    color: var(--text-dim); transition: transform 0.3s;
+    width: 20px;
+  }
+
+  /* Expandable detail */
+  .compliance-detail {
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.4s ease;
+    padding: 0 20px;
+    background: rgba(0,0,0,0.2);
+  }
+  .compliance-row.expanded .compliance-detail {
+    max-height: 200px;
+    padding: 14px 20px;
+  }
+  .compliance-row.expanded .c-expand { transform: rotate(180deg); }
+
+  .detail-check {
+    display: flex; align-items: center; gap: 10px;
+    padding: 6px 0; font-size: 12px; color: var(--text-gray);
+  }
+  .detail-check svg { color: var(--green); flex-shrink: 0; }
+
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+<nav class="navbar"><div class="logo"><span>Mo</span>boost</div></nav>
+<div class="content">
+  <div class="page-header">
+    <h1>Compliance Check</h1>
+    <div class="all-pass">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      All 8 Markets Passed
+    </div>
+  </div>
+
+  <div class="compliance-list" id="compList"></div>
+</div>
+
+<script>
+  const markets = [
+    { flag:'🇺🇸', name:'United States', lang:'English (US)', checks:[
+      'English language — All consumer-facing text verified',
+      'FTC compliance — Required disclosures included',
+      'ADA accessibility — Alt text and contrast checked',
+    ]},
+    { flag:'🇯🇵', name:'Japan', lang:'Japanese', checks:[
+      'Japanese language — All text translated by native AI',
+      'JARO ad standards — Claims substantiated',
+      'Price display — Tax-inclusive pricing shown (¥)',
+    ]},
+    { flag:'🇧🇷', name:'Brazil', lang:'Portuguese (BR)', checks:[
+      'Portuguese language — All consumer-facing text translated',
+      'Price transparency — Local currency displayed (R$)',
+      'Consumer protection — Cancellation policy included',
+      'CONAR ad code — Cultural sensitivity verified',
+    ]},
+    { flag:'🇳🇬', name:'Nigeria', lang:'English (NG)', checks:[
+      'English (Nigerian) — Localized expressions used',
+      'APCON standards — Advertising claims verified',
+      'Currency display — Naira (₦) pricing shown',
+    ]},
+    { flag:'🇰🇷', name:'South Korea', lang:'Korean', checks:[
+      'Korean language — All text translated (한국어)',
+      'KFDA regulations — Health claims reviewed',
+      'E-commerce law — Return policy displayed',
+    ]},
+    { flag:'🇩🇪', name:'Germany', lang:'German', checks:[
+      'German language — All text translated (Deutsch)',
+      'GDPR compliance — Data privacy notice included',
+      'Impressum — Legal entity information present',
+      'Price display — EUR with VAT included',
+    ]},
+    { flag:'🇮🇳', name:'India', lang:'Hindi', checks:[
+      'Hindi language — Primary text translated (हिंदी)',
+      'ASCI guidelines — Ad standards verified',
+      'Currency — INR (₹) pricing displayed',
+    ]},
+    { flag:'🇫🇷', name:'France', lang:'French', checks:[
+      'French language — All text translated (Français)',
+      'ARPP ad standards — Claims verified',
+      'Loi Toubon — French language compliance met',
+      'Price display — EUR with TTC indication',
+    ]},
+  ];
+
+  const list = document.getElementById('compList');
+  markets.forEach((m, i) => {
+    const checksHtml = m.checks.map(c =>
+      `<div class="detail-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>${c}</div>`
+    ).join('');
+    const dotsHtml = m.checks.map(() =>
+      `<div class="c-check-dot"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>`
+    ).join('');
+
+    list.innerHTML += `
+      <div class="compliance-row" id="cr${i}" onclick="this.classList.toggle('expanded')">
+        <div class="compliance-header">
+          <div class="c-flag">${m.flag}</div>
+          <div class="c-name">${m.name}</div>
+          <div class="c-lang">${m.lang}</div>
+          <div class="c-checks">${dotsHtml}</div>
+          <div class="c-status">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Passed
+          </div>
+          <div class="c-expand"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+        </div>
+        <div class="compliance-detail">${checksHtml}</div>
+      </div>
+    `;
+  });
+
+  // Animate rows in
+  document.querySelectorAll('.compliance-row').forEach((row, i) => {
+    setTimeout(() => {
+      row.style.animation = 'fadeUp 0.4s ease forwards';
+    }, 400 + i * 100);
+  });
+
+  // Auto-expand Brazil row after a delay (for the video)
+  setTimeout(() => {
+    document.getElementById('cr2').classList.add('expanded');
+  }, 3000);
+</script>
+</body>
+</html>

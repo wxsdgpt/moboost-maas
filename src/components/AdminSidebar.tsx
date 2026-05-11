@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
 import {
   Shield,
@@ -87,12 +88,13 @@ export default function AdminSidebar() {
         className="px-5 py-5 flex items-center gap-2.5"
         style={{ borderBottom: '1px solid var(--border)' }}
       >
-        <div
-          className="w-8 h-8 rounded-lg flex items-center justify-center"
-          style={{ background: 'linear-gradient(135deg, #e94560 0%, #0f3460 100%)' }}
-        >
-          <Shield className="w-4 h-4 text-white" />
-        </div>
+        <Image
+          src="/logo/black/icon/white_icon_transparent_background.png"
+          alt="Moboost"
+          width={32}
+          height={32}
+          style={{ objectFit: 'contain' }}
+        />
         <div>
           <span className="text-[15px] font-bold tracking-tight text-white">Moboost</span>
           <span className="text-[15px] font-bold tracking-tight ml-1" style={{ color: '#e94560' }}>Admin</span>

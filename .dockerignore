@@ -1,0 +1,12 @@
+node_modules
+.next
+.git
+*.md
+docs
+_backup_*
+services/ad-localization/backend/__pycache__
+services/ad-localization/backend/.pytest_cache
+services/ad-localization/backend/storage
+*.pyc
+.env
+.env.local

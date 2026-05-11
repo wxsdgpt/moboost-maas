@@ -1,0 +1,98 @@
+# Moboost MAAS — Docker Compose (Development)
+# Usage:  docker compose up -d
+# Stop:   docker compose down
+# Logs:   docker compose logs -f [service]
+# Reset:  docker compose down -v  (removes DB data)
+
+services:
+  # ─── PostgreSQL ────────────────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: moboost-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: dev123
+      POSTGRES_DB: ad_localization
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # ─── Ad-Localization Backend (FastAPI) ─────────────────────────────────
+  backend:
+    build:
+      context: ./services/ad-localization/backend
+      dockerfile: Dockerfile
+    container_name: moboost-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      ADLOC_APP_ENV: dev
+      ADLOC_DATABASE_URL: postgresql+psycopg://postgres:dev123@postgres:5432/ad_localization
+      ADLOC_LOG_LEVEL: INFO
+      ADLOC_STORAGE_DRIVER: local
+      # Pass through from host .env — fill these in .env.local
+      ADLOC_SERVICE_TOKEN: ${ADLOC_SERVICE_TOKEN:-dev-service-token}
+      ADLOC_OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
+      ADLOC_OPENROUTER_BASE_URL: ${OPENROUTER_BASE_URL:-https://openrouter.ai/api/v1}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./services/ad-localization/backend:/app
+      - backend-storage:/app/storage
+    command: >
+      sh -c "alembic upgrade head &&
+             uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+
+  # ─── Frontend (Next.js) ───────────────────────────────────────────────
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: moboost-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      # Clerk
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:-}
+      CLERK_SECRET_KEY: ${CLERK_SECRET_KEY:-}
+      # Supabase
+      NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL:-}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:-}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:-}
+      SUPABASE_STORAGE_BUCKET: ${SUPABASE_STORAGE_BUCKET:-creatives}
+      # OpenRouter
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
+      OPENROUTER_BASE_URL: ${OPENROUTER_BASE_URL:-https://openrouter.ai/api/v1}
+      IMAGE_MODEL: ${IMAGE_MODEL:-google/gemini-3-pro-image-preview}
+      VIDEO_MODEL: ${VIDEO_MODEL:-google/veo-3.1}
+      EVAL_MODEL: ${EVAL_MODEL:-anthropic/claude-sonnet-4-6}
+      # Backend proxy
+      ADLOC_SERVICE_URL: http://backend:8000
+      ADLOC_SERVICE_TOKEN: ${ADLOC_SERVICE_TOKEN:-dev-service-token}
+      # Admin
+      ADMIN_TOKEN_SECRET: ${ADMIN_TOKEN_SECRET:-dev-admin-secret}
+      # Data
+      DATA_DIR: ./data
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./src:/app/src
+      - ./public:/app/public
+      - ./data:/app/data
+    command: npm run dev
+
+volumes:
+  pgdata:
+    driver: local
+  backend-storage:
+    driver: local

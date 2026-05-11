@@ -7,12 +7,12 @@
  * changes should be made to the agent ecosystem.
  *
  * Decision types:
- *   - enhance:   增强Agent能力 (add tools, improve prompt)
- *   - split:     分裂Agent (specialized sub-agents for specific markets/tasks)
- *   - merge:     合并Agent (reduce redundancy, cut LLM calls)
- *   - create:    创建全新Agent (fill capability gaps)
- *   - deprecate: 废弃Agent (unused or consistently failing)
- *   - tune:      微调参数 (prompt wording, temperature, model selection)
+ *   - enhance:   Enhance agent capabilities (add tools, improve prompt)
+ *   - split:     Split agent (specialized sub-agents for specific markets/tasks)
+ *   - merge:     Merge agents (reduce redundancy, cut LLM calls)
+ *   - create:    Create a brand-new agent (fill capability gaps)
+ *   - deprecate: Deprecate agent (unused or consistently failing)
+ *   - tune:      Fine-tune parameters (prompt wording, temperature, model selection)
  *
  * Two modes:
  *   1. Rule-based (V1) — deterministic rules from health data
@@ -145,12 +145,12 @@ function generateRuleBasedDecisions(
         urgency: userInteraction.rejectRate > 0.5 ? 'immediate' : 'next_sprint',
         confidence: Math.min(0.9, stats.totalRuns / 50),
         targetAgents: [agentId],
-        reasoning: `用户拒绝率为 ${pct(userInteraction.rejectRate)}，超过阈值 ${pct(RULES.HIGH_REJECT_RATE)}。修改率 ${pct(userInteraction.modifyRate)} 表明产出方向基本正确但需质量提升。`,
+        reasoning: `User rejection rate is ${pct(userInteraction.rejectRate)}, exceeding threshold ${pct(RULES.HIGH_REJECT_RATE)}. Modification rate ${pct(userInteraction.modifyRate)} indicates output direction is generally correct but quality needs improvement.`,
         actionItems: [
           {
             type: 'update_prompt',
             target: agentId,
-            description: '分析被拒绝的产出，在system prompt中增加负面案例和质量约束',
+            description: 'Analyze rejected outputs, add negative examples and quality constraints to the system prompt',
             executed: false,
           },
         ],
@@ -170,12 +170,12 @@ function generateRuleBasedDecisions(
         urgency: 'next_sprint',
         confidence: 0.7,
         targetAgents: [agentId],
-        reasoning: `质量趋势下降中。平均分 ${stats.avgQualityScore}，需要调优 prompt 或模型参数。`,
+        reasoning: `Quality trend is declining. Average score ${stats.avgQualityScore}, prompt or model parameters need tuning.`,
         actionItems: [
           {
             type: 'adjust_param',
             target: agentId,
-            description: '降低 temperature、增加 few-shot examples、或切换到更强模型',
+            description: 'Lower temperature, add few-shot examples, or switch to a stronger model',
             executed: false,
           },
         ],
@@ -196,11 +196,11 @@ function generateRuleBasedDecisions(
         urgency: 'backlog',
         confidence: 0.6,
         targetAgents: [agentId],
-        reasoning: `在 ${marketAnomalies.length} 个市场检测到差异化修改模式，建议按市场拆分为专项子Agent。${marketAnomalies.map((a) => a.description).join('；')}`,
+        reasoning: `Differentiated modification patterns detected across ${marketAnomalies.length} markets, recommend splitting into market-specific sub-agents. ${marketAnomalies.map((a) => a.description).join('; ')}`,
         actionItems: marketAnomalies.map((a) => ({
           type: 'create_agent' as const,
           target: agentId,
-          description: `创建 ${agentId} 的市场专项变体: ${a.description}`,
+          description: `Create market-specific variant of ${agentId}: ${a.description}`,
           executed: false,
         })),
         impact: {
@@ -220,11 +220,11 @@ function generateRuleBasedDecisions(
         urgency: 'immediate',
         confidence: 0.85,
         targetAgents: [agentId],
-        reasoning: `检测到严重异常：${anomaly.description}`,
+        reasoning: `Critical anomaly detected: ${anomaly.description}`,
         actionItems: [{
           type: 'update_prompt',
           target: agentId,
-          description: `紧急修复：${anomaly.description}`,
+          description: `Urgent fix: ${anomaly.description}`,
           executed: false,
         }],
         impact: {
@@ -250,7 +250,7 @@ function generateRuleBasedDecisions(
         actionItems: [{
           type: 'merge_agents',
           target: pattern.agents.join('+'),
-          description: `评估合并 ${pattern.agents.join(' 和 ')} 为复合Agent`,
+          description: `Evaluate merging ${pattern.agents.join(' and ')} into a composite agent`,
           executed: false,
         }],
         impact: {
@@ -298,40 +298,40 @@ async function llmDiagnosis(
 ): Promise<{ decisions: EvolutionDecision[]; insights: string[] }> {
   const systemSnapshot = agentRegistry.getSystemSnapshot()
 
-  const prompt = `你是 Moboost AI MaaS 平台的 Evolution Agent（进化Agent）。
-你的职责是分析Agent生态系统的运行数据，找到最优解（而非最快解），提出进化建议。
+  const prompt = `You are the Evolution Agent for the Moboost AI MaaS platform.
+Your responsibility is to analyze operational data from the agent ecosystem, find the optimal solution (not the quickest fix), and propose evolution recommendations.
 
-# 当前Agent注册表
+# Current Agent Registry
 ${JSON.stringify(systemSnapshot.agents, null, 2)}
 
-# 各Agent健康报告（过去7天）
+# Agent Health Reports (Past 7 Days)
 ${reports.map((r) => `
 ## ${r.agentId}
-- 运行次数: ${r.stats.totalRuns}
-- 成功率: ${pct(r.stats.successRate)}
-- 平均耗时: ${r.stats.avgDurationMs}ms
-- 平均质量分: ${r.stats.avgQualityScore}
-- 用户接受率: ${pct(r.userInteraction.acceptRate)} / 修改率: ${pct(r.userInteraction.modifyRate)} / 拒绝率: ${pct(r.userInteraction.rejectRate)}
-- 趋势: 质量${r.trends.qualityTrend} / 使用量${r.trends.usageTrend} / 成本${r.trends.costTrend}
-- 异常: ${r.anomalies.length > 0 ? r.anomalies.map((a) => a.description).join('; ') : '无'}
+- Total runs: ${r.stats.totalRuns}
+- Success rate: ${pct(r.stats.successRate)}
+- Avg duration: ${r.stats.avgDurationMs}ms
+- Avg quality score: ${r.stats.avgQualityScore}
+- User accept rate: ${pct(r.userInteraction.acceptRate)} / Modify rate: ${pct(r.userInteraction.modifyRate)} / Reject rate: ${pct(r.userInteraction.rejectRate)}
+- Trends: quality ${r.trends.qualityTrend} / usage ${r.trends.usageTrend} / cost ${r.trends.costTrend}
+- Anomalies: ${r.anomalies.length > 0 ? r.anomalies.map((a) => a.description).join('; ') : 'None'}
 `).join('\n')}
 
-# 跨Agent模式
-${patterns.length > 0 ? patterns.map((p) => `- [${p.type}] ${p.description}`).join('\n') : '无明显模式'}
+# Cross-Agent Patterns
+${patterns.length > 0 ? patterns.map((p) => `- [${p.type}] ${p.description}`).join('\n') : 'No notable patterns'}
 
-# 规则引擎已产出的建议
-${ruleDecisions.map((d) => `- [${d.type}/${d.urgency}] ${d.reasoning}`).join('\n') || '无'}
+# Suggestions Already Produced by the Rule Engine
+${ruleDecisions.map((d) => `- [${d.type}/${d.urgency}] ${d.reasoning}`).join('\n') || 'None'}
 
-# 你的任务
-1. 给出 3-5 条系统级洞察（insights），从全局视角分析Agent生态
-2. 补充规则引擎可能遗漏的进化决策（特别是 create 类型 — 发现能力缺口）
-3. 每条决策都要有明确的 reasoning 和可执行的 actionItems
-4. 遵循"最优解而非最快解"原则：如果一个问题可以通过根本性改进解决，不要推荐临时补丁
+# Your Task
+1. Provide 3-5 system-level insights, analyzing the agent ecosystem from a holistic perspective
+2. Supplement evolution decisions that the rule engine may have missed (especially "create" type — identifying capability gaps)
+3. Each decision must have clear reasoning and actionable actionItems
+4. Follow the "optimal solution, not quickest fix" principle: if a problem can be solved through a fundamental improvement, do not recommend a temporary patch
 
-输出严格JSON：
+Output strict JSON:
 \`\`\`json
 {
-  "insights": ["洞察1", "洞察2", ...],
+  "insights": ["insight1", "insight2", ...],
   "decisions": [
     {
       "type": "enhance|split|merge|create|deprecate|tune",
@@ -601,17 +601,17 @@ function generateRollbackPlan(type: EvolutionDecisionType, targets: string[]): s
   switch (type) {
     case 'enhance':
     case 'tune':
-      return `还原 ${targets.join(', ')} 的 system prompt 到变更前版本`
+      return `Revert the system prompt of ${targets.join(', ')} to the pre-change version`
     case 'split':
-      return `禁用新创建的子Agent，恢复原始 ${targets.join(', ')} Agent`
+      return `Disable newly created sub-agents, restore original ${targets.join(', ')} agent`
     case 'merge':
-      return `恢复被合并的 ${targets.join(', ')} 为独立Agent，禁用合并后的Agent`
+      return `Restore merged ${targets.join(', ')} as independent agents, disable the merged agent`
     case 'create':
-      return `禁用新创建的Agent，从registry中移除`
+      return `Disable the newly created agent and remove it from the registry`
     case 'deprecate':
-      return `重新启用 ${targets.join(', ')}，恢复active状态`
+      return `Re-enable ${targets.join(', ')} and restore to active status`
     default:
-      return `手动评估并恢复变更`
+      return `Manually evaluate and revert changes`
   }
 }
 

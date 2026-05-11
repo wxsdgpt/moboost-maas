@@ -17,18 +17,18 @@
  *     tell stale snapshots apart from fresh ones in the DB.
  */
 
-/** 10 iGaming verticals currently supported by the onboarding form. */
+/** 10 Martech verticals currently supported by the onboarding form. */
 export const SUPPORTED_VERTICALS = [
-  'Sports Betting',
-  'Casino',
-  'Slots',
-  'Poker',
-  'Lottery',
-  'Esports',
-  'Fantasy Sports',
-  'Bingo',
-  'Live Dealer',
-  'Crash Games',
+  'E-commerce',
+  'SaaS',
+  'Mobile Apps',
+  'Gaming',
+  'Fintech',
+  'Health & Wellness',
+  'EdTech',
+  'Food & Delivery',
+  'Travel & Hospitality',
+  'Media & Entertainment',
 ] as const
 
 export type Vertical = (typeof SUPPORTED_VERTICALS)[number]

@@ -552,7 +552,7 @@ function ExploreTab({
             value={quickQuery}
             onChange={(e) => setQuickQuery(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && onQuickSearch()}
-            placeholder="输入搜索主题，如：iGaming AI creative trends 2026"
+            placeholder="Enter a search topic, e.g.: Martech AI creative trends 2026"
             className="flex-1 px-3 py-2 rounded-lg text-[13px] text-white placeholder:text-white/30 outline-none"
             style={{ background: 'var(--surface-3)', border: '1px solid var(--border-strong)' }}
           />

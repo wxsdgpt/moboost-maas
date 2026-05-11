@@ -103,8 +103,8 @@ export async function detectUserPatterns(periodDays: number = 7): Promise<Capabi
         candidates.push({
           id: `cand_up_${agentId}_${Date.now()}`,
           source: 'user_pattern',
-          title: `${agentId} 输出频繁被修改`,
-          description: `用户在 ${periodDays} 天内修改了 ${agentId} 的输出 ${data.count}/${total} 次 (${Math.round(modifyRate * 100)}%)。可能需要增强该Agent或拆分出专门子Agent。`,
+          title: `${agentId} output frequently modified`,
+          description: `Users modified ${agentId} output ${data.count}/${total} times (${Math.round(modifyRate * 100)}%) within ${periodDays} days. May need to enhance this agent or split into a specialized sub-agent.`,
           capabilityShape: { input: '', output: '', invariants: [], variables: [], failurePoints: [] },
           vfmScore: { expectationMatch: 0, clientGrowth: 0, speed: 0, simplicity: 0, quality: 0, coverage: 0, totalWeighted: 0 },
           totalScore: 0,
@@ -142,8 +142,8 @@ export async function detectUserPatterns(periodDays: number = 7): Promise<Capabi
         candidates.push({
           id: `cand_rej_${agentId}_${Date.now()}`,
           source: 'user_pattern',
-          title: `${agentId} 输出频繁被拒绝`,
-          description: `${agentId} 在 ${periodDays} 天内有 ${logIds.length} 次输出被用户直接拒绝。需要深入分析拒绝原因。`,
+          title: `${agentId} output frequently rejected`,
+          description: `${agentId} had ${logIds.length} outputs directly rejected by users within ${periodDays} days. A deeper analysis of rejection reasons is needed.`,
           capabilityShape: { input: '', output: '', invariants: [], variables: [], failurePoints: [] },
           vfmScore: { expectationMatch: 0, clientGrowth: 0, speed: 0, simplicity: 0, quality: 0, coverage: 0, totalWeighted: 0 },
           totalScore: 0,
@@ -179,8 +179,8 @@ export function patternsToCandidate(patterns: Array<{
       id: `cand_xag_${p.agents.join('_')}_${Date.now()}`,
       source: 'cross_agent' as const,
       title: p.type === 'co_invocation'
-        ? `${p.agents.join(' + ')} 总是一起调用，可合并`
-        : `${p.agents.join(', ')} 存在瓶颈模式`,
+        ? `${p.agents.join(' + ')} always invoked together, can be merged`
+        : `${p.agents.join(', ')} exhibit a bottleneck pattern`,
       description: p.description,
       capabilityShape: { input: '', output: '', invariants: [], variables: [], failurePoints: [] },
       vfmScore: { expectationMatch: 0, clientGrowth: 0, speed: 0, simplicity: 0, quality: 0, coverage: 0, totalWeighted: 0 },
@@ -206,32 +206,32 @@ export async function abstractCandidate(candidate: CapabilityCandidate): Promise
   const messages: LLMMessage[] = [
     {
       role: 'system',
-      content: `你是一个能力抽象引擎。你的任务是将一个模糊的"能力候选"抽象为精确的"能力轮廓（Capability Shape）"。
+      content: `You are a capability abstraction engine. Your task is to abstract a vague "capability candidate" into a precise "Capability Shape".
 
-规则：
-- 必须明确定义：输入是什么、输出是什么、不变量（invariants）、可变参数（variables）、失败点（failurePoints）
-- 不使用模糊语言（"某种程度上"、"可能是"、"本质上"等禁止出现）
-- 每个字段必须是具体的、可验证的
-- 如果无法明确定义，标注为 "NEEDS_MORE_DATA"
+Rules:
+- You must clearly define: what the input is, what the output is, invariants, variables, and failurePoints
+- Do not use vague language ("to some extent", "might be", "essentially", etc. are prohibited)
+- Each field must be specific and verifiable
+- If a clear definition is not possible, mark it as "NEEDS_MORE_DATA"
 
-输出严格JSON格式：
+Output in strict JSON format:
 {
-  "input": "输入描述",
-  "output": "输出描述",
-  "invariants": ["不变量1", "不变量2"],
-  "variables": ["可变参数1", "可变参数2"],
-  "failurePoints": ["失败点1", "失败点2"]
+  "input": "input description",
+  "output": "output description",
+  "invariants": ["invariant1", "invariant2"],
+  "variables": ["variable1", "variable2"],
+  "failurePoints": ["failure point 1", "failure point 2"]
 }`,
     },
     {
       role: 'user',
-      content: `能力候选：
-标题: ${candidate.title}
-描述: ${candidate.description}
-来源: ${candidate.source}
-证据: ${JSON.stringify(candidate.evidence, null, 2)}
+      content: `Capability candidate:
+Title: ${candidate.title}
+Description: ${candidate.description}
+Source: ${candidate.source}
+Evidence: ${JSON.stringify(candidate.evidence, null, 2)}
 
-请将此候选抽象为能力轮廓。`,
+Please abstract this candidate into a Capability Shape.`,
     },
   ]
 
