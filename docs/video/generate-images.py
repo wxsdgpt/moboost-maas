@@ -14,7 +14,7 @@ from pathlib import Path
 from typing import Optional
 
 # ── Config ──────────────────────────────────────────────────────────────
-API_KEY = os.environ.get(OPENROUTER_API_KEY, YOUR_KEY_HERE)
+API_KEY = os.environ.get("OPENROUTER_API_KEY", "YOUR_KEY_HERE")
 BASE_URL = "https://openrouter.ai/api/v1"
 OUTPUT_DIR = Path(__file__).parent / "assets" / "images"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)

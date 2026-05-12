@@ -1,3 +1,4 @@
+import os
 #!/usr/bin/env python3
 """Test: generate 1 image with each model, verify extraction works."""
 import json
@@ -5,7 +6,7 @@ import base64
 import requests
 from pathlib import Path
 
-API_KEY = os.environ.get(OPENROUTER_API_KEY, YOUR_KEY_HERE)
+API_KEY = os.environ.get("OPENROUTER_API_KEY", "YOUR_KEY_HERE")
 BASE_URL = "https://openrouter.ai/api/v1"
 HEADERS = {
     "Authorization": "Bearer " + API_KEY,

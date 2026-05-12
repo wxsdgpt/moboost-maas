@@ -1,9 +1,10 @@
+import os
 #!/usr/bin/env python3
 """Quick test: generate 1 image with Nano Banana Pro, dump full response structure."""
 import json
 import requests
 
-API_KEY = os.environ.get(OPENROUTER_API_KEY, YOUR_KEY_HERE)
+API_KEY = os.environ.get("OPENROUTER_API_KEY", "YOUR_KEY_HERE")
 BASE_URL = "https://openrouter.ai/api/v1"
 HEADERS = {
     "Authorization": "Bearer " + API_KEY,

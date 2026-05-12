@@ -8,7 +8,7 @@ import requests
 from pathlib import Path
 
 API_KEY = os.environ.get("OPENROUTER_API_KEY",
-    os.environ.get(OPENROUTER_API_KEY, YOUR_KEY_HERE))
+    os.environ.get("OPENROUTER_API_KEY", "YOUR_KEY_HERE"))
 AUTH = {"Authorization": "Bearer " + API_KEY}
 OUT = Path(__file__).parent / "assets" / "videos"
 OUT.mkdir(parents=True, exist_ok=True)

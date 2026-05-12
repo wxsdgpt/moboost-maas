@@ -29,7 +29,7 @@ from typing import Optional, Tuple
 
 # --- Config (matches .env.local) ---
 API_KEY = os.environ.get("OPENROUTER_API_KEY",
-    os.environ.get(OPENROUTER_API_KEY, YOUR_KEY_HERE))
+    os.environ.get("OPENROUTER_API_KEY", "YOUR_KEY_HERE"))
 BASE_URL = os.environ.get("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1")
 VIDEO_MODEL = os.environ.get("VIDEO_MODEL", "google/veo-3.1")
 

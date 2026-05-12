@@ -6,7 +6,7 @@ import requests
 from pathlib import Path
 
 API_KEY = os.environ.get("OPENROUTER_API_KEY",
-    os.environ.get(OPENROUTER_API_KEY, YOUR_KEY_HERE))
+    os.environ.get("OPENROUTER_API_KEY", "YOUR_KEY_HERE"))
 BASE_URL = "https://openrouter.ai/api/v1"
 HEADERS = {
     "Authorization": "Bearer " + API_KEY,
