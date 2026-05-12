@@ -16,6 +16,10 @@ import {
   X,
 } from 'lucide-react'
 import { useLocale } from '@/lib/i18n/LocaleProvider'
+import {
+  store, generateThinkingSteps,
+  type GenerationJob, type ChatMessage as StoreChatMessage,
+} from '@/lib/store'
 
 // ──── Types ────
 
@@ -40,6 +44,46 @@ const QUICK_ACTIONS = [
   { id: 'intel' as const, labelKey: 'collector.action.intel', icon: Search, description: 'Market intel' },
   { id: 'landing' as const, labelKey: 'collector.action.landing', icon: Layout, description: 'Landing page' },
 ] as const
+
+// ──── Quick-reply intent mapping (Phase 2 design: fast path) ────
+
+/** Map numbered replies to intents when in clarification chatMode */
+const NUMBERED_INTENT_MAP: Record<string, Intent> = {
+  '1': 'intel',
+  '2': 'asset',
+  '3': 'landing',
+  '4': 'pipeline',
+}
+
+const QUICK_REPLY_REGEX = /^([1-4])[.、)）\s]?/
+
+/** Check if the last assistant message contains a numbered option list */
+function hasNumberedOptions(msgs: ChatMsg[]): boolean {
+  const last = [...msgs].reverse().find(m => m.role === 'assistant')
+  if (!last) return false
+  // Match patterns like "1)" "1." "1、" in the assistant text
+  return /[1-4][)）.、]/.test(last.content)
+}
+
+/** Try to map a user reply to an intent via quick-path regex */
+function tryQuickReplyMap(text: string, msgs: ChatMsg[]): Intent {
+  if (!hasNumberedOptions(msgs)) return null
+  const match = text.match(QUICK_REPLY_REGEX)
+  if (!match) return null
+  return NUMBERED_INTENT_MAP[match[1]] || null
+}
+
+/** Detect image vs video from prompt text (mirrors ProjectWorkspace logic) */
+function detectAssetType(text: string): 'image' | 'video' {
+  const lower = text.toLowerCase()
+  // Use word-boundary-aware matching to avoid false positives
+  // e.g. "promotional" should NOT match "motion"
+  const videoPatterns = [
+    /视频/, /video/, /\bclip\b/, /动画/, /\banimation\b/,
+    /\bmotion\b/, /\bveo\b/, /短片/,
+  ]
+  return videoPatterns.some(p => p.test(lower)) ? 'video' : 'image'
+}
 
 // ──── Main Component ────
 
@@ -85,23 +129,44 @@ export default function UnifiedCollector({
     setProcessing(true)
 
     // Add user message to chat
+    const updatedMessages = text
+      ? [...messages, { role: 'user' as const, content: text }]
+      : messages
     if (text) {
-      setMessages(prev => [...prev, { role: 'user', content: text }])
+      setMessages(updatedMessages)
     }
 
     try {
-      // 1. Detect intent
+      // ── Fast path: numbered reply in chatMode ──
+      if (chatMode && text) {
+        const quickIntent = tryQuickReplyMap(text, updatedMessages)
+        if (quickIntent) {
+          executeIntent(quickIntent, text)
+          return
+        }
+      }
+
+      // ── Normal path: detect intent via API ──
+      // Build enhanced input for chatMode replies (include conversation context)
+      let intentInput = text || selectedAction || ''
+      if (chatMode && text && updatedMessages.length > 1) {
+        const lastAssistant = [...updatedMessages].reverse().find(m => m.role === 'assistant')
+        if (lastAssistant) {
+          intentInput = `上一条系统提问: ${lastAssistant.content}\n用户回复: ${text}`
+        }
+      }
+
       const intentRes = await fetch('/api/intent', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          input: text || selectedAction || '',
+          input: intentInput,
           context: {
             productName,
             productUrl,
             vertical,
             explicitIntent: selectedAction,
-            previousMessages: messages,
+            previousMessages: updatedMessages,
           },
         }),
       })
@@ -110,11 +175,11 @@ export default function UnifiedCollector({
 
       if (!intent) throw new Error('Intent detection failed')
 
-      // 2. Handle different scenarios
+      // ── Handle different scenarios ──
 
       // Case A: Intent clear + ready to execute
       if (intent.confidence >= 0.7 && !intent.needsClarification && !intent.needsUrl) {
-        await executeIntent(intent.intent, text, intent.urls)
+        executeIntent(intent.intent, text, intent.urls)
         return
       }
 
@@ -141,7 +206,7 @@ export default function UnifiedCollector({
           {
             role: 'assistant',
             content: intent.clarificationQuestion ||
-              'Which would you like: 1) Generate a competitive intelligence report, 2) Generate marketing creatives (images/videos), 3) Generate a landing page, or 4) The full one-click pipeline?',
+              '请问您想要：1) 生成竞品情报报告 2) 生成营销素材（图片/视频）3) 生成落地页 4) 全套一键联动？',
           },
         ])
         setInput('')
@@ -149,7 +214,7 @@ export default function UnifiedCollector({
       }
 
       // Case D: Fallback — execute best guess
-      await executeIntent(intent.intent, text, intent.urls)
+      executeIntent(intent.intent, text, intent.urls)
     } catch (e) {
       setError((e as Error).message)
       setMessages(prev => [
@@ -159,60 +224,98 @@ export default function UnifiedCollector({
     } finally {
       setProcessing(false)
     }
-  }, [input, selectedAction, messages, productName, productUrl, vertical])
+  }, [input, selectedAction, messages, chatMode, productName, productUrl, vertical])
 
   // ── Execute detected intent ──
+  //
+  // For 'asset' intent: create project + routing job in the client-side store,
+  // then navigate to ProjectWorkspace which auto-starts generation via its
+  // existing auto-start logic (detects job.status === 'routing').
+  //
+  // Store's _schedulePersist handles server-side persistence automatically.
+  // No need to call POST /api/projects — this was the v2 regression that broke
+  // the generation flow by creating DB-only projects unreachable by the store.
 
-  async function executeIntent(
+  function executeIntent(
     intent: string,
     userInput: string,
     urls: string[] = []
   ) {
-    // Create a project
-    const projectName = userInput.slice(0, 60) || `${intent} project`
+    const projectName = userInput.slice(0, 40) + (userInput.length > 40 ? '...' : '') || `${intent} project`
 
     try {
-      const projRes = await fetch('/api/projects', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: projectName,
-          productId: productId || null,
-          source: 'homepage',
-          metadata: { intent, urls, userInput },
-        }),
-      })
-      const projData = await projRes.json()
+      switch (intent) {
+        case 'asset': {
+          // ── Store-driven asset generation (restored from v1 design) ──
+          const assetType = detectAssetType(userInput)
+          const userMsg: StoreChatMessage = {
+            id: `msg-${Date.now()}`,
+            role: 'user',
+            content: userInput,
+            timestamp: new Date().toISOString(),
+          }
+          const project = store.createProject(projectName, userMsg)
 
-      if (projData.ok && projData.project?.id) {
-        onProjectCreated?.(projData.project.id, intent)
+          const steps = generateThinkingSteps(assetType, userInput)
+          const job: GenerationJob = {
+            id: `job-${Date.now()}`,
+            projectId: project.id,
+            type: assetType,
+            prompt: userInput,
+            status: 'routing',
+            createdAt: new Date().toISOString(),
+            thinkingSteps: steps,
+          }
+          store.addJobToProject(project.id, job)
 
-        // Route to appropriate destination
-        switch (intent) {
-          case 'intel':
-            if (productId) {
-              // Generate report directly
-              router.push(`/project/${projData.project.id}?action=report`)
-            } else if (urls.length > 0) {
-              router.push(`/project/${projData.project.id}?action=report&url=${encodeURIComponent(urls[0])}`)
-            } else {
-              router.push(`/project/${projData.project.id}`)
-            }
-            break
-          case 'asset':
-            router.push(`/project/${projData.project.id}?action=generate`)
-            break
-          case 'landing':
-            router.push(`/landing?projectId=${projData.project.id}`)
-            break
-          case 'pipeline':
-            router.push(`/project/${projData.project.id}?action=pipeline`)
-            break
-          default:
-            router.push(`/project/${projData.project.id}`)
+          onProjectCreated?.(project.id, intent)
+          router.push(`/project/${project.id}`)
+          break
         }
-      } else {
-        throw new Error('Failed to create project')
+
+        case 'intel':
+        case 'landing':
+        case 'pipeline':
+        default: {
+          // ── Other intents: keep existing DB-based flow for now ──
+          // TODO: migrate these to store-driven flow in a future task
+          fetch('/api/projects', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              name: projectName,
+              productId: productId || null,
+              source: 'homepage',
+              metadata: { intent, urls, userInput },
+            }),
+          })
+            .then(r => r.json())
+            .then(projData => {
+              if (projData.ok && projData.project?.id) {
+                onProjectCreated?.(projData.project.id, intent)
+                switch (intent) {
+                  case 'intel':
+                    router.push(urls.length > 0
+                      ? `/project/${projData.project.id}?action=report&url=${encodeURIComponent(urls[0])}`
+                      : `/project/${projData.project.id}`
+                    )
+                    break
+                  case 'landing':
+                    router.push(`/landing?projectId=${projData.project.id}`)
+                    break
+                  case 'pipeline':
+                    router.push(`/project/${projData.project.id}?action=pipeline`)
+                    break
+                  default:
+                    router.push(`/project/${projData.project.id}`)
+                }
+              } else {
+                setError('Failed to create project')
+              }
+            })
+            .catch(e => setError((e as Error).message))
+          break
+        }
       }
     } catch (e) {
       setError((e as Error).message)
