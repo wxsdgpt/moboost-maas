@@ -89,19 +89,38 @@ function detectAssetType(text: string): 'image' | 'video' {
 
 const LOG_PREFIX = '[UnifiedCollector]'
 
+const OP_LOG_KEY = '__uc_log__'
+let _flushTimer: ReturnType<typeof setTimeout> | null = null
+
 function logOp(action: string, data?: Record<string, unknown>) {
   if (typeof window === 'undefined') return
   const entry = { action, ts: new Date().toISOString(), ...data }
   console.log(LOG_PREFIX, action, data || '')
   // Append to sessionStorage log for debugging
   try {
-    const key = '__uc_log__'
-    const prev = JSON.parse(sessionStorage.getItem(key) || '[]') as unknown[]
+    const prev = JSON.parse(sessionStorage.getItem(OP_LOG_KEY) || '[]') as unknown[]
     prev.push(entry)
-    // Keep last 50 entries
     if (prev.length > 50) prev.splice(0, prev.length - 50)
-    sessionStorage.setItem(key, JSON.stringify(prev))
+    sessionStorage.setItem(OP_LOG_KEY, JSON.stringify(prev))
   } catch { /* quota or SSR */ }
+  // Debounced flush to server so AI can read logs via API
+  scheduleFlush()
+}
+
+function scheduleFlush() {
+  if (_flushTimer) return
+  _flushTimer = setTimeout(() => {
+    _flushTimer = null
+    try {
+      const entries = JSON.parse(sessionStorage.getItem(OP_LOG_KEY) || '[]')
+      if (entries.length === 0) return
+      fetch('/api/debug/op-log', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ source: 'unified-collector', entries }),
+      }).catch(() => { /* fire and forget */ })
+    } catch { /* SSR or quota */ }
+  }, 2000) // flush 2s after last log
 }
 
 // ──── Main Component ────
