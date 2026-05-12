@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { buildGenerationPrompt, type ProjectContext } from '@/lib/contextBuilder'
 
 const OPENROUTER_BASE = process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1'
 const OPENROUTER_KEY = process.env.OPENROUTER_API_KEY || ''
@@ -49,7 +50,7 @@ async function safeParseJson(response: Response, label: string): Promise<{ ok: t
 
 export async function POST(req: NextRequest) {
   try {
-    const { prompt, action, jobId } = await req.json()
+    const { prompt, action, jobId, projectContext, recentImages } = await req.json()
 
     if (!OPENROUTER_KEY) {
       return NextResponse.json({ error: 'OpenRouter API key not configured' }, { status: 500 })
@@ -58,23 +59,78 @@ export async function POST(req: NextRequest) {
     // ===== Action: submit — Start a new video generation job =====
     if (action === 'submit') {
       const wantAudio = process.env.VIDEO_GENERATE_AUDIO !== 'false'
+      const model = process.env.VIDEO_MODEL || 'google/veo-3.1'
 
-      // VEO 3.1 via OpenRouter: `generate_audio: true` at top level enables
-      // native audio. Audio is enabled by default for veo-3.1; explicitly
-      // setting it makes intent clear and protects against future defaults.
+      // Build contextualized prompt using contextBuilder
+      const built = buildGenerationPrompt(
+        prompt,
+        'video',
+        (projectContext as ProjectContext) || null,
+      )
+
+      // Assemble the enhanced prompt text:
+      // System context (brand/assets/history) + user's current request
+      const enhancedPrompt = built.systemPrompt
+        ? `${built.systemPrompt}\n\nUser request: ${prompt}`
+        : prompt
+
+      console.log('[generate-video] context meta:', JSON.stringify(built.meta))
+
+      // Build request body
+      interface FrameImage {
+        type: 'image_url'
+        image_url: { url: string }
+        frame_type: 'first_frame' | 'last_frame'
+      }
+      interface InputReference {
+        type: 'image_url'
+        image_url: { url: string }
+      }
       interface RequestBody {
         model: string
         prompt: string
         generate_audio?: boolean
+        frame_images?: FrameImage[]
+        input_references?: InputReference[]
       }
 
       const requestBody: RequestBody = {
-        model: process.env.VIDEO_MODEL || 'google/veo-3.1',
-        prompt,
+        model,
+        prompt: enhancedPrompt,
         generate_audio: wantAudio,
       }
 
-      console.log('[generate-video] submit → openrouter', { model: requestBody.model, audio: wantAudio })
+      // Image-to-Video: if user has recent image assets, pass them to VEO3.1
+      // Strategy:
+      //   - If prompt mentions "based on image" / "根据图片" / "from the image",
+      //     use frame_images (first_frame) for image-to-video
+      //   - Otherwise, use input_references for style consistency
+      const images = (recentImages as Array<{ imageData: string; prompt: string }>) || []
+      if (images.length > 0) {
+        const lowerPrompt = prompt.toLowerCase()
+        const wantImageToVideo = /根据图片|基于图片|from.{0,5}image|based.{0,5}on.{0,5}image|用图片|图片.*生成|按照图片/.test(lowerPrompt)
+
+        if (wantImageToVideo) {
+          // Use the most recent image as first frame
+          requestBody.frame_images = [{
+            type: 'image_url',
+            image_url: { url: images[images.length - 1].imageData },
+            frame_type: 'first_frame',
+          }]
+          console.log('[generate-video] mode: image-to-video (frame_images, first_frame)')
+        } else {
+          // Use images as style reference
+          requestBody.input_references = images.map(img => ({
+            type: 'image_url' as const,
+            image_url: { url: img.imageData },
+          }))
+          console.log('[generate-video] mode: reference-to-video (input_references:', images.length, ')')
+        }
+      } else {
+        console.log('[generate-video] mode: text-to-video (no images available)')
+      }
+
+      console.log('[generate-video] submit → openrouter', { model, audio: wantAudio, hasFrameImages: !!requestBody.frame_images, hasInputRefs: !!requestBody.input_references, promptLen: enhancedPrompt.length })
 
       const response = await fetchWithTimeout(`https://openrouter.ai/api/v1/videos`, {
         method: 'POST',

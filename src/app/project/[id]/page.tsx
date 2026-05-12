@@ -209,10 +209,22 @@ export default function ProjectWorkspace() {
 
     try {
       const ctx2 = getProjectContext()
-      logPw('generate.video.start', { prompt: prompt.slice(0, 80), contextMessages: ctx2?.messages.length || 0, contextAssets: ctx2?.assets.length || 0 })
+
+      // Collect recent image assets for image-to-video (frame_images)
+      const recentImages = (project?.assets || [])
+        .filter(a => a.type === 'image' && a.imageData)
+        .slice(-2) // last 2 images max
+        .map(a => ({ imageData: a.imageData!, prompt: a.prompt }))
+
+      logPw('generate.video.start', {
+        prompt: prompt.slice(0, 80),
+        contextMessages: ctx2?.messages.length || 0,
+        contextAssets: ctx2?.assets.length || 0,
+        recentImages: recentImages.length,
+      })
       const res = await fetch('/api/generate-video', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'submit', prompt, projectContext: ctx2 }),
+        body: JSON.stringify({ action: 'submit', prompt, projectContext: ctx2, recentImages }),
       })
       const data = await res.json()
 
