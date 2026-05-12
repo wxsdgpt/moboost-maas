@@ -85,6 +85,25 @@ function detectAssetType(text: string): 'image' | 'video' {
   return videoPatterns.some(p => p.test(lower)) ? 'video' : 'image'
 }
 
+// ──── Frontend operation logger ────
+
+const LOG_PREFIX = '[UnifiedCollector]'
+
+function logOp(action: string, data?: Record<string, unknown>) {
+  if (typeof window === 'undefined') return
+  const entry = { action, ts: new Date().toISOString(), ...data }
+  console.log(LOG_PREFIX, action, data || '')
+  // Append to sessionStorage log for debugging
+  try {
+    const key = '__uc_log__'
+    const prev = JSON.parse(sessionStorage.getItem(key) || '[]') as unknown[]
+    prev.push(entry)
+    // Keep last 50 entries
+    if (prev.length > 50) prev.splice(0, prev.length - 50)
+    sessionStorage.setItem(key, JSON.stringify(prev))
+  } catch { /* quota or SSR */ }
+}
+
 // ──── Main Component ────
 
 export default function UnifiedCollector({
@@ -141,13 +160,13 @@ export default function UnifiedCollector({
       if (chatMode && text) {
         const quickIntent = tryQuickReplyMap(text, updatedMessages)
         if (quickIntent) {
-          // Use the original user message (first user msg in conversation)
-          // as the prompt, not the numbered reply itself.
-          // If original was also vague, navigate without auto-generating.
+          logOp('quickReply.mapped', { reply: text, intent: quickIntent })
           const originalUserMsg = updatedMessages.find(m => m.role === 'user')
           const originalPrompt = originalUserMsg?.content || ''
           const isOriginalVague = !originalPrompt || /^[0-9\s.\u3001)\uff09]+$/.test(originalPrompt.trim())
-          executeIntent(quickIntent, isOriginalVague ? '' : originalPrompt)
+          const effectivePrompt = isOriginalVague ? '' : originalPrompt
+          logOp('quickReply.prompt', { original: originalPrompt, effective: effectivePrompt, vague: isOriginalVague })
+          executeIntent(quickIntent, effectivePrompt)
           return
         }
       }
@@ -162,6 +181,7 @@ export default function UnifiedCollector({
         }
       }
 
+      logOp('intent.request', { input: intentInput, chatMode, selectedAction })
       const intentRes = await fetch('/api/intent', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -180,6 +200,7 @@ export default function UnifiedCollector({
       const intent = intentData.intent
 
       if (!intent) throw new Error('Intent detection failed')
+      logOp('intent.result', { intent: intent.intent, confidence: intent.confidence, needsClarification: intent.needsClarification, needsUrl: intent.needsUrl })
 
       // ── Handle different scenarios ──
 
@@ -283,6 +304,7 @@ export default function UnifiedCollector({
             store.addJobToProject(project.id, job)
           }
 
+          logOp('executeIntent', { intent, projectId: project.id, hasPrompt, assetType: hasPrompt ? detectAssetType(userInput) : null })
           onProjectCreated?.(project.id, intent)
           router.push(`/project/${project.id}`)
           break
