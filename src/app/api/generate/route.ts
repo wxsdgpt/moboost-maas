@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { buildGenerationPrompt, type ProjectContext } from '@/lib/contextBuilder'
 
 const OPENROUTER_BASE = process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1'
 const OPENROUTER_KEY = process.env.OPENROUTER_API_KEY || ''
@@ -11,7 +12,7 @@ function fetchWithTimeout(url: string, options: RequestInit, timeoutMs = 300_000
 
 export async function POST(req: NextRequest) {
   try {
-    const { prompt, type } = await req.json()
+    const { prompt, type, projectContext } = await req.json()
 
     if (!OPENROUTER_KEY || OPENROUTER_KEY === 'your_openrouter_api_key_here') {
       return NextResponse.json({ error: 'OpenRouter API key not configured' }, { status: 500 })
@@ -20,6 +21,15 @@ export async function POST(req: NextRequest) {
     const model = type === 'video'
       ? (process.env.VIDEO_MODEL || 'google/veo-3.1')
       : (process.env.IMAGE_MODEL || 'google/gemini-3-pro-image-preview')
+
+    // Build contextualized prompt
+    const built = buildGenerationPrompt(
+      prompt,
+      type || 'image',
+      (projectContext as ProjectContext) || null,
+    )
+
+    console.log('[api/generate] context meta:', JSON.stringify(built.meta))
 
     const response = await fetchWithTimeout(`${OPENROUTER_BASE}/chat/completions`, {
       method: 'POST',
@@ -31,9 +41,7 @@ export async function POST(req: NextRequest) {
       },
       body: JSON.stringify({
         model,
-        messages: [
-          { role: 'user', content: prompt },
-        ],
+        messages: built.messages,
       }),
     })
 

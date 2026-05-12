@@ -10,6 +10,7 @@ import {
 import ModelRouter from '@/components/ModelRouter'
 import ThinkingPanel from '@/components/ThinkingPanel'
 import RemoteProjectView from './RemoteProjectView'
+import type { ProjectContext } from '@/lib/contextBuilder'
 import {
   store, generateThinkingSteps, pollVideoJob,
   GenerationJob, GeneratedAsset, ThinkingStep, ChatMessage as StoreChatMessage
@@ -51,6 +52,26 @@ export default function ProjectWorkspace() {
   }, [])
 
   useEffect(() => { store.setSidebarCollapsed(isProcessing) }, [isProcessing])
+
+  // Build project context for generation API calls
+  const getProjectContext = useCallback((): ProjectContext | null => {
+    if (!project) return null
+    return {
+      projectId: project.id,
+      projectName: project.name,
+      messages: project.messages
+        .filter(m => m.content && !m.isGenerating && !m.isEvaluating)
+        .map(m => ({ role: m.role, content: m.content, timestamp: m.timestamp })),
+      assets: project.assets.map(a => ({
+        type: a.type,
+        prompt: a.prompt,
+        createdAt: a.createdAt,
+        evaluationSummary: a.evaluation
+          ? `overall: ${(a.evaluation as Record<string, unknown>).overall || 'N/A'}`
+          : undefined,
+      })),
+    }
+  }, [project])
 
   // Auto-start generation for pending 'routing' jobs (created from Home page redirect)
   const [autoStarted, setAutoStarted] = useState(false)
@@ -94,7 +115,7 @@ export default function ProjectWorkspace() {
     try {
       const res = await fetch('/api/generate', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt, type: 'image' }),
+        body: JSON.stringify({ prompt, type: 'image', projectContext: getProjectContext() }),
       })
       const data = await res.json()
 
@@ -155,7 +176,7 @@ export default function ProjectWorkspace() {
     try {
       const res = await fetch('/api/generate-video', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'submit', prompt }),
+        body: JSON.stringify({ action: 'submit', prompt, projectContext: getProjectContext() }),
       })
       const data = await res.json()
 
