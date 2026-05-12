@@ -3,20 +3,24 @@
 /**
  * /project — list of all projects for the current user.
  *
- * Source of truth is the database via GET /api/projects (returns rows
- * enriched with `counts: { reports, landingPages, assets }` and the
- * embedded `products` row). The page used to read from a localStorage
- * `lib/store`, which silently diverged whenever artifacts were generated
- * server-side — that's why generated reports/landing pages "disappeared"
- * after creation. This file is now a thin renderer over the API.
+ * Merged data source: reads from both the database (GET /api/projects) and
+ * the client-side store (localStorage). DB projects come with server-generated
+ * artifacts (reports, landing pages). Store projects come from the asset
+ * generation flow (UnifiedCollector → ProjectWorkspace). Both are merged
+ * and deduplicated by ID so the user sees everything in one list.
  */
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useSyncExternalStore } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   FolderKanban, FileText, Image as ImageIcon, Layout,
   Clock, ChevronRight, AlertCircle, Loader2,
 } from 'lucide-react'
+import { store } from '@/lib/store'
+
+function useStoreValue<T>(sel: () => T): T {
+  return useSyncExternalStore(store.subscribe, sel, sel)
+}
 
 type ProjectRow = {
   id: string
@@ -49,9 +53,14 @@ function timeAgo(iso: string): string {
 
 export default function ProjectPage() {
   const router = useRouter()
-  const [projects, setProjects] = useState<ProjectRow[] | null>(null)
+  const [dbProjects, setDbProjects] = useState<ProjectRow[] | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const storeProjects = useStoreValue(store.getProjects)
 
+  // Hydrate store from disk on first load
+  useEffect(() => { store.hydrate().catch(() => {}) }, [])
+
+  // Fetch DB projects
   useEffect(() => {
     let cancelled = false
     fetch('/api/projects', { cache: 'no-store' })
@@ -60,23 +69,51 @@ export default function ProjectPage() {
         if (cancelled) return
         if (!data.ok) {
           setError(data.error || 'failed_to_load')
-          setProjects([])
+          setDbProjects([])
           return
         }
-        setProjects(data.projects ?? [])
+        setDbProjects(data.projects ?? [])
       })
       .catch((err) => {
         if (cancelled) return
         setError(err.message)
-        setProjects([])
+        setDbProjects([])
       })
-    return () => {
-      cancelled = true
-    }
+    return () => { cancelled = true }
   }, [])
 
-  const loading = projects === null
-  const total = projects?.length ?? 0
+  // Merge store + DB projects, deduplicate by ID, sort newest first
+  const projects: ProjectRow[] = (() => {
+    const dbRows = dbProjects ?? []
+    const dbIds = new Set(dbRows.map(p => p.id))
+
+    // Convert store projects to ProjectRow format (for ones not in DB)
+    const storeOnly: ProjectRow[] = storeProjects
+      .filter(sp => !dbIds.has(sp.id))
+      .map(sp => ({
+        id: sp.id,
+        name: sp.name,
+        description: null,
+        status: sp.status,
+        source: 'local',
+        created_at: sp.createdAt,
+        updated_at: null,
+        product_id: null,
+        products: null,
+        counts: {
+          reports: 0,
+          landingPages: 0,
+          assets: sp.assets.length,
+        },
+      }))
+
+    const merged = [...storeOnly, ...dbRows]
+    merged.sort((a, b) => (b.created_at || '').localeCompare(a.created_at || ''))
+    return merged
+  })()
+
+  const loading = dbProjects === null
+  const total = projects.length
 
   return (
     <div
