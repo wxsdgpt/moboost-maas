@@ -30,6 +30,7 @@ export async function POST(req: NextRequest) {
     )
 
     console.log('[api/generate] context meta:', JSON.stringify(built.meta))
+    console.log('[api/generate] prompt sent:', JSON.stringify(built.messages.map(m => ({ role: m.role, len: m.content.length, preview: m.content.slice(0, 100) }))))
 
     const response = await fetchWithTimeout(`${OPENROUTER_BASE}/chat/completions`, {
       method: 'POST',

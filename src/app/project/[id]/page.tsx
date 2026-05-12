@@ -17,6 +17,37 @@ import {
 } from '@/lib/store'
 import type { ModelCandidate, AssetEvaluation } from '@/types'
 
+// ── Operation logger (mirrors UnifiedCollector pattern) ──
+const PW_LOG_PREFIX = '[ProjectWorkspace]'
+const PW_LOG_KEY = '__pw_log__'
+let _pwFlushTimer: ReturnType<typeof setTimeout> | null = null
+
+function logPw(action: string, data?: Record<string, unknown>) {
+  if (typeof window === 'undefined') return
+  const entry = { action, ts: new Date().toISOString(), ...data }
+  console.log(PW_LOG_PREFIX, action, data || '')
+  try {
+    const prev = JSON.parse(sessionStorage.getItem(PW_LOG_KEY) || '[]') as unknown[]
+    prev.push(entry)
+    if (prev.length > 50) prev.splice(0, prev.length - 50)
+    sessionStorage.setItem(PW_LOG_KEY, JSON.stringify(prev))
+  } catch { /* quota or SSR */ }
+  if (!_pwFlushTimer) {
+    _pwFlushTimer = setTimeout(() => {
+      _pwFlushTimer = null
+      try {
+        const entries = JSON.parse(sessionStorage.getItem(PW_LOG_KEY) || '[]')
+        if (entries.length === 0) return
+        fetch('/api/debug/op-log', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ source: 'project-workspace', entries }),
+        }).catch(() => {})
+      } catch {}
+    }, 2000)
+  }
+}
+
 function useStoreValue<T>(sel: () => T): T {
   return useSyncExternalStore(store.subscribe, sel, sel)
 }
@@ -80,6 +111,7 @@ export default function ProjectWorkspace() {
     const pendingJob = project.jobs.find(j => j.status === 'routing')
     if (!pendingJob) return
     setAutoStarted(true)
+    logPw('autoStart.detected', { jobId: pendingJob.id, type: pendingJob.type, prompt: pendingJob.prompt.slice(0, 80) })
 
     // Start the generation flow
     setCurrentPrompt(pendingJob.prompt)
@@ -113,9 +145,11 @@ export default function ProjectWorkspace() {
     scrollToBottom()
 
     try {
+      const ctx = getProjectContext()
+      logPw('generate.image.start', { prompt: prompt.slice(0, 80), contextMessages: ctx?.messages.length || 0, contextAssets: ctx?.assets.length || 0 })
       const res = await fetch('/api/generate', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt, type: 'image', projectContext: getProjectContext() }),
+        body: JSON.stringify({ prompt, type: 'image', projectContext: ctx }),
       })
       const data = await res.json()
 
@@ -174,9 +208,11 @@ export default function ProjectWorkspace() {
     scrollToBottom()
 
     try {
+      const ctx2 = getProjectContext()
+      logPw('generate.video.start', { prompt: prompt.slice(0, 80), contextMessages: ctx2?.messages.length || 0, contextAssets: ctx2?.assets.length || 0 })
       const res = await fetch('/api/generate-video', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'submit', prompt, projectContext: getProjectContext() }),
+        body: JSON.stringify({ action: 'submit', prompt, projectContext: ctx2 }),
       })
       const data = await res.json()
 
