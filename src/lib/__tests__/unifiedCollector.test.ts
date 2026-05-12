@@ -174,6 +174,62 @@ assertEqual(detectAssetType('用veo生成一个广告'), 'video', 'veo → video
 assertEqual(detectAssetType('做一个动画广告'), 'video', '动画 → video')
 
 
+console.log('\n=== chatMode prompt extraction logic ===')
+
+// Simulate the logic in handleSubmit that extracts original prompt
+function extractOriginalPrompt(msgs: ChatMsg[]): string {
+  const originalUserMsg = msgs.find(m => m.role === 'user')
+  const originalPrompt = originalUserMsg?.content || ''
+  const isVague = !originalPrompt || /^[0-9\s.\u3001)\uff09]+$/.test(originalPrompt.trim())
+  return isVague ? '' : originalPrompt
+}
+
+assertEqual(
+  extractOriginalPrompt([
+    { role: 'user', content: '帮我做点东西' },
+    { role: 'assistant', content: '请问您想要：1) 情报 2) 素材 3) 落地页 4) 一键联动？' },
+    { role: 'user', content: '2' },
+  ]),
+  '帮我做点东西',
+  'original user input "帮我做点东西" preserved (not "2")'
+)
+
+assertEqual(
+  extractOriginalPrompt([
+    { role: 'user', content: '生成一张体育博彩的广告banner' },
+    { role: 'assistant', content: '请问您想要：1) ... 2) ...' },
+    { role: 'user', content: '2' },
+  ]),
+  '生成一张体育博彩的广告banner',
+  'detailed original prompt preserved for generation'
+)
+
+assertEqual(
+  extractOriginalPrompt([
+    { role: 'assistant', content: '请问您想要：1) ... 2) ...' },
+    { role: 'user', content: '2' },
+  ]),
+  '',
+  'only numbered reply → empty prompt (no auto-generate)'
+)
+
+assertEqual(
+  extractOriginalPrompt([
+    { role: 'user', content: '3' },
+    { role: 'assistant', content: '...' },
+    { role: 'user', content: '2' },
+  ]),
+  '',
+  'original was also just a number → empty prompt'
+)
+
+assertEqual(
+  extractOriginalPrompt([]),
+  '',
+  'empty conversation → empty prompt'
+)
+
+
 // ──── Summary ────
 
 console.log(`\n${'='.repeat(40)}`)

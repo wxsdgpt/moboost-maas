@@ -141,7 +141,13 @@ export default function UnifiedCollector({
       if (chatMode && text) {
         const quickIntent = tryQuickReplyMap(text, updatedMessages)
         if (quickIntent) {
-          executeIntent(quickIntent, text)
+          // Use the original user message (first user msg in conversation)
+          // as the prompt, not the numbered reply itself.
+          // If original was also vague, navigate without auto-generating.
+          const originalUserMsg = updatedMessages.find(m => m.role === 'user')
+          const originalPrompt = originalUserMsg?.content || ''
+          const isOriginalVague = !originalPrompt || /^[0-9\s.\u3001)\uff09]+$/.test(originalPrompt.trim())
+          executeIntent(quickIntent, isOriginalVague ? '' : originalPrompt)
           return
         }
       }
@@ -241,32 +247,41 @@ export default function UnifiedCollector({
     userInput: string,
     urls: string[] = []
   ) {
-    const projectName = userInput.slice(0, 40) + (userInput.length > 40 ? '...' : '') || `${intent} project`
+    const hasPrompt = !!userInput.trim()
+    const projectName = hasPrompt
+      ? userInput.slice(0, 40) + (userInput.length > 40 ? '...' : '')
+      : `${intent} project`
 
     try {
       switch (intent) {
         case 'asset': {
           // ── Store-driven asset generation (restored from v1 design) ──
-          const assetType = detectAssetType(userInput)
-          const userMsg: StoreChatMessage = {
-            id: `msg-${Date.now()}`,
-            role: 'user',
-            content: userInput,
-            timestamp: new Date().toISOString(),
-          }
-          const project = store.createProject(projectName, userMsg)
+          const project = hasPrompt
+            ? store.createProject(projectName, {
+                id: `msg-${Date.now()}`,
+                role: 'user',
+                content: userInput,
+                timestamp: new Date().toISOString(),
+              })
+            : store.createProject(projectName)
 
-          const steps = generateThinkingSteps(assetType, userInput)
-          const job: GenerationJob = {
-            id: `job-${Date.now()}`,
-            projectId: project.id,
-            type: assetType,
-            prompt: userInput,
-            status: 'routing',
-            createdAt: new Date().toISOString(),
-            thinkingSteps: steps,
+          // Only auto-start generation if we have a real prompt.
+          // Otherwise, navigate to the workspace and let the user
+          // type their creative description there.
+          if (hasPrompt) {
+            const assetType = detectAssetType(userInput)
+            const steps = generateThinkingSteps(assetType, userInput)
+            const job: GenerationJob = {
+              id: `job-${Date.now()}`,
+              projectId: project.id,
+              type: assetType,
+              prompt: userInput,
+              status: 'routing',
+              createdAt: new Date().toISOString(),
+              thinkingSteps: steps,
+            }
+            store.addJobToProject(project.id, job)
           }
-          store.addJobToProject(project.id, job)
 
           onProjectCreated?.(project.id, intent)
           router.push(`/project/${project.id}`)
