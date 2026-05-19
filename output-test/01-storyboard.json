@@ -1,0 +1,84 @@
+{
+  "title": "竹林飞花决",
+  "characters": [
+    {
+      "id": "c1",
+      "name": "白衣剑客",
+      "description": "身穿飘逸白衣的年轻剑客，手持银色长剑，神情冷峻"
+    },
+    {
+      "id": "c2",
+      "name": "黑衣杀手",
+      "description": "身穿黑色紧身衣的蒙面杀手，双手持刀，杀气腾腾"
+    }
+  ],
+  "scenes": [
+    {
+      "order": 1,
+      "description": "竹林深处，阳光透过竹叶洒下斑驳光影，白衣剑客和黑衣杀手相对而立，剑拔弩张",
+      "dialogue": null,
+      "camera": {
+        "shot": "全景",
+        "angle": "平视",
+        "movement": "缓慢推进",
+        "composition": "对称构图"
+      },
+      "characterIds": [
+        "c1",
+        "c2"
+      ],
+      "emotion": "紧张对峙",
+      "duration": 4
+    },
+    {
+      "order": 2,
+      "description": "两人同时出手，剑光刀影在竹林中交错，竹叶纷飞，激烈交锋",
+      "dialogue": null,
+      "camera": {
+        "shot": "中景",
+        "angle": "侧面",
+        "movement": "快速切换",
+        "composition": "动态构图"
+      },
+      "characterIds": [
+        "c1",
+        "c2"
+      ],
+      "emotion": "激烈战斗",
+      "duration": 8
+    },
+    {
+      "order": 3,
+      "description": "白衣剑客施展飞花逐月剑法，花瓣漫天飞舞，剑气如月光般划过",
+      "dialogue": null,
+      "camera": {
+        "shot": "特写",
+        "angle": "仰视",
+        "movement": "旋转跟拍",
+        "composition": "中心构图"
+      },
+      "characterIds": [
+        "c1"
+      ],
+      "emotion": "绝招施展",
+      "duration": 5
+    },
+    {
+      "order": 4,
+      "description": "黑衣杀手被击败倒地，白衣剑客收剑而立，花瓣缓缓飘落",
+      "dialogue": null,
+      "camera": {
+        "shot": "全景",
+        "angle": "俯视",
+        "movement": "静止",
+        "composition": "黄金分割"
+      },
+      "characterIds": [
+        "c1",
+        "c2"
+      ],
+      "emotion": "胜负已定",
+      "duration": 3
+    }
+  ]
+}

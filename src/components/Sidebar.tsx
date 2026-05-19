@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import Image from 'next/image'
-import { Home, FolderKanban, Dna, Wrench, Sparkles, LogIn, User, Layout, FileText, Lightbulb, Globe } from 'lucide-react'
+import { Home, FolderKanban, Dna, Wrench, Sparkles, LogIn, User, Layout, FileText, Lightbulb, Globe, Workflow } from 'lucide-react'
 import { useState, useSyncExternalStore } from 'react'
 import { SignedIn, SignedOut, UserButton, SignInButton, SignUpButton, useUser } from '@clerk/nextjs'
 import { store } from '@/lib/store'
@@ -15,6 +15,7 @@ import { useLocale } from '@/lib/i18n/LocaleProvider'
 const navItems = [
   { href: '/', key: 'nav.home', icon: Home },
   { href: '/inspire', key: 'nav.inspire', icon: Lightbulb },
+  { href: '/workflow', key: 'nav.workflow', icon: Workflow },
   { href: '/project', key: 'nav.project', icon: FolderKanban },
   { href: '/reports', key: 'nav.reports', icon: FileText },
   { href: '/landing', key: 'nav.landing', icon: Layout },

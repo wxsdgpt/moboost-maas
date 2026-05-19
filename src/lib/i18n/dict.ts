@@ -40,6 +40,7 @@ export const en: Dict = {
   // Navigation (sidebar)
   'nav.home': 'Home',
   'nav.inspire': 'Inspire',
+  'nav.workflow': 'Workflow',
   'nav.project': 'Project',
   'nav.reports': 'Reports',
   'nav.landing': 'Landing Pages',
@@ -171,6 +172,7 @@ export const zh: Dict = {
   // Navigation
   'nav.home': '首页',
   'nav.inspire': '灵感库',
+  'nav.workflow': '工作流',
   'nav.project': '项目',
   'nav.reports': '报告',
   'nav.landing': '落地页',
