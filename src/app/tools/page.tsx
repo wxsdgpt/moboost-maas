@@ -58,6 +58,15 @@ const TOOLS: Tool[] = [
     features: ['VEO3 Ultra quality', 'Short-form video (6-15s)', 'Dynamic text overlays', 'Music/SFX integration'],
   },
   {
+    id: 'video-understanding',
+    name: 'Video Understanding',
+    desc: 'AI-powered video analysis — extract operation timelines, keyframes, UI text, and semantic clips from screen recordings',
+    icon: Cpu,
+    category: 'creative',
+    status: 'available',
+    features: ['Native video understanding (Gemini)', 'Intelligent keyframe extraction', 'Full Chinese/English OCR', 'Semantic video segmentation'],
+  },
+  {
     id: 'localization',
     name: 'Creative Localization',
     desc: 'Adapt creatives for different markets — language, currency, cultural preferences, and compliance',
